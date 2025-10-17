@@ -1,0 +1,18 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <!-- Simple geometric icon with clean design -->
+  
+  <!-- Background -->
+  <rect width="512" height="512" rx="80" fill="#6366f1"/>
+  
+  <!-- Main Icon Shape - Lightning Bolt -->
+  <path d="M200 80 L280 80 L220 220 L320 220 L180 432 L240 280 L140 280 Z" 
+        fill="#ffffff" 
+        stroke="#4f46e5" 
+        stroke-width="4" 
+        stroke-linejoin="round"/>
+  
+  <!-- Highlight -->
+  <path d="M200 80 L280 80 L250 150" 
+        fill="#f8fafc" 
+        opacity="0.6"/>
+</svg>
