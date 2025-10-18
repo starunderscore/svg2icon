@@ -2,24 +2,24 @@
 
 A powerful desktop application built with Electron and TypeScript that converts SVG files into complete PNG icon sets for mobile, desktop, and web app development.
 
-![Icon Generator Screenshot](https://via.placeholder.com/600x400/667eea/ffffff?text=Icon+Generator+App)
-
 ## ✨ Features
 
 - **🎨 SVG to PNG Conversion** - High-quality vector to raster conversion with resvg
 - **📱 Mobile-Ready Icon Sets** - Generate all required sizes for iOS and Android
+- **🌍 Universal Mode** - Organized folders for mobile/desktop/web platforms
 - **🎯 Six Target Platforms**:
+  - **Universal** - Complete cross-platform package with organized folders
   - **iOS App Icons** - All required sizes for App Store submission
   - **Android App Icons** - Complete density folder structure  
   - **Desktop App Icons** - Windows ICO, macOS ICNS, Linux PNG ready
   - **Electron App Icons** - Electron-builder ready with assets/ structure
   - **Web App Icons** - PWA manifests, favicons, and touch icons
-  - **Universal Icons** - Complete cross-platform compatibility
 - **🖼️ Live Preview** - See your SVG before conversion
 - **📁 Organized Output** - Proper folder structure with detailed manifest
 - **⚡ Automatic ICO/ICNS Creation** - png2icons + ImageMagick fallback
 - **🐧 Cross-Platform** - Works on Windows, macOS, and Linux
-- **🎨 Modern UI** - Beautiful, intuitive Electron interface
+- **🎨 Modern UI** - Beautiful, intuitive Electron interface with theme support
+- **📊 Telemetry** - Anonymous usage tracking for development insights
 
 ## 🚀 Quick Start
 
@@ -30,20 +30,20 @@ A powerful desktop application built with Electron and TypeScript that converts 
 
 ### Installation
 
-1. **Clone or create the project directory:**
+1. **Clone the repository:**
    ```bash
-   mkdir icon-generator-app
-   cd icon-generator-app
+   git clone https://github.com/yourusername/svg2icon
+   cd svg2icon
    ```
 
-2. **Initialize and install dependencies:**
+2. **Install dependencies:**
    ```bash
-   npm init -y
-   npm install --save-dev electron typescript @types/node electron-builder
-   npm install sharp @resvg/resvg-js png2icons
+   npm install
    ```
 
-3. **Add the project files** (copy all the TypeScript and HTML files from the artifacts)
+3. **Set up PostHog (optional):**
+   - Get your API key from PostHog
+   - Replace `YOUR_API_KEY_HERE` in `src/renderer/services/TelemetryService.js`
 
 4. **Build and run:**
    ```bash
@@ -57,7 +57,18 @@ A powerful desktop application built with Electron and TypeScript that converts 
 npm run dev
 ```
 
-## 📋 Icon Sets Generated
+## 📋 Universal Icon Sets
+
+The **Universal** option creates organized folders for different platforms:
+
+```
+universal-icons/
+├── mobile/
+│   ├── ios/          # iOS App Store icons
+│   └── android/      # Android density folders
+├── desktop/          # Windows ICO, macOS ICNS, Linux PNG
+└── web/             # PWA manifests, favicons, touch icons
+```
 
 ### iOS App Icons
 - **iPhone**: 60x60, 120x120, 180x180
@@ -66,77 +77,47 @@ npm run dev
 - **App Store**: 1024x1024
 
 ### Android App Icons
-- **LDPI**: 36x36
-- **MDPI**: 48x48
-- **HDPI**: 72x72
-- **XHDPI**: 96x96
-- **XXHDPI**: 144x144
-- **XXXHDPI**: 192x192
+- **LDPI to XXXHDPI**: Complete density coverage
 - **Play Store**: 512x512
 
 ### Desktop App Icons
-- **Windows ICO**: 16x16, 24x24, 32x32, 48x48, 64x64, 96x96, 128x128, 256x256, 512x512
-- **macOS App Bundle**: 1024x1024
-- **Linux Desktop**: All standard sizes
-- **General Purpose**: Perfect for any desktop application
-
-### Electron App Icons
-- **Electron-builder Structure**: Ready-to-use assets/ folder
-- **Auto ICO/ICNS**: Automatic .ico and .icns file generation
-- **Perfect Layout**: icon.png, icon@2x.png, icon-1024.png structure
-- **Cross-Platform**: Works on Linux, Windows, and macOS
-- **Zero Config**: Drop into your Electron project and build
+- **Windows ICO**: Auto-generated
+- **macOS ICNS**: Auto-generated
+- **Linux PNG**: 512x512
 
 ### Web App Icons (PWA)
 - **Favicons**: 16x16, 32x32
-- **Apple Touch Icons**: 57x57 to 180x180
+- **Apple Touch Icons**: Complete set
 - **PWA Manifest**: 192x192, 512x512
-- **Web App Install Ready**: Complete PWA icon set
-
-### Universal Icons
-Complete set from 16x16 to 1024x1024 for maximum compatibility across all platforms.
 
 ## 🎯 Usage
 
 1. **Launch the app** using `npm start`
 2. **Select your SVG file** - Click "Select SVG File" and choose your vector icon
-3. **Choose icon type** - Select from iOS, Android, Desktop, Electron, Web, or Universal
+3. **Choose icon type** - Select from Universal, iOS, Android, Desktop, Web
 4. **Set output folder** - Click "Choose Output Folder" to specify where icons will be saved
 5. **Generate icons** - Click "Generate Icons" and wait for processing to complete
-
-### 📁 Need Example SVG Files?
-
-Check out the [examples folder](examples/) for sample SVG icons and a complete guide on creating icons that convert well across all sizes.
-
-### Output Structure
-
-```
-your-output-folder/
-├── desktop-icons/           # Complete desktop package
-│   ├── icon.ico            # Windows icon file (auto-generated)
-│   ├── icon.icns           # macOS icon file (auto-generated)
-│   ├── icon-16.png         # Individual PNG sizes
-│   ├── icon-32.png         # ... all desktop sizes
-│   ├── icon-256.png        # Standard app icon
-│   ├── icon-512.png        # Linux icon
-│   ├── icon-1024.png       # High-resolution
-│   ├── README.md           # Setup instructions
-│   └── manifest.json       # Complete file inventory
-```
 
 ## ⚙️ Development
 
 ### Project Structure
 
 ```
-icon-generator-app/
+svg2icon/
 ├── src/
-│   ├── main.ts              # Main Electron process
-│   ├── icon-generator.ts    # Core conversion logic
+│   ├── main.ts                    # Main Electron process
+│   ├── icon-generator.ts          # Core conversion logic
 │   └── renderer/
-│       ├── index.html       # UI interface
-│       └── renderer.js      # Frontend logic
-├── dist/                    # Compiled TypeScript output
+│       ├── index.html             # UI interface
+│       ├── styles.css             # Application styles
+│       ├── renderer.js            # Main orchestrator
+│       ├── services/
+│       │   ├── TelemetryService.js    # PostHog tracking
+│       │   ├── SettingsManager.js     # App settings
+│       │   └── FileManager.js         # File operations
+│       └── ui/
+│           └── UIManager.js           # UI state management
+├── dist/                          # Compiled TypeScript output
 ├── package.json
 ├── tsconfig.json
 └── README.md
@@ -168,6 +149,7 @@ npm run dist
 - **@resvg/resvg-js** - Primary SVG to PNG conversion
 - **png2icons** - ICO and ICNS file generation
 - **ImageMagick** - Fallback ICO/ICNS creation (auto-detected)
+- **PostHog** - Anonymous usage analytics
 
 ### Smart Fallback System
 
@@ -185,8 +167,9 @@ The app uses multiple methods for optimal icon generation:
 ### Architecture
 
 - **Main Process** (`main.ts`) - Handles file system operations and app lifecycle
-- **Renderer Process** (`renderer.js`) - Manages the user interface
+- **Renderer Process** (`renderer.js`) - Manages the user interface and orchestrates services
 - **Icon Generator** (`icon-generator.ts`) - Core conversion and sizing logic
+- **Services** - Modular components for telemetry, settings, files, and UI
 
 ## 🎨 Customization
 
@@ -203,7 +186,14 @@ const customIconSizes: IconSize[] = [
 
 ### Modifying the UI
 
-The interface is built with vanilla HTML/CSS/JS in `src/renderer/`. Customize the styling in the `<style>` section of `index.html`.
+The interface is built with vanilla HTML/CSS/JS. Customize styling in `src/renderer/styles.css`.
+
+### Telemetry Configuration
+
+To set up PostHog analytics:
+1. Sign up at [PostHog](https://posthog.com)
+2. Get your API key
+3. Replace `YOUR_API_KEY_HERE` in `src/renderer/services/TelemetryService.js`
 
 ## 🐛 Troubleshooting
 
@@ -232,7 +222,27 @@ The interface is built with vanilla HTML/CSS/JS in `src/renderer/`. Customize th
 
 ## 📄 License
 
-MIT License - feel free to use this project for personal or commercial purposes.
+MIT License
+
+Copyright (c) 2024 StarUnderscore.com (Michael Hunt)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 
 ## 🤝 Contributing
 
@@ -252,8 +262,9 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 - Built with [Electron](https://electronjs.org/)
 - Image processing by [Sharp](https://sharp.pixelplumbing.com/)
 - SVG rendering by [resvg](https://github.com/RazrFalcon/resvg)
+- Analytics by [PostHog](https://posthog.com)
 
 ---
 
-**Made with ❤️ for app developers everywhere**  
-**✨ Enhanced with automatic ICO/ICNS generation and cross-platform support**
+**Made with ❤️ by StarUnderscore.com**  
+**✨ A cozy, simple MIT licensed app for the developer community**

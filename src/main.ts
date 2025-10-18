@@ -44,12 +44,9 @@ ipcMain.handle('select-svg-file', async (): Promise<string | null> => {
     ]
   });
   
-  // Handle both old API (returns string[]) and new API (returns OpenDialogReturnValue)
   if (Array.isArray(result)) {
-    // Old API - result is string[]
     return result.length > 0 ? result[0] : null;
   } else {
-    // New API - result is OpenDialogReturnValue
     const dialogResult = result as any;
     if (!dialogResult.canceled && dialogResult.filePaths && dialogResult.filePaths.length > 0) {
       return dialogResult.filePaths[0];
@@ -63,12 +60,9 @@ ipcMain.handle('select-output-folder', async (): Promise<string | null> => {
     properties: ['openDirectory']
   });
   
-  // Handle both old API (returns string[]) and new API (returns OpenDialogReturnValue)
   if (Array.isArray(result)) {
-    // Old API - result is string[]
     return result.length > 0 ? result[0] : null;
   } else {
-    // New API - result is OpenDialogReturnValue
     const dialogResult = result as any;
     if (!dialogResult.canceled && dialogResult.filePaths && dialogResult.filePaths.length > 0) {
       return dialogResult.filePaths[0];

@@ -21,11 +21,10 @@
   "dependencies": {
     "@resvg/resvg-js": "^2.6.2",
     "png2icons": "^2.0.1",
-    "posthog-js": "^1.276.0",
     "sharp": "^0.33.5"
   },
   "build": {
-    "appId": "com.example.icon-generator",
+    "appId": "com.starunderscore.icon-generator",
     "productName": "Icon Generator",
     "directories": {
       "output": "release"
