@@ -193,3 +193,6 @@ logs/
 
 # Generated documentation
 docs/build/
+
+# sandbox dev storage
+dev-temp/

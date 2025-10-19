@@ -2,10 +2,27 @@
 class SettingsManager {
   constructor(telemetryService) {
       this.telemetryService = telemetryService;
+      // Telemetry is opt-out by default. Environment variables can change the default
+      // for first-run experience without affecting saved user preference:
+      //   - DISABLE_TELEMETRY=1           -> default off
+      //   - SVG2ICON_TELEMETRY_DEFAULT=off|0|false -> default off
+      //   - SVG2ICON_TELEMETRY_DEFAULT=on|1|true  -> default on
+      const env = (typeof process !== 'undefined' && process && process.env) ? process.env : {};
+      const telemDefaultEnv = (env.SVG2ICON_TELEMETRY_DEFAULT || '').toString().trim().toLowerCase();
+      const disableTelem = (env.DISABLE_TELEMETRY || '').toString().trim().toLowerCase();
+      let defaultTelemetry = true;
+      if (disableTelem === '1' || disableTelem === 'true' || disableTelem === 'on') {
+          defaultTelemetry = false;
+      } else if (telemDefaultEnv === 'off' || telemDefaultEnv === '0' || telemDefaultEnv === 'false') {
+          defaultTelemetry = false;
+      } else if (telemDefaultEnv === 'on' || telemDefaultEnv === '1' || telemDefaultEnv === 'true') {
+          defaultTelemetry = true;
+      }
+
       this.settings = {
           theme: 'system',
           autoUpdate: false,
-          telemetry: true
+          telemetry: defaultTelemetry
       };
       this.storageKey = 'svg2iconSettings';
   }

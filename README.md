@@ -190,12 +190,21 @@ const customIconSizes: IconSize[] = [
 
 The interface is built with vanilla HTML/CSS/JS. Customize styling in `src/renderer/styles.css`.
 
-### Telemetry Configuration
+### Telemetry Configuration (opt-out)
 
-To set up PostHog analytics:
-1. Sign up at [PostHog](https://posthog.com)
-2. Get your API key
-3. Replace `YOUR_API_KEY_HERE` in `src/renderer/services/TelemetryService.js`
+SVG2Icon includes optional anonymous usage analytics (PostHog) to guide development.
+
+- Default: telemetry is enabled (opt-out) and can be turned off in Settings at any time.
+- First-run default via environment variables:
+  - Disable by default: set `DISABLE_TELEMETRY=1` or `SVG2ICON_TELEMETRY_DEFAULT=off`
+  - Enable by default: set `SVG2ICON_TELEMETRY_DEFAULT=on`
+
+Examples:
+
+- Linux/macOS (bash): `DISABLE_TELEMETRY=1 npm run start`
+- Windows (PowerShell): `$env:DISABLE_TELEMETRY='1'; npm run start`
+
+If you fork this project and want to use your own PostHog project, replace the API key in `src/renderer/services/TelemetryService.js`.
 
 ## 🐛 Troubleshooting
 
