@@ -1,8 +1,12 @@
 {
-  "name": "icon-generator-app",
+  "name": "svg2icon",
   "version": "1.0.0",
   "description": "SVG to PNG Icon Generator for Mobile Apps",
   "main": "dist/main.js",
+  "author": {
+    "name": "Star Underscore",
+    "url": "https://StarUnderscore.com"
+  },
   "scripts": {
     "build": "tsc",
     "start": "npm run build && electron .",

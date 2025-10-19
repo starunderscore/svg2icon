@@ -85,10 +85,10 @@ class TelemetryService {
   }
 
   getOrCreateUserId() {
-      let userId = localStorage.getItem('iconGenerator_userId');
+      let userId = localStorage.getItem('svg2icon_userId');
       if (!userId) {
           userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-          localStorage.setItem('iconGenerator_userId', userId);
+          localStorage.setItem('svg2icon_userId', userId);
       }
       return userId;
   }

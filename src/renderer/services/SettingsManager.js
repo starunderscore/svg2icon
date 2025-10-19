@@ -7,7 +7,7 @@ class SettingsManager {
           autoUpdate: false,
           telemetry: true
       };
-      this.storageKey = 'iconGeneratorSettings';
+      this.storageKey = 'svg2iconSettings';
   }
 
   load() {
