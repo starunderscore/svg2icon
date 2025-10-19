@@ -4,10 +4,22 @@ import { generateIconSet } from './icon-generator';
 
 let mainWindow: BrowserWindow;
 
+function resolveAppIcon(): string {
+  const base = app.isPackaged
+    ? path.join(process.resourcesPath, 'assets', 'this-app')
+    : path.join(__dirname, '../src/assets/this-app');
+
+  if (process.platform === 'win32') return path.join(base, 'icon.ico');
+  if (process.platform === 'darwin') return path.join(base, 'icon.icns');
+  // Linux and others prefer PNG
+  return path.join(base, 'icon-512.png');
+}
+
 function createWindow(): void {
   mainWindow = new BrowserWindow({
     height: 600,
     width: 800,
+    icon: resolveAppIcon(),
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false

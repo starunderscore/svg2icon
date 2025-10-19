@@ -1,4 +1,4 @@
-# 🚀 Icon Generator
+# 🚀 SVG2Icon
 
 A powerful desktop application built with Electron and TypeScript that converts SVG files into complete PNG icon sets for mobile, desktop, and web app development.
 
@@ -140,6 +140,8 @@ npm run dist
 # The packaged app will be in the 'release' folder
 ```
 
+For platform-specific prerequisites and commands (Windows NSIS, Linux AppImage/DEB/RPM), see `BUILDING.md`.
+
 ## 🛠️ Technical Details
 
 ### Dependencies
@@ -168,7 +170,7 @@ The app uses multiple methods for optimal icon generation:
 
 - **Main Process** (`main.ts`) - Handles file system operations and app lifecycle
 - **Renderer Process** (`renderer.js`) - Manages the user interface and orchestrates services
-- **Icon Generator** (`icon-generator.ts`) - Core conversion and sizing logic
+- **SVG2Icon** (`icon-generator.ts`) - Core conversion and sizing logic
 - **Services** - Modular components for telemetry, settings, files, and UI
 
 ## 🎨 Customization

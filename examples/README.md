@@ -94,7 +94,7 @@ Before generating icons, test your SVG:
 1. **Choose a template** from the examples above
 2. **Modify the design** to fit your app
 3. **Test at different sizes** in your browser
-4. **Run through Icon Generator** to create your icon set
+4. **Run through SVG2Icon** to create your icon set
 
 ## 💡 **Pro Tips**
 

@@ -1,8 +1,9 @@
 {
   "name": "svg2icon",
   "version": "1.0.0",
-  "description": "SVG to PNG Icon Generator for Mobile Apps",
+  "description": "SVG to PNG icon generator for mobile, desktop, and web",
   "main": "dist/main.js",
+  "license": "MIT",
   "author": {
     "name": "Star Underscore",
     "url": "https://StarUnderscore.com"
@@ -12,7 +13,13 @@
     "start": "npm run build && electron .",
     "dev": "tsc && electron . --dev",
     "pack": "electron-builder --dir",
-    "dist": "electron-builder"
+    "dist": "node scripts/dist-host.mjs",
+    "dist:linux": "electron-builder -l AppImage,deb,rpm -c.directories.output=release/linux",
+    "postdist:linux": "node scripts/trim-release.mjs release/linux && node scripts/checksums.mjs release/linux",
+    "dist:win": "electron-builder -w nsis -c.directories.output=release/win",
+    "postdist:win": "node scripts/trim-release.mjs release/win",
+    "postinstall": "electron-builder install-app-deps",
+    "postdist": "node scripts/trim-release.mjs"
   },
   "devDependencies": {
     "@types/electron": "^1.4.38",
@@ -29,22 +36,61 @@
   },
   "build": {
     "appId": "com.starunderscore.icon-generator",
-    "productName": "Icon Generator",
+    "productName": "SVG2Icon",
+    "artifactName": "${productName}-${version}-${os}-${arch}.${ext}",
     "directories": {
       "output": "release"
     },
+    "asarUnpack": [
+      "**/*.node"
+    ],
     "files": [
       "dist/**/*",
       "src/renderer/**/*"
     ],
+    "extraResources": [
+      {
+        "from": "src/assets/this-app",
+        "to": "assets/this-app"
+      }
+    ],
     "mac": {
-      "category": "public.app-category.graphics-design"
+      "category": "public.app-category.graphics-design",
+      "icon": "src/assets/this-app/icon.icns"
     },
     "win": {
-      "target": "nsis"
+      "target": ["nsis"],
+      "icon": "src/assets/this-app/icon.ico",
+      "publisherName": "Star Underscore"
     },
     "linux": {
-      "target": "AppImage"
+      "target": ["AppImage", "deb", "rpm"],
+      "category": "Graphics",
+      "icon": "src/assets/this-app/icon-512.png",
+      "executableName": "svg2icon",
+      "maintainer": "Star Underscore <maintainer@example.com>",
+      "vendor": "Star Underscore",
+      "synopsis": "Convert SVG into complete icon sets",
+      "description": "SVG2Icon converts an SVG into production-ready icon sets for mobile, desktop, and web platforms.",
+      "desktop": {
+        "Name": "SVG2Icon",
+        "Comment": "SVG to PNG icon generator",
+        "Categories": "Graphics;",
+        "StartupWMClass": "SVG2Icon",
+        "Keywords": "svg;icon;png;ico;icns;convert;generator;"
+      }
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "SVG2Icon",
+      "installerHeaderIcon": "src/assets/star-underscore/favicon.ico",
+      "deleteAppDataOnUninstall": false,
+      "license": "LICENSE"
     }
   }
 }
