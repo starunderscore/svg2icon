@@ -14,7 +14,7 @@
     "dev": "tsc && electron . --dev",
     "pack": "electron-builder --dir",
     "dist": "node scripts/dist-host.mjs",
-    "dist:linux": "electron-builder -l AppImage,deb,rpm -c.directories.output=release/linux",
+    "dist:linux": "electron-builder -l AppImage -l deb -c.directories.output=release/linux",
     "postdist:linux": "node scripts/trim-release.mjs release/linux && node scripts/checksums.mjs release/linux",
     "dist:win": "electron-builder -w nsis -c.directories.output=release/win",
     "postdist:win": "node scripts/trim-release.mjs release/win",
@@ -64,7 +64,7 @@
       "publisherName": "Star Underscore"
     },
     "linux": {
-      "target": ["AppImage", "deb", "rpm"],
+      "target": ["AppImage", "deb"],
       "category": "Graphics",
       "icon": "src/assets/this-app/icon-512.png",
       "executableName": "svg2icon",

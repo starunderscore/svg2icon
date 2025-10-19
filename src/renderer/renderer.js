@@ -132,17 +132,33 @@ class IconGeneratorApp {
         }
     }
 
-    checkForUpdates() {
+    async checkForUpdates() {
         this.uiManager.showUpdateStatus('Checking for updates...', 'checking');
         this.telemetryService.track('update_check_started');
-        
-        setTimeout(() => {
-            this.uiManager.showUpdateStatus('You are running the latest version!', 'up-to-date');
-            this.telemetryService.track('update_check_completed', {
-                result: 'up_to_date',
-                current_version: '1.0.0'
-            });
-        }, 2000);
+        try {
+            const { ipcRenderer } = require('electron');
+            const result = await ipcRenderer.invoke('check-for-updates');
+            if (result && result.ok) {
+                if (result.hasUpdate) {
+                    this.uiManager.showUpdateStatus(`Update available: ${result.current} → ${result.latest}. Opening download...`, 'available');
+                    this.telemetryService.track('update_check_completed', { result: 'available', current_version: result.current, latest_version: result.latest });
+                    const url = result.assetUrl || result.pageUrl;
+                    await ipcRenderer.invoke('open-url', url);
+                } else {
+                    this.uiManager.showUpdateStatus('You are running the latest version!', 'up-to-date');
+                    this.telemetryService.track('update_check_completed', { result: 'up_to_date', current_version: result.current });
+                }
+            } else {
+                this.uiManager.showUpdateStatus('Unable to check right now. Opening releases...', 'available');
+                await ipcRenderer.invoke('open-releases');
+            }
+        } catch (e) {
+            this.uiManager.showUpdateStatus('Unable to check right now. Opening releases...', 'available');
+            try {
+                const { ipcRenderer } = require('electron');
+                await ipcRenderer.invoke('open-releases');
+            } catch {}
+        }
     }
 }
 

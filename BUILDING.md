@@ -25,12 +25,13 @@ Native modules are rebuilt automatically via `electron-builder install-app-deps`
 2. From project root:
    ```bash
    npm ci
-   npm run dist:win
+   npm run dist
    ```
-3. Output: `release/win/SVG2Icon-<version>-win-<arch>.exe`
+3. Output (v1.0.0): `release/win/x64/SVG2Icon-<version>-win-x64.exe` and `SHA256SUMS.txt`
 
 Notes:
 - If native build tools are needed, install Visual Studio Build Tools 2022 (C++ workload).
+- 32-bit Windows (ia32) is not shipped in v1.0.0 due to native dependency constraints; we can revisit if needed.
 
 ## Ubuntu/Kubuntu 24.04 (AppImage + .deb)
 
@@ -46,7 +47,7 @@ Notes:
    ```
 3. Output: `.AppImage` and `.deb` in `release/linux/x64/` (RPM is auto-included if `rpmbuild` is available). A `SHA256SUMS.txt` file is generated for verification.
 
-## Fedora Workstation 42 (AppImage + .rpm)
+## Fedora Workstation 42 (AppImage)
 
 1. Ensure build tools:
    ```bash
@@ -57,7 +58,8 @@ Notes:
    npm ci
    npm run dist:linux
    ```
-3. Output: `.AppImage` and `.rpm` in `release/linux/x64/`. A `SHA256SUMS.txt` file is generated for verification.
+3. Output: `.AppImage` in `release/linux/x64/`. A `SHA256SUMS.txt` file is generated for verification.
+   - Note: RPM is intentionally omitted for v1.0.0. We can enable it later.
 
 ## Manjaro KDE (AppImage)
 
@@ -92,7 +94,7 @@ release/linux/"SVG2Icon-<version>-linux-x86_64.AppImage"
 ## What we ship
 
 - Windows: NSIS installer (`.exe`) with Start Menu and Desktop shortcuts in `release/win/`
-- Linux: AppImage (universal), plus `.deb` (Debian/Ubuntu) and `.rpm` (Fedora/RHEL) in `release/linux/`
+- Linux: AppImage (universal) and `.deb` (Debian/Ubuntu/Mint) in `release/linux/`
 
 ## Icons and Metadata
 

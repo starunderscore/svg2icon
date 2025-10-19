@@ -23,8 +23,7 @@ function checksums(dir) {
 }
 
 if (platform === 'linux') {
-  const rpmAvailable = hasCmd('rpmbuild');
-  const targets = rpmAvailable ? ['AppImage', 'deb', 'rpm'] : ['AppImage', 'deb'];
+  const targets = ['AppImage', 'deb'];
   const arches = ['x64', 'arm64'];
   for (const arch of arches) {
     const out = `release/linux/${arch}`;
@@ -35,7 +34,8 @@ if (platform === 'linux') {
     checksums(out);
   }
 } else if (platform === 'win32') {
-  const arches = ['x64', 'ia32'];
+  // Default to x64 only for v1.0.0 to avoid 32-bit native dependency issues (e.g., sharp)
+  const arches = ['x64'];
   for (const arch of arches) {
     const out = `release/win/${arch}`;
     const archFlag = arch === 'x64' ? '--x64' : '--ia32';

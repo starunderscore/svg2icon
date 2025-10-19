@@ -140,7 +140,7 @@ npm run dist
 # The packaged app will be in the 'release' folder
 ```
 
-For platform-specific prerequisites and commands (Windows NSIS, Linux AppImage/DEB/RPM), see `BUILDING.md`.
+For platform-specific prerequisites and commands (Windows NSIS, Linux AppImage/DEB), see `BUILDING.md`.
 
 ## 🛠️ Technical Details
 
@@ -162,9 +162,9 @@ The app uses multiple methods for optimal icon generation:
 
 ### Cross-Platform Support
 
-- **Linux**: Full ICO/ICNS generation with ImageMagick
-- **macOS**: Native iconutil support + ImageMagick fallback
-- **Windows**: Complete ICO generation with all tools
+- **Linux**: AppImage + DEB (x64, arm64)
+- **macOS**: Ready (ICNS wired) if targeted later
+- **Windows**: NSIS installer (x64, 32-bit)
 
 ### Architecture
 
