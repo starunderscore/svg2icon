@@ -24,7 +24,7 @@ function checksums(dir) {
 
 if (platform === 'linux') {
   const targets = ['AppImage', 'deb'];
-  const arches = ['x64', 'arm64'];
+  const arches = ['x64'];
   for (const arch of arches) {
     const out = `release/linux/${arch}`;
     const archFlag = arch === 'x64' ? '--x64' : arch === 'arm64' ? '--arm64' : '--ia32';
@@ -32,6 +32,17 @@ if (platform === 'linux') {
     runBuilder(args);
     trim(out);
     checksums(out);
+  }
+  // Optional: cross-build Windows on Linux if Wine is available
+  if (hasCmd('wine')) {
+    console.log('wine detected: building Windows NSIS (x64) on Linux...');
+    const out = `release/win/x64`;
+    const args = ['-w', 'nsis', `-c.directories.output=${out}`, '--x64'];
+    runBuilder(args);
+    trim(out);
+    checksums(out);
+  } else {
+    console.log('Skipping Windows build: wine not found. Install wine64 to enable cross-build.');
   }
 } else if (platform === 'win32') {
   // Default to x64 only for v1.0.0 to avoid 32-bit native dependency issues (e.g., sharp)

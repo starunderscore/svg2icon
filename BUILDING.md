@@ -47,6 +47,16 @@ Notes:
    ```
 3. Output: `.AppImage` and `.deb` in `release/linux/x64/` (RPM is auto-included if `rpmbuild` is available). A `SHA256SUMS.txt` file is generated for verification.
 
+Optional: cross-build Windows NSIS on Linux
+
+```bash
+sudo apt update
+sudo apt install -y wine64 mono-complete
+npm run dist   # will also produce release/win/x64/SVG2Icon-<ver>-win-x64.exe if wine is available
+```
+
+Note: Cross-building uses Wine to run NSIS. If Wine isn’t installed, the script skips Windows.
+
 ## Fedora Workstation 42 (AppImage)
 
 1. Ensure build tools:
