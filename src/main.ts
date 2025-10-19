@@ -18,8 +18,10 @@ function resolveAppIcon(): string {
 
 function createWindow(): void {
   mainWindow = new BrowserWindow({
-    height: 600,
-    width: 800,
+    height: 900,
+    width: 1200,
+    minHeight: 800,
+    minWidth: 1100,
     icon: resolveAppIcon(),
     autoHideMenuBar: true,
     webPreferences: {

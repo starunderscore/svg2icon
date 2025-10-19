@@ -47,6 +47,30 @@ Notes:
    ```
 3. Output: `.AppImage` and `.deb` in `release/linux/x64/` (RPM is auto-included if `rpmbuild` is available). A `SHA256SUMS.txt` file is generated for verification.
 
+### Install the .deb (simple)
+
+Recommended (apt can resolve dependencies for local .deb files):
+
+```bash
+cd release/linux/x64
+sudo apt install ./SVG2Icon-<version>-linux-amd64.deb   # or: sudo apt install ./*.deb
+```
+
+Alternative using dpkg (use apt to fix dependencies if needed):
+
+```bash
+cd release/linux/x64
+sudo dpkg -i ./SVG2Icon-<version>-linux-amd64.deb || sudo apt -f install
+```
+
+### Uninstall (remove)
+
+```bash
+sudo apt remove svg2icon           # keep user settings
+# or
+sudo apt purge svg2icon            # remove package and system config files
+```
+
 Optional: cross-build Windows NSIS on Linux
 
 ```bash

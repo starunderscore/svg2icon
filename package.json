@@ -66,7 +66,7 @@
     "linux": {
       "target": ["AppImage", "deb"],
       "category": "Graphics",
-      "icon": "src/assets/this-app/icon-512.png",
+      "icon": "src/assets/this-app",
       "executableName": "svg2icon",
       "maintainer": "Star Underscore <maintainer@example.com>",
       "vendor": "Star Underscore",
@@ -76,7 +76,6 @@
         "Name": "SVG2Icon",
         "Comment": "SVG to PNG icon generator",
         "Categories": "Graphics;",
-        "StartupWMClass": "SVG2Icon",
         "Keywords": "svg;icon;png;ico;icns;convert;generator;"
       }
     },
