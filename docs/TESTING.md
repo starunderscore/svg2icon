@@ -3,7 +3,7 @@
 Pragmatic checks to validate Linux x64 and Windows x64 builds.
 
 ## Test matrix
-- Linux x64: one Debian/Ubuntu distro (DEB) and AppImage on a second distro (for portability)
+- Linux x64: Debian/Ubuntu (DEB) and Fedora/RHEL (RPM)
 - Windows x64: Windows 10 or 11
 
 ## Setup
@@ -33,8 +33,8 @@ Pragmatic checks to validate Linux x64 and Windows x64 builds.
 - Error path: invalid/empty SVG → user-friendly error message
 
 ## Platform specifics
-- Linux AppImage: `chmod +x`, run, no missing lib errors
 - Linux DEB: installs, appears in desktop menu, launches; uninstall cleanly removes app
+- Linux RPM: installs, appears in desktop menu, launches; uninstall cleanly removes app
 - Windows NSIS: installs with shortcuts; uninstall removes app, leaves user files intact
 
 ## Smoke pass criteria

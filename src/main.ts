@@ -174,10 +174,10 @@ ipcMain.handle('check-for-updates', async () => {
         const a = assets.find(a => patt.test(a.name));
         if (a) assetUrl = a.browser_download_url;
       } else if (plat === 'linux') {
-        // Prefer AppImage per arch
-        const patt = arch === 'arm64' ? /linux-arm64\.AppImage$/i : /linux-x86_64\.AppImage$/i;
-        const a = assets.find(a => patt.test(a.name));
-        if (a) assetUrl = a.browser_download_url;
+        // Prefer DEB (Debian/Ubuntu); fallback to RPM (Fedora/RHEL)
+        const deb = assets.find(a => /linux-amd64\.deb$/i.test(a.name) || /linux-arm64\.deb$/i.test(a.name));
+        const rpm = assets.find(a => /linux-x86_64\.rpm$/i.test(a.name) || /linux-aarch64\.rpm$/i.test(a.name));
+        if (deb) assetUrl = deb.browser_download_url; else if (rpm) assetUrl = rpm.browser_download_url;
       } else if (plat === 'darwin') {
         // Future: dmg
         const a = assets.find(a => /\.dmg$/i.test(a.name));

@@ -11,20 +11,20 @@ Concise steps to ship a version. Tailor as needed.
 - Install: `npm ci`
 - Compile: `npm run build`
 - Package:
-  - Host Linux: `npm run dist` (produces Linux x64 AppImage + DEB; Windows x64 if wine is available)
+  - Host Linux: `npm run dist` (produces Linux x64 DEB + RPM; Windows x64 if wine is available)
   - Or run platform scripts as appropriate
 
 ## 3) Artifacts
 - Verify outputs exist:
-  - `release/linux/x64/*.AppImage`
   - `release/linux/x64/*.deb`
+  - `release/linux/x64/*.rpm`
   - `release/win/x64/*-win-x64.exe` (if building Windows)
 - Checksum file present: `SHA256SUMS.txt` in each folder
 
 ## 4) Smoke tests
 - Linux (x64):
-  - AppImage: `chmod +x`, run; generate icons from a sample SVG
-  - DEB: install; launch from menu; generate icons
+  - DEB (Debian/Ubuntu): install; launch from menu; generate icons
+  - RPM (Fedora/RHEL): install; launch from menu; generate icons
 - Windows (x64):
   - Install NSIS; launch from Start; generate icons
 

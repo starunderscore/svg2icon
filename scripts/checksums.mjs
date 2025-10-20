@@ -16,7 +16,7 @@ function sha256File(file) {
 
 (async () => {
   const files = readdirSync(targetDir)
-    .filter((n) => /\.(AppImage|deb|rpm|exe)$/i.test(n))
+    .filter((n) => /\.(deb|rpm|exe)$/i.test(n))
     .map((n) => join(targetDir, n))
     .filter((p) => statSync(p).isFile());
 

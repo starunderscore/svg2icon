@@ -23,7 +23,17 @@ function checksums(dir) {
 }
 
 if (platform === 'linux') {
-  const targets = ['AppImage', 'deb'];
+  const targets = [];
+  if (hasCmd('dpkg-deb')) {
+    targets.push('deb');
+  } else {
+    console.log('Skipping DEB build: dpkg-deb not found. Install it to enable DEB output (Ubuntu/Debian: installed by default; Fedora: sudo dnf install dpkg fakeroot).');
+  }
+  if (hasCmd('rpmbuild')) {
+    targets.push('rpm');
+  } else {
+    console.log('Skipping RPM build: rpmbuild not found. Install it to enable RPM output (Ubuntu/Debian: sudo apt install rpm, Fedora: sudo dnf install rpm-build).');
+  }
   const arches = ['x64'];
   for (const arch of arches) {
     const out = `release/linux/${arch}`;

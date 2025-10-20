@@ -33,19 +33,19 @@ Notes:
 - If native build tools are needed, install Visual Studio Build Tools 2022 (C++ workload).
 - 32-bit Windows (ia32) is not shipped in v1.0.0 due to native dependency constraints; we can revisit if needed.
 
-## Ubuntu/Kubuntu 24.04 (AppImage + .deb)
+## Ubuntu/Kubuntu 24.04 (.deb + .rpm)
 
 1. Ensure build tools:
-   ```bash
-   sudo apt update
-   sudo apt install -y libfuse2 fakeroot dpkg-dev
-   ```
+  ```bash
+  sudo apt update
+  sudo apt install -y fakeroot dpkg-dev rpm
+  ```
 2. Build:
    ```bash
    npm ci
    npm run dist:linux
    ```
-3. Output: `.AppImage` and `.deb` in `release/linux/x64/` (RPM is auto-included if `rpmbuild` is available). A `SHA256SUMS.txt` file is generated for verification.
+3. Output: `.deb` and `.rpm` in `release/linux/x64/` (RPM requires `rpmbuild`). If `rpmbuild` is missing, the build script skips RPM and continues. A `SHA256SUMS.txt` file is generated for verification.
 
 ### Install the .deb (simple)
 
@@ -81,32 +81,27 @@ npm run dist   # will also produce release/win/x64/SVG2Icon-<ver>-win-x64.exe if
 
 Note: Cross-building uses Wine to run NSIS. If Wine isn’t installed, the script skips Windows.
 
-## Fedora Workstation 42 (AppImage)
+## Fedora Workstation 42 (.rpm)
 
 1. Ensure build tools:
-   ```bash
-   sudo dnf install -y rpm-build fuse
-   ```
+  ```bash
+  sudo dnf install -y rpm-build
+  ```
 2. Build:
    ```bash
    npm ci
    npm run dist:linux
    ```
-3. Output: `.AppImage` in `release/linux/x64/`. A `SHA256SUMS.txt` file is generated for verification.
-   - Note: RPM is intentionally omitted for v1.0.0. We can enable it later.
+3. Output: `.rpm` in `release/linux/x64/`. A `SHA256SUMS.txt` file is generated for verification.
 
-## Manjaro KDE (AppImage)
+### Install the .rpm (simple)
 
-1. Ensure AppImage runtime:
-   ```bash
-   sudo pacman -S --needed libfuse2
-   ```
-2. Build:
-   ```bash
-   npm ci
-   npm run dist:linux
-   ```
-3. Output: `.AppImage` (plus `.deb`/`.rpm` if tools available) in `release/linux/x64/`. A `SHA256SUMS.txt` file is generated for verification.
+```bash
+cd release/linux/x64
+sudo dnf install ./SVG2Icon-<version>-1.x86_64.rpm   # or: sudo dnf install ./*.rpm
+```
+
+<!-- AppImage and Arch packaging are intentionally not supported in this project. -->
 
 ## ARM64 (aarch64) builds
 
@@ -118,17 +113,12 @@ npm run dist   # on a Linux host; the script builds x64 and arm64
 
 Outputs will be written to `release/linux/arm64/`. Note: Running ARM64 artifacts requires an ARM64 system; they won’t run on x64 machines.
 
-## Running the AppImage
-
-```bash
-chmod +x release/linux/"SVG2Icon-<version>-linux-x86_64.AppImage"
-release/linux/"SVG2Icon-<version>-linux-x86_64.AppImage"
-```
+<!-- AppImage runtime instructions removed: not supported. -->
 
 ## What we ship
 
 - Windows: NSIS installer (`.exe`) with Start Menu and Desktop shortcuts in `release/win/`
-- Linux: AppImage (universal) and `.deb` (Debian/Ubuntu/Mint) in `release/linux/`
+- Linux: `.deb` (Debian/Ubuntu/Mint) and `.rpm` (Fedora/RHEL) in `release/linux/`
 
 ## Icons and Metadata
 
