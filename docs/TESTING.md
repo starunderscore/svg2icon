@@ -1,6 +1,6 @@
 # Testing Guide (1.0.0)
 
-Pragmatic checks to validate Linux x64 and Windows x64 builds.
+Manual testing only for v1.0.0. Builds are produced on Ubuntu; verify installs on Ubuntu (.deb), Fedora/RHEL (.rpm), and Windows (NSIS).
 
 ## Test matrix
 - Linux x64: Debian/Ubuntu (DEB) and Fedora/RHEL (RPM)
@@ -8,7 +8,27 @@ Pragmatic checks to validate Linux x64 and Windows x64 builds.
 
 ## Setup
 - Sample assets: pick a few SVGs (simple logo, complex paths, large 4096px)
-- Install builds from `release/` outputs
+- Install builds from `release/` outputs on each target OS
+
+## Install commands (cheat sheet)
+- Ubuntu/Debian (.deb):
+  ```bash
+  cd release/linux/x64
+  sudo apt install ./SVG2Icon-<version>-linux-amd64.deb   # or: sudo apt install ./*.deb
+  ```
+  Uninstall:
+  ```bash
+  sudo apt remove svg2icon   # or: sudo apt purge svg2icon
+  ```
+
+- Fedora/RHEL (.rpm):
+  ```bash
+  cd release/linux/x64
+  sudo dnf install ./SVG2Icon-<version>-1.x86_64.rpm   # or: sudo dnf install ./*.rpm
+  ```
+
+- Windows (NSIS .exe):
+  - Run the installer and accept defaults; verify Start Menu/Desktop shortcuts
 
 ## Core flows
 - Launch: app opens without errors; app icon shows correctly
@@ -33,8 +53,8 @@ Pragmatic checks to validate Linux x64 and Windows x64 builds.
 - Error path: invalid/empty SVG → user-friendly error message
 
 ## Platform specifics
-- Linux DEB: installs, appears in desktop menu, launches; uninstall cleanly removes app
-- Linux RPM: installs, appears in desktop menu, launches; uninstall cleanly removes app
+- Linux DEB (Ubuntu/Debian): installs, appears in desktop menu, launches; uninstall cleanly removes app
+- Linux RPM (Fedora/RHEL): installs, appears in desktop menu, launches; uninstall cleanly removes app
 - Windows NSIS: installs with shortcuts; uninstall removes app, leaves user files intact
 
 ## Smoke pass criteria
@@ -43,3 +63,4 @@ Pragmatic checks to validate Linux x64 and Windows x64 builds.
 - No crashes, no blocking errors
 
 Tips: If a failure occurs, capture the SVG, logs, and platform details to file an issue.
+

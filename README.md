@@ -134,13 +134,12 @@ svg2icon/
 ### Building for Distribution
 
 ```bash
-# Build for current platform
+# From Ubuntu (recommended): produces Linux .deb + .rpm (x64)
 npm run dist
 
-# The packaged app will be in the 'release' folder
+# Artifacts will be in the 'release' folder
 ```
-
-For platform-specific prerequisites and commands (Windows NSIS, Linux DEB/RPM), see `BUILDING.md`.
+For platform-specific prerequisites and commands (Windows NSIS, Linux DEB/RPM), see `docs/BUILDING.md`.
 
 ## 🛠️ Technical Details
 
@@ -162,9 +161,9 @@ The app uses multiple methods for optimal icon generation:
 
 ### Cross-Platform Support
 
-- **Linux**: DEB + RPM (x64, arm64)
+- **Linux**: DEB + RPM (x64)
 - **macOS**: Ready (ICNS wired) if targeted later
-- **Windows**: NSIS installer (x64, 32-bit)
+- **Windows**: NSIS installer (x64)
 
 ### Architecture
 
@@ -218,6 +217,8 @@ If you fork this project and want to use your own PostHog project, replace the A
 - Install ImageMagick: `sudo apt install imagemagick` (Linux)
 - Install png2icons: `npm install png2icons`
 - Manual conversion instructions provided in generated README
+
+
 
 **Installation fails:**
 - Make sure you have Node.js v16 or higher

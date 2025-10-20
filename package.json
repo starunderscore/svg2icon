@@ -18,7 +18,8 @@
     "postdist:linux": "node scripts/trim-release.mjs release/linux && node scripts/checksums.mjs release/linux",
     "dist:win": "electron-builder -w nsis -c.directories.output=release/win",
     "postdist:win": "node scripts/trim-release.mjs release/win",
-    "postinstall": "electron-builder install-app-deps",
+    "prepare:fa": "node scripts/copy-fa.mjs",
+    "postinstall": "electron-builder install-app-deps && node scripts/copy-fa.mjs",
     "postdist": "node scripts/trim-release.mjs"
   },
   "devDependencies": {
@@ -27,6 +28,7 @@
     "@types/sharp": "^0.31.1",
     "electron": "^28.0.0",
     "electron-builder": "^24.9.1",
+    "@fortawesome/fontawesome-free": "^6.5.1",
     "typescript": "^5.3.3"
   },
   "dependencies": {
@@ -46,7 +48,8 @@
     ],
     "files": [
       "dist/**/*",
-      "src/renderer/**/*"
+      "src/renderer/**/*",
+      "src/assets/star-underscore/**/*"
     ],
     "extraResources": [
       {

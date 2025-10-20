@@ -11,8 +11,8 @@ Concise steps to ship a version. Tailor as needed.
 - Install: `npm ci`
 - Compile: `npm run build`
 - Package:
-  - Host Linux: `npm run dist` (produces Linux x64 DEB + RPM; Windows x64 if wine is available)
-  - Or run platform scripts as appropriate
+  - Host Ubuntu: `npm run dist` (produces Linux x64 DEB + RPM; Windows x64 if Wine is available)
+  - Or run platform-native builds as appropriate
 
 ## 3) Artifacts
 - Verify outputs exist:
