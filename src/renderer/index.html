@@ -1,183 +1,433 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SVG2Icon</title>
-  <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
-  <link rel="stylesheet" href="styles.css">
+  <meta name="theme-color" content="#0f172a">
+  <title>SVG2Icon v1.1.0 - Professional Icon Generator</title>
+  
+  <!-- Bulma CSS Framework -->
+  <link rel="stylesheet" href="../../node_modules/bulma/css/bulma.min.css">
+  
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="../styles/main.css">
+  <link rel="stylesheet" href="../styles/themes/dark.css">
+  <link rel="stylesheet" href="../styles/themes/light.css">
+  <link rel="stylesheet" href="../styles/components/buttons.css">
+  <link rel="stylesheet" href="../styles/components/modals.css">
+  <link rel="stylesheet" href="../styles/components/tables.css">
+  <link rel="stylesheet" href="../styles/components/forms.css">
+  
+  <!-- Additional Styles -->
+  <style>
+    /* Critical animations */
+    @keyframes slideInDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes slideOutUp {
+      from { opacity: 1; transform: translateY(0); }
+      to { opacity: 0; transform: translateY(-20px); }
+    }
+    
+    @keyframes slideInRight {
+      from { opacity: 0; transform: translateX(100%); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    
+    @keyframes slideOutRight {
+      from { opacity: 1; transform: translateX(0); }
+      to { opacity: 0; transform: translateX(100%); }
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    @keyframes fadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    @keyframes scaleIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    
+    /* Component-specific styles */
+    .shortcuts-help {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-lg);
+      padding: 2rem;
+      box-shadow: var(--shadow-xl);
+      z-index: 10000;
+      min-width: 300px;
+    }
+    
+    .shortcuts-help h3 {
+      margin-bottom: 1rem;
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+    
+    .shortcuts-help ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .shortcuts-help li {
+      margin-bottom: 0.5rem;
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+    }
+    
+    .shortcuts-help kbd {
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      padding: 0.125rem 0.25rem;
+      font-size: 0.75rem;
+      color: var(--text-primary);
+    }
+    
+    .error-boundary {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 99999;
+    }
+    
+    .error-content {
+      background: var(--bg-secondary);
+      border: 1px solid var(--danger);
+      border-radius: var(--border-radius-lg);
+      padding: 2rem;
+      max-width: 500px;
+      text-align: center;
+    }
+    
+    .error-content h2 {
+      color: var(--danger);
+      margin-bottom: 1rem;
+    }
+    
+    .error-content p {
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+    }
+    
+    .error-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+    
+    /* Utility classes */
+    .is-hidden {
+      display: none !important;
+    }
+    
+    .app-container {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    /* SVG preview enhancements */
+    .svg-preview-large {
+      width: 120px;
+      height: 120px;
+      border: 2px solid var(--border-color);
+      border-radius: var(--border-radius-lg);
+      background: var(--bg-tertiary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+    
+    .svg-preview-large img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+    
+    .svg-preview-container {
+      display: flex;
+      gap: 1.5rem;
+      align-items: flex-start;
+    }
+    
+    .svg-info {
+      flex: 1;
+    }
+    
+    .svg-info-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+    }
+    
+    .svg-info-item .label {
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+    
+    .svg-info-item .value {
+      color: var(--text-primary);
+    }
+    
+    .action-buttons {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+    
+    .privacy-info {
+      background: var(--bg-tertiary);
+      border-radius: var(--border-radius);
+      padding: 1rem;
+      margin-top: 1rem;
+    }
+    
+    .privacy-info p {
+      margin-bottom: 0.5rem;
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+    }
+    
+    .privacy-info p:last-child {
+      margin-bottom: 0;
+    }
+    
+    .update-actions {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      margin-top: 1rem;
+    }
+    
+    .about-info {
+      text-align: center;
+    }
+    
+    .app-info h4 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+    }
+    
+    .app-info p {
+      color: var(--text-secondary);
+      margin-bottom: 0.25rem;
+    }
+    
+    .links {
+      margin-top: 1.5rem;
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    
+    /* Theme preview styles */
+    .theme-sample-header {
+      height: 8px;
+      background: var(--bg-hover);
+      margin-bottom: 4px;
+      border-radius: 2px;
+    }
+    
+    .theme-sample-content {
+      height: 12px;
+      background: var(--text-muted);
+      border-radius: 2px;
+    }
+  </style>
 </head>
-
 <body>
-  <div class="container">
-    <div class="settings-icon" id="settingsIcon" title="Settings">
-      <i class="fa-solid fa-gear"></i>
+  <div id="app" class="app-container">
+    <!-- App Header -->
+    <header id="app-header" class="app-header">
+      <!-- Will be populated by AppHeader component -->
+    </header>
+
+    <!-- Main Content -->
+    <main id="main-content" class="main-content">
+      <!-- Will be populated by MainContent component -->
+    </main>
+
+    <!-- Modal Container -->
+    <div id="modal-container" class="modal-container">
+      <!-- Modals will be rendered here -->
     </div>
 
-    <h1>SVG2Icon</h1>
-    <p style="margin-bottom: 30px; color: #6c757d;">Convert SVG to PNG icon sets for mobile, desktop & web apps</p>
-
-    <div class="icon-preview" id="iconPreview">
-      <span style="color: #6c757d;">No SVG selected</span>
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay is-hidden">
+      <div class="loading-content">
+        <div class="spinner"></div>
+        <p class="loading-text">Processing...</p>
+      </div>
     </div>
 
-    <div class="file-input-container">
-      <button class="btn" id="selectSvgBtn">Select SVG File</button>
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container">
+      <!-- Toast notifications will appear here -->
     </div>
 
-    <div class="icon-type-selector">
-      <label for="iconType">Icon Type:</label>
-      <select id="iconType">
-        <option value="universal">Universal (Mobile + Desktop + Web)</option>
-        <option value="ios">iOS App Icons</option>
-        <option value="android">Android App Icons</option>
-        <option value="desktop">Desktop App Icons</option>
-        <option value="web">Web App Icons (PWA)</option>
-      </select>
-    </div>
-
-    <div id="outputPath" class="output-path" style="display: none;">
-      Output folder: <span id="outputPathText"></span>
-    </div>
-
-    <div>
-      <button class="btn secondary" id="selectOutputBtn">Choose Output Folder</button>
-      <button class="btn success" id="generateBtn" disabled>Generate Icons</button>
-    </div>
-
-    <div id="status" class="status"></div>
-
-    <div class="feature-list">
-      <h3>What you'll get:</h3>
-      <ul id="featureList">
-        <li>High-quality PNG icons</li>
-        <li>All standard mobile sizes</li>
-        <li>Organized folder structure</li>
-        <li>Manifest file with details</li>
+    <!-- Keyboard Shortcuts Help -->
+    <div id="shortcuts-help" class="shortcuts-help is-hidden">
+      <h3>Keyboard Shortcuts</h3>
+      <ul>
+        <li><kbd>Ctrl/Cmd</kbd> + <kbd>N</kbd> - New Project</li>
+        <li><kbd>Ctrl/Cmd</kbd> + <kbd>,</kbd> - Settings</li>
+        <li><kbd>Escape</kbd> - Close Modal</li>
+        <li><kbd>Enter</kbd> - Confirm Action</li>
+        <li><kbd>Delete</kbd> - Delete Selected Project</li>
+        <li><kbd>Ctrl/Cmd</kbd> + <kbd>/</kbd> - Show/Hide This Help</li>
       </ul>
     </div>
-  </div>
 
-  <!-- Settings Modal -->
-  <div class="modal-overlay" id="settingsModal">
-    <div class="modal">
-      <div class="modal-header">
-        <h2 class="modal-title">Settings</h2>
-        <button class="modal-close" id="closeModal">&times;</button>
-      </div>
-      <div class="modal-body">
-        <!-- Theme Section -->
-        <div class="settings-section">
-          <h3 class="section-title">
-            <svg class="section-icon" viewBox="0 0 24 24">
-              <path
-                d="M12 2.5a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0V3a.5.5 0 0 1 .5-.5ZM7.5 6A1.5 1.5 0 0 0 6 7.5v9A1.5 1.5 0 0 0 7.5 18h9a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 16.5 6h-9ZM19 12a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5ZM12 18.5a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2a.5.5 0 0 1 .5-.5ZM5.5 12a.5.5 0 0 1-.5.5H3a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5Z" />
-            </svg>
-            Theme
-          </h3>
-          <div class="theme-selector">
-            <div class="theme-option" data-theme="light">
-              <div class="theme-preview theme-light">
-                <div class="theme-circle"></div>
-                <div class="theme-bars">
-                  <div class="theme-bar"></div>
-                  <div class="theme-bar"></div>
-                </div>
-              </div>
-              <span>Light</span>
-            </div>
-            <div class="theme-option active" data-theme="system">
-              <div class="theme-preview theme-system">
-                <div class="theme-circle"></div>
-                <div class="theme-bars">
-                  <div class="theme-bar"></div>
-                  <div class="theme-bar"></div>
-                </div>
-              </div>
-              <span>System</span>
-            </div>
-            <div class="theme-option" data-theme="dark">
-              <div class="theme-preview theme-dark">
-                <div class="theme-circle"></div>
-                <div class="theme-bars">
-                  <div class="theme-bar"></div>
-                  <div class="theme-bar"></div>
-                </div>
-              </div>
-              <span>Dark</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Updates Section -->
-        <div class="settings-section">
-          <h3 class="section-title">
-            <svg class="section-icon" viewBox="0 0 24 24">
-              <path
-                d="M12 2C17.5 2 22 6.5 22 12S17.5 22 12 22 2 17.5 2 12 6.5 2 12 2M12 4C7.58 4 4 7.58 4 12S7.58 20 12 20 20 16.42 20 12 16.42 4 12 4M12 6L16 10H13V14H11V10H8L12 6Z" />
-            </svg>
-            Check for Updates
-          </h3>
-          <div class="setting-item">
-            <div class="setting-label">
-              <h4>Automatic Updates</h4>
-              <p>Automatically check for app updates on startup</p>
-            </div>
-            <div class="toggle-switch" id="autoUpdateToggle">
-              <div class="toggle-slider"></div>
-            </div>
-          </div>
-          <button class="btn small" id="checkUpdateBtn">Check for Updates</button>
-          <div class="update-status" id="updateStatus" style="display: none;"></div>
-          <p style="margin-top: 15px; font-size: 12px; color: #6c757d; text-align: center;">
-            Current Version: 1.0.0
-          </p>
-        </div>
-
-        <!-- Telemetry Section -->
-        <div class="settings-section">
-          <h3 class="section-title">
-            <svg class="section-icon" viewBox="0 0 24 24">
-              <path d="M9.4 16.6L4.8 12L3.4 13.4L9.4 19.4L20.6 8.2L19.2 6.8L9.4 16.6Z" />
-            </svg>
-            Analytics & Data
-          </h3>
-          <div class="setting-item">
-            <div class="setting-label">
-              <h4>Anonymous Usage Analytics</h4>
-              <p>Help improve the app by sharing anonymous usage statistics and feature usage patterns</p>
-            </div>
-            <div class="toggle-switch active" id="telemetryToggle">
-              <div class="toggle-slider"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- About Section -->
-        <div class="settings-section">
-          <h3 class="section-title">
-            <svg class="section-icon" viewBox="0 0 24 24">
-              <path
-                d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6M12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8Z" />
-            </svg>
-            About
-          </h3>
-          <div class="brand-section">
-            <div class="brand-logo">
-              <img src="../assets/star-underscore/favicon-32x32.png" alt="StarUnderscore Logo" class="logo-image">
-            </div>
-            <div class="brand-text">
-              <strong>Proudly made by</strong><br>
-              <a href="https://starunderscore.com" class="brand-link" target="_blank">StarUnderscore.com</a>
-            </div>
-          </div>
+    <!-- Error Boundary -->
+    <div id="error-boundary" class="error-boundary is-hidden">
+      <div class="error-content">
+        <h2>Application Error</h2>
+        <p>The application encountered an unexpected error. Please try refreshing the page or restart the application.</p>
+        <div class="error-actions">
+          <button class="button is-primary" onclick="location.reload()">Refresh Page</button>
+          <button class="button" onclick="document.getElementById('error-boundary').classList.add('is-hidden')">Dismiss</button>
         </div>
       </div>
     </div>
   </div>
 
-  <script src="renderer.js"></script>
-</body>
+  <!-- App JavaScript -->
+  <script type="module" src="../../dist/renderer/app.js"></script>
+  
+  <!-- Initialization Scripts -->
+  <script>
+    // Global error handler
+    window.addEventListener('error', (event) => {
+      console.error('Global error:', event.error);
+      showErrorBoundary(event.error?.message || 'An unexpected error occurred');
+    });
 
+    window.addEventListener('unhandledrejection', (event) => {
+      console.error('Unhandled promise rejection:', event.reason);
+      showErrorBoundary('A promise was rejected: ' + (event.reason?.message || event.reason));
+    });
+
+    function showErrorBoundary(message) {
+      const errorBoundary = document.getElementById('error-boundary');
+      if (errorBoundary) {
+        const messageElement = errorBoundary.querySelector('p');
+        if (messageElement) {
+          messageElement.textContent = message || 'An unexpected error occurred';
+        }
+        errorBoundary.classList.remove('is-hidden');
+      }
+    }
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      // Help toggle
+      if ((e.ctrlKey || e.metaKey) && e.key === '/') {
+        e.preventDefault();
+        const help = document.getElementById('shortcuts-help');
+        if (help) {
+          help.classList.toggle('is-hidden');
+        }
+      }
+      
+      // Close help with Escape
+      if (e.key === 'Escape') {
+        const help = document.getElementById('shortcuts-help');
+        if (help && !help.classList.contains('is-hidden')) {
+          help.classList.add('is-hidden');
+        }
+      }
+    });
+
+    // Theme management
+    function applyInitialTheme() {
+      try {
+        const savedTheme = localStorage.getItem('svg2icon_theme') || 'dark';
+        let resolvedTheme = savedTheme;
+        
+        if (savedTheme === 'system') {
+          resolvedTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        
+        document.documentElement.setAttribute('data-theme', resolvedTheme);
+        
+        // Update theme-color meta tag
+        const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+        if (themeColorMeta) {
+          themeColorMeta.setAttribute('content', resolvedTheme === 'dark' ? '#0f172a' : '#ffffff');
+        }
+        
+        console.log('Applied theme:', resolvedTheme);
+      } catch (error) {
+        console.error('Theme application failed:', error);
+        // Fallback to dark theme
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    }
+
+    // Apply theme immediately
+    applyInitialTheme();
+
+    // Listen for system theme changes
+    if (window.matchMedia) {
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+        try {
+          const savedTheme = localStorage.getItem('svg2icon_theme');
+          if (savedTheme === 'system') {
+            applyInitialTheme();
+          }
+        } catch (error) {
+          console.error('System theme change handler failed:', error);
+        }
+      });
+    }
+
+    // Performance monitoring
+    window.addEventListener('load', () => {
+      if (window.performance && window.performance.timing) {
+        const loadTime = window.performance.timing.loadEventEnd - window.performance.timing.navigationStart;
+        console.log('Page load time:', loadTime + 'ms');
+      }
+    });
+
+    // Console welcome message
+    console.log('%cSVG2Icon v1.1.0', 'color: #3b82f6; font-size: 24px; font-weight: bold;');
+    console.log('%cProfessional SVG to Icon Generator', 'color: #6b7280; font-size: 14px;');
+    console.log('%cMade with ❤️ by StarUnderscore.com', 'color: #6b7280; font-size: 12px;');
+  </script>
+</body>
 </html>

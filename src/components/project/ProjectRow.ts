@@ -1,0 +1,319 @@
+// ProjectRow component - Individual table row for each project
+
+import { ProjectActions } from './ProjectActions.js';
+import type { Project, IconType } from '../../types/Project.js';
+import type { ProjectService } from '../../services/ProjectService.js';
+import type { EventManager } from '../../utils/events.js';
+
+interface ProjectRowProps {
+  project: Project;
+  projectService: ProjectService;
+  eventManager: EventManager;
+  onEdit: (project: Project) => void;
+  onDelete: (project: Project) => void;
+  onDownload: (project: Project, type: string) => void;
+}
+
+export class ProjectRow {
+  private props: ProjectRowProps;
+  private element: HTMLTableRowElement | null = null;
+  private projectActions: ProjectActions;
+  private isEditing = false;
+
+  constructor(props: ProjectRowProps) {
+    this.props = props;
+    this.projectActions = new ProjectActions({
+      project: props.project,
+      onEdit: props.onEdit,
+      onDelete: props.onDelete,
+      onGenerate: (iconType) => this.handleGenerate(iconType)
+    });
+  }
+
+  render(): HTMLTableRowElement {
+    this.element = document.createElement('tr');
+    this.element.className = 'project-row';
+    this.element.dataset.projectId = this.props.project.id;
+    
+    this.updateHTML();
+    this.attachEventListeners();
+    
+    return this.element;
+  }
+
+  updateProject(project: Project): void {
+    this.props.project = project;
+    this.projectActions.updateProject(project);
+    this.updateHTML();
+  }
+
+  async animateDelete(): Promise<void> {
+    if (!this.element) return;
+
+    this.element.style.animation = 'slideOutUp 0.3s ease forwards';
+    
+    return new Promise(resolve => {
+      setTimeout(() => {
+        if (this.element?.parentNode) {
+          this.element.parentNode.removeChild(this.element);
+        }
+        resolve();
+      }, 300);
+    });
+  }
+
+  private updateHTML(): void {
+    if (!this.element) return;
+
+    const project = this.props.project;
+    const formattedDate = this.formatDate(project.createdAt);
+    const svgPreview = this.createSvgPreview(project.svgData);
+
+    this.element.innerHTML = `
+      <td class="project-name-cell">
+        ${this.isEditing ? this.getEditableNameHTML() : this.getNameHTML()}
+      </td>
+      <td class="svg-preview-cell">
+        ${svgPreview}
+      </td>
+      <td class="project-date-cell">
+        <span class="project-date">${formattedDate}</span>
+      </td>
+      <td class="download-buttons-cell">
+        <div class="download-buttons">
+          <button class="download-btn" data-download="all" title="Download all formats">
+            All
+          </button>
+          <button class="download-btn" data-download="mobile" title="Download mobile package">
+            Mobile
+          </button>
+          <button class="download-btn" data-download="desktop" title="Download desktop package">
+            Desktop
+          </button>
+          <button class="download-btn" data-download="web" title="Download web package">
+            Web
+          </button>
+          <button class="download-btn" data-download="original" title="Download original SVG">
+            SVG
+          </button>
+        </div>
+      </td>
+      <td class="project-actions-cell">
+        <div class="project-actions">
+          <button class="actions-trigger" type="button" title="More actions">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/>
+            </svg>
+          </button>
+          <div id="actions-menu-${project.id}" class="dropdown-menu">
+            <!-- Actions menu will be rendered here -->
+          </div>
+        </div>
+      </td>
+    `;
+
+    // Render actions menu
+    const actionsContainer = this.element.querySelector(`#actions-menu-${project.id}`);
+    if (actionsContainer) {
+      this.projectActions.render(actionsContainer as HTMLElement);
+    }
+  }
+
+  private getNameHTML(): string {
+    return `
+      <div class="project-name" title="${this.props.project.name}">
+        ${this.escapeHtml(this.props.project.name)}
+      </div>
+    `;
+  }
+
+  private getEditableNameHTML(): string {
+    return `
+      <input 
+        class="project-name-editable" 
+        type="text" 
+        value="${this.escapeHtml(this.props.project.name)}"
+        maxlength="100"
+      />
+    `;
+  }
+
+  private createSvgPreview(svgData: string): string {
+    if (!svgData) {
+      return `
+        <div class="svg-preview">
+          <div class="svg-preview-placeholder">No preview</div>
+        </div>
+      `;
+    }
+
+    try {
+      // Convert base64 to data URL
+      const dataUrl = `data:image/svg+xml;base64,${svgData}`;
+      
+      return `
+        <div class="svg-preview">
+          <img src="${dataUrl}" alt="SVG Preview" />
+        </div>
+      `;
+    } catch (error) {
+      return `
+        <div class="svg-preview">
+          <div class="svg-preview-placeholder">Invalid SVG</div>
+        </div>
+      `;
+    }
+  }
+
+  private attachEventListeners(): void {
+    if (!this.element) return;
+
+    // Download buttons
+    const downloadButtons = this.element.querySelectorAll('.download-btn');
+    downloadButtons.forEach(button => {
+      button.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const type = (button as HTMLElement).dataset.download;
+        if (type) {
+          this.handleDownload(type);
+        }
+      });
+    });
+
+    // Actions trigger
+    const actionsTrigger = this.element.querySelector('.actions-trigger');
+    actionsTrigger?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.toggleActionsMenu();
+    });
+
+    // Name editing
+    const nameCell = this.element.querySelector('.project-name-cell');
+    nameCell?.addEventListener('dblclick', () => {
+      this.startEditing();
+    });
+
+    // Click outside to close menus
+    document.addEventListener('click', (e) => {
+      if (!this.element?.contains(e.target as Node)) {
+        this.closeActionsMenu();
+      }
+    });
+  }
+
+  private startEditing(): void {
+    this.isEditing = true;
+    this.updateHTML();
+    
+    const input = this.element?.querySelector('.project-name-editable') as HTMLInputElement;
+    if (input) {
+      input.focus();
+      input.select();
+      
+      const saveEdit = async () => {
+        const newName = input.value.trim();
+        if (newName && newName !== this.props.project.name) {
+          try {
+            const updated = await this.props.projectService.update(this.props.project.id, {
+              name: newName
+            });
+            this.props.eventManager.emit('project:updated', updated);
+          } catch (error) {
+            console.error('Failed to update project name:', error);
+          }
+        }
+        this.isEditing = false;
+        this.updateHTML();
+      };
+
+      const cancelEdit = () => {
+        this.isEditing = false;
+        this.updateHTML();
+      };
+
+      input.addEventListener('blur', saveEdit);
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          saveEdit();
+        } else if (e.key === 'Escape') {
+          e.preventDefault();
+          cancelEdit();
+        }
+      });
+    }
+  }
+
+  private handleDownload(type: string): void {
+    const button = this.element?.querySelector(`[data-download="${type}"]`) as HTMLButtonElement;
+    if (button) {
+      button.classList.add('is-loading');
+      
+      this.props.onDownload(this.props.project, type);
+      
+      // Remove loading state after a delay
+      setTimeout(() => {
+        button.classList.remove('is-loading');
+      }, 2000);
+    }
+  }
+
+  private async handleGenerate(iconType: IconType): Promise<void> {
+    try {
+      await this.props.projectService.generateIcons(this.props.project.id, iconType);
+      this.props.eventManager.emit('project:generation_completed', {
+        projectId: this.props.project.id,
+        iconType
+      });
+    } catch (error) {
+      console.error('Failed to generate icons:', error);
+      this.props.eventManager.emit('project:generation_failed', {
+        projectId: this.props.project.id,
+        iconType,
+        error: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
+  }
+
+  private toggleActionsMenu(): void {
+    const menu = this.element?.querySelector('.dropdown-menu');
+    if (menu) {
+      menu.classList.toggle('is-active');
+    }
+  }
+
+  private closeActionsMenu(): void {
+    const menu = this.element?.querySelector('.dropdown-menu');
+    if (menu) {
+      menu.classList.remove('is-active');
+    }
+  }
+
+  private formatDate(dateString: string): string {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+    const diffMinutes = Math.floor(diffMs / (1000 * 60));
+
+    if (diffMinutes < 1) return 'Just now';
+    if (diffMinutes < 60) return `${diffMinutes}m ago`;
+    if (diffHours < 24) return `${diffHours}h ago`;
+    if (diffDays < 7) return `${diffDays}d ago`;
+    if (diffDays < 30) return `${Math.floor(diffDays / 7)}w ago`;
+    
+    return date.toLocaleDateString();
+  }
+
+  private escapeHtml(text: string): string {
+    const map: Record<string, string> = {
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#039;'
+    };
+    return text.replace(/[&<>"']/g, (m) => map[m]);
+  }
+}

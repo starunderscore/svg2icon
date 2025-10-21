@@ -1,0 +1,114 @@
+// SettingsService - Application settings management
+
+interface AppSettings {
+  theme: 'light' | 'dark' | 'system';
+  telemetry: boolean;
+  autoUpdate: boolean;
+  defaultIconType: string;
+  lastUsedOutputPath?: string;
+}
+
+export class SettingsService {
+  private settings: AppSettings;
+  private initialized = false;
+
+  constructor() {
+    this.settings = this.getDefaultSettings();
+  }
+
+  async initialize(): Promise<void> {
+    if (this.initialized) return;
+
+    try {
+      const savedSettings = await window.electronAPI.settings.get();
+      this.settings = { ...this.settings, ...savedSettings };
+      this.initialized = true;
+    } catch (error) {
+      console.error('Failed to load settings:', error);
+      this.settings = this.getDefaultSettings();
+      this.initialized = true;
+    }
+  }
+
+  async getAll(): Promise<AppSettings> {
+    if (!this.initialized) {
+      await this.initialize();
+    }
+    return { ...this.settings };
+  }
+
+  async get<K extends keyof AppSettings>(key: K): Promise<AppSettings[K]> {
+    if (!this.initialized) {
+      await this.initialize();
+    }
+    return this.settings[key];
+  }
+
+  async set<K extends keyof AppSettings>(key: K, value: AppSettings[K]): Promise<void> {
+    try {
+      this.settings[key] = value;
+      await window.electronAPI.settings.set(key, value);
+      
+      // Handle special settings
+      if (key === 'theme') {
+        this.applyTheme(value as string);
+      }
+    } catch (error) {
+      console.error('Failed to save setting:', error);
+      throw new Error('Failed to save setting');
+    }
+  }
+
+  async setTheme(theme: 'light' | 'dark' | 'system'): Promise<void> {
+    await this.set('theme', theme);
+    await window.electronAPI.settings.setTheme(theme);
+  }
+
+  async toggleTheme(): Promise<string> {
+    const currentTheme = await this.get('theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    await this.setTheme(newTheme);
+    return newTheme;
+  }
+
+  private getDefaultSettings(): AppSettings {
+    return {
+      theme: 'dark',
+      telemetry: true,
+      autoUpdate: false,
+      defaultIconType: 'universal'
+    };
+  }
+
+  private applyTheme(theme: string): void {
+    const resolvedTheme = this.resolveTheme(theme as any);
+    document.documentElement.setAttribute('data-theme', resolvedTheme);
+    
+    // Emit theme change event
+    document.dispatchEvent(new CustomEvent('themeChanged', {
+      detail: { theme: resolvedTheme }
+    }));
+  }
+
+  private resolveTheme(theme: 'light' | 'dark' | 'system'): 'light' | 'dark' {
+    if (theme === 'system') {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    return theme;
+  }
+
+  getAppliedTheme(): 'light' | 'dark' {
+    const theme = document.documentElement.getAttribute('data-theme');
+    return theme === 'dark' ? 'dark' : 'light';
+  }
+
+  // Listen for system theme changes
+  setupSystemThemeListener(): void {
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', async (e) => {
+      const currentTheme = await this.get('theme');
+      if (currentTheme === 'system') {
+        this.applyTheme('system');
+      }
+    });
+  }
+}

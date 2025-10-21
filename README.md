@@ -141,6 +141,16 @@ npm run dist
 ```
 For platform-specific prerequisites and commands (Windows NSIS, Linux DEB/RPM), see `docs/BUILDING.md`.
 
+## 🔄 Updates
+
+- Windows (NSIS): in‑app updates via GitHub Releases using `electron-updater`.
+  - Users can enable/disable automatic updates in Settings.
+  - When enabled, the app checks on startup and applies updates.
+- Linux (.deb/.rpm): the app notifies and opens the GitHub release page; install updates with your package manager.
+  - If you prefer full in‑app auto‑update on Linux, consider shipping an AppImage target.
+
+Release hosting uses GitHub Releases. If publishing via CI, set `GH_TOKEN` and run `electron-builder --publish always` or use the existing `npm run dist` outputs and upload the artifacts (`.exe`, `.blockmap`, `latest.yml` on Windows; `.deb/.rpm`, `latest-linux.yml` on Linux).
+
 ## 🛠️ Technical Details
 
 ### Dependencies
