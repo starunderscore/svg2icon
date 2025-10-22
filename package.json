@@ -34,7 +34,8 @@
   },
   "dependencies": {
     "@resvg/resvg-js": "^2.6.2",
-    "electron-updater": "^6.3.9"
+    "electron-updater": "^6.3.9",
+    "png2icons": "^2.0.1"
   },
   "build": {
     "appId": "com.starunderscore.icon-generator",

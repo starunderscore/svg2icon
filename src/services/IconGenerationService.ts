@@ -3,6 +3,7 @@
 import type { GenerationResult, IconType } from '../types/Project.js';
 import * as fs from 'fs';
 import * as path from 'path';
+import { spawnSync } from 'child_process';
 
 interface IconSize {
   name: string;
@@ -243,8 +244,73 @@ export class IconGenerationService {
       }
       
     } catch {
-      // Silently skip ICO/ICNS creation when png2icons is unavailable
-      return;
+      // png2icons unavailable — try CLI fallbacks (ImageMagick/iconutil/png2icns)
+      try {
+        // Ensure we have the PNGs we need on disk (generateSingleIcon already wrote them)
+        const icoSizes = [16, 24, 32, 48, 64, 128, 256];
+        const icnsSizes = [16, 32, 64, 128, 256, 512, 1024];
+
+        const pngPathsICO = icoSizes
+          .map((s) => path.join(outputPath, `icon-${s}.png`))
+          .filter((p) => fs.existsSync(p));
+
+        const pngPathsICNS = icnsSizes
+          .map((s) => path.join(outputPath, `icon-${s}.png`))
+          .filter((p) => fs.existsSync(p));
+
+        // ICO via ImageMagick (magick or convert)
+        if (pngPathsICO.length > 0) {
+          const hasMagick = this.hasCmd('magick');
+          const hasConvert = this.hasCmd('convert');
+          if (hasMagick) {
+            spawnSync('magick', [...pngPathsICO, path.join(outputPath, 'icon.ico')], { stdio: 'ignore' });
+          } else if (hasConvert) {
+            spawnSync('convert', [...pngPathsICO, path.join(outputPath, 'icon.ico')], { stdio: 'ignore' });
+          }
+        }
+
+        // ICNS via iconutil (macOS) or png2icns (if installed)
+        if (pngPathsICNS.length > 0) {
+          if (process.platform === 'darwin' && this.hasCmd('iconutil')) {
+            const iconsetDir = path.join(outputPath, 'icon.iconset');
+            fs.mkdirSync(iconsetDir, { recursive: true });
+            // Map sizes to icon.iconset expected names
+            const map: Array<[number, string]> = [
+              [16, 'icon_16x16.png'],
+              [32, 'icon_16x16@2x.png'],
+              [32, 'icon_32x32.png'],
+              [64, 'icon_32x32@2x.png'],
+              [128, 'icon_128x128.png'],
+              [256, 'icon_128x128@2x.png'],
+              [256, 'icon_256x256.png'],
+              [512, 'icon_256x256@2x.png'],
+              [512, 'icon_512x512.png'],
+              [1024, 'icon_512x512@2x.png'],
+            ];
+            for (const [size, filename] of map) {
+              const src = path.join(outputPath, `icon-${size}.png`);
+              if (fs.existsSync(src)) {
+                fs.copyFileSync(src, path.join(iconsetDir, filename));
+              }
+            }
+            spawnSync('iconutil', ['-c', 'icns', iconsetDir, '-o', path.join(outputPath, 'icon.icns')], { stdio: 'ignore' });
+          } else if (this.hasCmd('png2icns')) {
+            // png2icns icon.icns icon-16.png ... icon-1024.png
+            spawnSync('png2icns', [path.join(outputPath, 'icon.icns'), ...pngPathsICNS], { stdio: 'ignore' });
+          }
+        }
+      } catch {
+        // Ignore if fallbacks not available
+      }
+    }
+  }
+
+  private hasCmd(cmd: string): boolean {
+    try {
+      const res = spawnSync(cmd, ['-version'], { stdio: 'ignore' });
+      return res.status === 0 || res.error === undefined;
+    } catch {
+      return false;
     }
   }
 
