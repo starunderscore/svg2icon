@@ -1,5 +1,8 @@
 /* Main stylesheet - SVG2Icon v1.1.0 */
 
+/* UI font (Inter) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
 /* Import Bulma */
 @import '../../node_modules/bulma/css/bulma.min.css';
 
@@ -41,8 +44,8 @@
   /* Spacing and layout */
   --header-height: 80px;
   --sidebar-width: 280px;
-  --border-radius: 8px;
-  --border-radius-lg: 12px;
+  --border-radius: 0px;
+  --border-radius-lg: 0px;
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
   --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
@@ -71,7 +74,7 @@ html {
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   background-color: var(--bg-primary);
   color: var(--text-primary);
   margin: 0;
@@ -105,7 +108,7 @@ body {
 
 .main-content {
   flex: 1;
-  padding: 2rem;
+  padding: 0; /* no vertical padding: table touches header/footer */
   height: calc(100vh - var(--header-height));
   background: var(--bg-primary);
   display: flex;
@@ -117,6 +120,38 @@ body {
 .main-content-inner {
   height: 100%;
   display: contents;
+}
+
+/* Make table wrapper fill and be the only scroll area */
+.project-table-wrapper {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden; /* inner table body scrolls */
+}
+
+/* Footer beneath the table */
+.app-footer {
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border-color);
+}
+
+.app-footer-inner {
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem; /* tighter footer spacing as requested */
+}
+
+.footer-project-count {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+/* Remove any unintended left margin on project count chips/text */
+.footer-project-count,
+.project-count {
+  margin-left: 0 !important;
 }
 
 /* Content toolbar and card (ASCII vibe) */
@@ -166,7 +201,7 @@ body {
   background: var(--bg-secondary);
   border: 1px solid var(--border-color);
   border-radius: 12px;
-  padding: 0.5rem 0.5rem 1rem 0.5rem;
+  padding: 0 2rem 2rem 2rem; /* align inner content with header left padding */
   box-shadow: var(--shadow-sm);
   flex: 1;
   min-height: 0; /* allow flex child to scroll */
@@ -478,10 +513,6 @@ body {
 
 /* Responsive design */
 @media (max-width: 1024px) {
-  .main-content {
-    padding: 1.5rem;
-  }
-  
   .app-header {
     padding: 0 1.5rem;
   }

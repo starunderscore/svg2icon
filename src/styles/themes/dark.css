@@ -1,20 +1,20 @@
 /* Dark theme - Professional developer colors */
 
 [data-theme="dark"] {
-  /* Dark theme palette - dark green + dark grey (no blue) */
-  --bg-primary: #0c1110;      /* near-black with green tint */
-  --bg-secondary: #121a17;    /* dark green-grey */
-  --bg-tertiary: #1a2622;     /* deeper green-grey */
-  --bg-hover: #22312b;        /* hover shade */
-  --bg-active: #2b3d36;       /* active shade */
+  /* Dark theme palette - polished dark green + dark grey (no blue) */
+  --bg-primary: #0b0f0e;      /* near-black greenish */
+  --bg-secondary: #111815;    /* dark grey-green */
+  --bg-tertiary: #19221f;     /* deeper panel */
+  --bg-hover: #1f2b26;        /* hover */
+  --bg-active: #26352f;       /* active */
   
   --text-primary: #edf2ee;
-  --text-secondary: #c7d1cc;
-  --text-muted: #95a59e;
-  --text-inverse: #0c1110;
+  --text-secondary: #d1dad6;
+  --text-muted: #9fb0a9;
+  --text-inverse: #0b0f0e;
   
-  --border-color: #27362f;
-  --border-light: #31463e;
+  --border-color: #23322c;
+  --border-light: #2d4039;    /* row separators */
   --border-focus: #22c55e;    /* green focus */
   
   --accent-primary: #22c55e;  /* green */
@@ -101,6 +101,16 @@
 [data-theme="dark"] .project-row.selected {
   background-color: rgba(34, 197, 94, 0.12);
   border-color: var(--accent-primary);
+}
+
+/* Ensure visible row separators in dark mode */
+[data-theme="dark"] .project-table tbody tr,
+[data-theme="dark"] .project-row {
+  background-clip: padding-box; /* safety for row background */
+}
+
+[data-theme="dark"] .project-table tbody td {
+  border-bottom: 1px solid var(--border-light) !important;
 }
 
 /* SVG preview adjustments */

@@ -45,21 +45,27 @@ export class MainContent {
 
     this.container.innerHTML = `
       <div class="main-content-inner">
-        <div class="content-card">
-          <div id="project-table-container" class="project-table-wrapper">
-            <!-- Project table will be rendered here -->
+        <div id="project-table-container" class="project-table-wrapper">
+          <!-- Project table will be rendered here -->
+        </div>
+        <div id="empty-state" class="empty-state" style="display: none;">
+          <div class="empty-state-icon">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+            </svg>
           </div>
-          <div id="empty-state" class="empty-state" style="display: none;">
-            <div class="empty-state-icon">
-              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-              </svg>
+          <h3 class="empty-state-title">No SVG projects yet</h3>
+          <p class="empty-state-description">
+            Create your first project by uploading an SVG file.
+            You'll be able to generate complete icon sets for mobile, desktop, and web platforms.
+          </p>
+        </div>
+        <div class="app-footer">
+          <div class="app-footer-inner">
+            <div class="footer-left">
+              <span class="footer-project-count">0 projects</span>
             </div>
-            <h3 class="empty-state-title">No SVG projects yet</h3>
-            <p class="empty-state-description">
-              Create your first project by uploading an SVG file.
-              You'll be able to generate complete icon sets for mobile, desktop, and web platforms.
-            </p>
+            <div class="footer-right"></div>
           </div>
         </div>
       </div>
@@ -91,6 +97,11 @@ export class MainContent {
       emptyState?.setAttribute('style', 'display: none;');
     }
 
-    // No toolbar count in content (moved to header)
+    // Update footer count
+    const countEl = this.container.querySelector('.footer-project-count');
+    if (countEl) {
+      const n = this.projects.length;
+      countEl.textContent = `${n} project${n === 1 ? '' : 's'}`;
+    }
   }
 }

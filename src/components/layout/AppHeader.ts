@@ -22,10 +22,7 @@ export class AppHeader {
 
   updateProjectCount(count: number): void {
     this.projectCount = count;
-    const countElement = this.container?.querySelector('.project-count-toolbar');
-    if (countElement) {
-      countElement.textContent = `${this.projectCount} project${this.projectCount === 1 ? '' : 's'}`;
-    }
+    // count now shown in footer
   }
 
   private updateHTML(): void {
@@ -40,7 +37,6 @@ export class AppHeader {
             </svg>
             New SVG
           </button>
-          <span class="project-count-toolbar">${this.projectCount} project${this.projectCount === 1 ? '' : 's'}</span>
         </div>
         
         <div class="header-right">

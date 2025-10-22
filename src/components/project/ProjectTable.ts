@@ -35,23 +35,27 @@ export class ProjectTable {
     if (!this.container) return;
 
     this.container.innerHTML = `
-      <div class="project-table-container">
+      <table class="project-table project-table-head">
+        <thead>
+          <tr>
+            <th>ICON</th>
+            <th>Name</th>
+            <th>Created</th>
+            <th>Downloads</th>
+            <th></th>
+          </tr>
+        </thead>
+      </table>
+      <div class="project-table-body-scroll">
         <table class="project-table">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Preview</th>
-              <th>Created</th>
-              <th>Downloads</th>
-              <th></th>
-            </tr>
-          </thead>
           <tbody id="project-table-body">
             <!-- Project rows will be rendered here -->
           </tbody>
         </table>
       </div>
     `;
+
+    // Header rendered
   }
 
   private renderRows(): void {
@@ -82,7 +86,10 @@ export class ProjectTable {
     tbody.querySelectorAll('tr').forEach((row, index) => {
       row.style.animation = `slideInDown 0.3s ease ${index * 0.05}s both`;
     });
+
+    // Rows rendered
   }
+
 
   private bindEvents(): void {
     this.props.eventManager.on('project:updated', (project: Project) => {

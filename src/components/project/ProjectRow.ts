@@ -70,39 +70,29 @@ export class ProjectRow {
     const svgPreview = this.createSvgPreview(project.svgData);
 
     this.element.innerHTML = `
-      <td class="project-name-cell">
-        ${this.isEditing ? this.getEditableNameHTML() : this.getNameHTML()}
-      </td>
       <td class="svg-preview-cell">
         ${svgPreview}
+      </td>
+      <td class="project-name-cell">
+        ${this.isEditing ? this.getEditableNameHTML() : this.getNameHTML()}
       </td>
       <td class="project-date-cell">
         <span class="project-date">${formattedDate}</span>
       </td>
       <td class="download-buttons-cell">
         <div class="download-buttons">
-          <button class="download-btn" data-download="all" title="Download all formats">
-            All
-          </button>
-          <button class="download-btn" data-download="mobile" title="Download mobile package">
-            Mobile
-          </button>
-          <button class="download-btn" data-download="desktop" title="Download desktop package">
-            Desktop
-          </button>
-          <button class="download-btn" data-download="web" title="Download web package">
-            Web
-          </button>
-          <button class="download-btn" data-download="original" title="Download original SVG">
-            SVG
-          </button>
+          <button class="download-btn" data-download="all" title="Download all formats">All</button>
+          <button class="download-btn" data-download="mobile" title="Download mobile package">Mobile</button>
+          <button class="download-btn" data-download="desktop" title="Download desktop package">Desktop</button>
+          <button class="download-btn" data-download="web" title="Download web package">Web</button>
+          <button class="download-btn" data-download="original" title="Download original SVG">SVG</button>
         </div>
       </td>
       <td class="project-actions-cell">
         <div class="project-actions">
           <button class="actions-trigger" type="button" title="More actions">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/>
             </svg>
           </button>
           <div id="actions-menu-${project.id}" class="dropdown-menu">

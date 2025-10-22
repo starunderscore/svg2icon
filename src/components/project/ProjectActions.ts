@@ -35,21 +35,15 @@ export class ProjectActions {
     if (!this.container) return;
 
     this.container.innerHTML = `
-      <div class="dropdown-divider"></div>
       <button class="dropdown-item" data-action="edit">
         <span class="dropdown-icon">✏️</span>
         Edit Project
       </button>
-      <button class="dropdown-item" data-action="rename">
-        <span class="dropdown-icon">📝</span>
-        Rename
-      </button>
-      
       <div class="dropdown-divider"></div>
       <div class="dropdown-submenu">
         <span class="dropdown-item-header">
-          <span class="dropdown-icon">⚡</span>
-          Generate Icons
+          <span class="dropdown-icon">⬇️</span>
+          Download
         </span>
         <button class="dropdown-item dropdown-subitem" data-action="generate" data-icon-type="universal">
           <span class="dropdown-icon">🌐</span>
@@ -72,16 +66,6 @@ export class ProjectActions {
           Web Icons
         </button>
       </div>
-      
-      <div class="dropdown-divider"></div>
-      <button class="dropdown-item" data-action="duplicate">
-        <span class="dropdown-icon">📋</span>
-        Duplicate Project
-      </button>
-      <button class="dropdown-item" data-action="export">
-        <span class="dropdown-icon">📤</span>
-        Export Settings
-      </button>
       
       <div class="dropdown-divider"></div>
       <button class="dropdown-item is-danger" data-action="delete">
@@ -109,7 +93,6 @@ export class ProjectActions {
 
     switch (action) {
       case 'edit':
-      case 'rename':
         this.props.onEdit(this.props.project);
         break;
         
@@ -117,14 +100,6 @@ export class ProjectActions {
         if (iconType) {
           this.props.onGenerate(iconType as IconType);
         }
-        break;
-        
-      case 'duplicate':
-        this.handleDuplicate();
-        break;
-        
-      case 'export':
-        this.handleExport();
         break;
         
       case 'delete':
@@ -136,15 +111,7 @@ export class ProjectActions {
     this.closeDropdown();
   }
 
-  private handleDuplicate(): void {
-    // Implementation for duplicating project
-    console.log('Duplicate project:', this.props.project.name);
-  }
-
-  private handleExport(): void {
-    // Implementation for exporting project settings
-    console.log('Export project:', this.props.project.name);
-  }
+  // Removed duplicate/export actions per current UX
 
   private closeDropdown(): void {
     const dropdown = this.container?.closest('.dropdown-menu');
