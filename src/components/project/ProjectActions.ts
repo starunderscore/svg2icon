@@ -39,33 +39,6 @@ export class ProjectActions {
         <span class="dropdown-icon">✏️</span>
         Edit Project
       </button>
-      <div class="dropdown-divider"></div>
-      <div class="dropdown-submenu">
-        <span class="dropdown-item-header">
-          <span class="dropdown-icon">⬇️</span>
-          Download
-        </span>
-        <button class="dropdown-item dropdown-subitem" data-action="generate" data-icon-type="universal">
-          <span class="dropdown-icon">🌐</span>
-          Universal Package
-        </button>
-        <button class="dropdown-item dropdown-subitem" data-action="generate" data-icon-type="ios">
-          <span class="dropdown-icon">📱</span>
-          iOS Icons
-        </button>
-        <button class="dropdown-item dropdown-subitem" data-action="generate" data-icon-type="android">
-          <span class="dropdown-icon">🤖</span>
-          Android Icons
-        </button>
-        <button class="dropdown-item dropdown-subitem" data-action="generate" data-icon-type="desktop">
-          <span class="dropdown-icon">🖥️</span>
-          Desktop Icons
-        </button>
-        <button class="dropdown-item dropdown-subitem" data-action="generate" data-icon-type="web">
-          <span class="dropdown-icon">🌍</span>
-          Web Icons
-        </button>
-      </div>
       
       <div class="dropdown-divider"></div>
       <button class="dropdown-item is-danger" data-action="delete">
@@ -116,7 +89,12 @@ export class ProjectActions {
   private closeDropdown(): void {
     const dropdown = this.container?.closest('.dropdown-menu');
     if (dropdown) {
-      dropdown.classList.remove('is-active');
+      if (dropdown.classList.contains('dropdown-portal')) {
+        // Remove portal menu from body
+        dropdown.remove();
+      } else {
+        dropdown.classList.remove('is-active');
+      }
     }
   }
 }

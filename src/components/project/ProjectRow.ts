@@ -19,6 +19,7 @@ export class ProjectRow {
   private element: HTMLTableRowElement | null = null;
   private projectActions: ProjectActions;
   private isEditing = false;
+  private actionsPortal: HTMLElement | null = null;
 
   constructor(props: ProjectRowProps) {
     this.props = props;
@@ -174,7 +175,11 @@ export class ProjectRow {
     const actionsTrigger = this.element.querySelector('.actions-trigger');
     actionsTrigger?.addEventListener('click', (e) => {
       e.stopPropagation();
-      this.toggleActionsMenu();
+      if (this.actionsPortal) {
+        this.closeActionsMenu();
+      } else {
+        this.openActionsMenu(actionsTrigger as HTMLElement);
+      }
     });
 
     // Name editing
@@ -266,18 +271,78 @@ export class ProjectRow {
   }
 
   private toggleActionsMenu(): void {
-    const menu = this.element?.querySelector('.dropdown-menu');
-    if (menu) {
-      menu.classList.toggle('is-active');
-    }
+    // legacy (no-op) retained for compatibility
   }
 
   private closeActionsMenu(): void {
-    const menu = this.element?.querySelector('.dropdown-menu');
-    if (menu) {
-      menu.classList.remove('is-active');
+    if (this.actionsPortal) {
+      document.body.removeChild(this.actionsPortal);
+      this.actionsPortal = null;
+      document.removeEventListener('click', this.handleGlobalClick, true);
+      window.removeEventListener('scroll', this.handleViewportChange, true);
+      window.removeEventListener('resize', this.handleViewportChange, true);
+      // Remove active state from trigger
+      const trigger = this.element?.querySelector('.actions-trigger') as HTMLElement | null;
+      if (trigger) {
+        trigger.classList.remove('is-active');
+      }
     }
   }
+
+  private openActionsMenu(trigger: HTMLElement): void {
+    // Create a portal menu anchored to the trigger's viewport position
+    const rect = trigger.getBoundingClientRect();
+    const portal = document.createElement('div');
+    portal.className = 'dropdown-menu dropdown-portal';
+    portal.style.position = 'fixed';
+    portal.style.zIndex = '2000';
+
+    // Render actions into portal (needs to be in DOM to measure)
+    this.projectActions.render(portal);
+    document.body.appendChild(portal);
+
+    // Measure and position within viewport
+    const menuWidth = portal.offsetWidth;
+    const menuHeight = portal.offsetHeight;
+    const EDGE_PADDING = 8;   // keep away from top/bottom edges
+    const OFFSET_Y = 6;       // nudge a bit down
+
+    let top = rect.bottom + OFFSET_Y; // drop below trigger by default
+
+    // If overflowing bottom, flip above trigger
+    if (top + menuHeight > window.innerHeight - EDGE_PADDING) {
+      top = rect.top - menuHeight;
+    }
+    if (top < EDGE_PADDING) top = EDGE_PADDING;
+
+    // Position 25px from right edge for consistent alignment
+    portal.style.right = `25px`;
+    portal.style.left = 'auto';
+    portal.style.top = `${Math.round(top)}px`;
+
+    // Mark trigger active and trigger entrance animation after positioned
+    (trigger as HTMLElement).classList.add('is-active');
+    portal.classList.add('is-active');
+
+    this.actionsPortal = portal;
+
+    // Close handlers
+    document.addEventListener('click', this.handleGlobalClick, true);
+    window.addEventListener('scroll', this.handleViewportChange, true);
+    window.addEventListener('resize', this.handleViewportChange, true);
+  }
+
+  private handleGlobalClick = (e: MouseEvent) => {
+    const target = e.target as Node;
+    if (this.actionsPortal && !this.actionsPortal.contains(target)) {
+      this.closeActionsMenu();
+    }
+  };
+
+  private handleViewportChange = () => {
+    // Close on scroll/resize to avoid misplacement
+    this.closeActionsMenu();
+  };
 
   private formatDate(dateString: string): string {
     const date = new Date(dateString);

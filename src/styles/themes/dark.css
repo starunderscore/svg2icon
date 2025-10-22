@@ -125,9 +125,8 @@
 
 /* Dropdown menu dark mode */
 [data-theme="dark"] .dropdown-menu {
-  background-color: var(--glass-bg);
-  border-color: var(--glass-border);
-  backdrop-filter: blur(12px);
+  background-color: var(--bg-secondary);
+  border-color: var(--border-color);
   box-shadow: var(--shadow-xl);
 }
 
