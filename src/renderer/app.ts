@@ -165,6 +165,14 @@ class SVG2IconApp {
       this.applyTheme(theme);
     });
 
+    // Download notifications
+    this.eventManager.on('download:success', (message: string) => {
+      this.showSuccess(message || 'Icons downloaded successfully');
+    });
+    this.eventManager.on('download:error', (message: string) => {
+      this.showError(message || 'Failed to download icons');
+    });
+
     // No content toolbar new-project now; header button handles creation
   }
 

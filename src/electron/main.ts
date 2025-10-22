@@ -1,6 +1,8 @@
 // Electron main process - SVG2Icon v1.1.0
 
 import { BrowserWindow, ipcMain, dialog, app, Menu } from 'electron';
+import * as path from 'path';
+import * as fs from 'fs';
 import { StorageService } from './storage.js';
 import { IconGenerationService } from '../services/IconGenerationService.js';
 import type { Project, CreateProjectData, UpdateProjectData } from '../types/Project.js';
@@ -76,8 +78,6 @@ export class ElectronMain {
           throw new Error('Project not found');
         }
         // Centralized output path under userData
-        const path = require('path');
-        const fs = require('fs');
         const baseDir = path.join(app.getPath('userData'), 'svg2icon', 'projects', id);
         fs.mkdirSync(baseDir, { recursive: true });
         
@@ -137,19 +137,25 @@ export class ElectronMain {
         const project = await this.storageService.getProjectById(id);
         if (!project) return false;
 
-        const path = require('path');
-        const fs = require('fs');
-
         const baseDir = project.outputPath || path.join(app.getPath('userData'), 'svg2icon', 'projects', id);
-        const pickDirs = (type: string): string[] => {
-          switch (type) {
-            case 'all': return ['universal-icons', 'ios-icons', 'android-icons', 'desktop-icons', 'web-icons'].map(p => path.join(baseDir, p));
-            case 'mobile': return ['ios-icons', 'android-icons'].map(p => path.join(baseDir, p));
-            case 'desktop': return ['desktop-icons'].map(p => path.join(baseDir, p));
-            case 'web': return ['web-icons'].map(p => path.join(baseDir, p));
-            case 'original': return [baseDir];
-            default: return [];
+
+        // Ensure output base exists
+        fs.mkdirSync(baseDir, { recursive: true });
+
+        // Helper to generate icons for required types
+        const ensureGenerated = async (types: string[]) => {
+          for (const t of types) {
+            await this.iconGenerationService.generateIcons(
+              project.svgData,
+              baseDir,
+              t as any
+            );
           }
+          // Update project metadata
+          await this.storageService.updateProject(id, {
+            generatedAt: new Date().toISOString(),
+            outputPath: baseDir
+          } as any);
         };
 
         const chosen = await dialog.showOpenDialog(this.window, {
@@ -158,9 +164,6 @@ export class ElectronMain {
         });
         if (chosen.canceled || !chosen.filePaths.length) return false;
         const destRoot = chosen.filePaths[0];
-
-        const targets = pickDirs(packageType);
-        if (!targets.length) return false;
 
         const copyRecursive = (src: string, dest: string) => {
           if (!fs.existsSync(src)) return;
@@ -176,20 +179,64 @@ export class ElectronMain {
           }
         };
 
-        const bundleName = `${project.name.replace(/[^a-z0-9\-]+/ig,'-')}-${packageType}`;
-        const finalDest = path.join(destRoot, bundleName);
+        // Build outer folder name: {projectname}_{selection}
+        const selectionLabel = packageType === 'original' ? 'svg' : packageType;
+        const baseName = `${project.name
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, '_')
+          .replace(/_+/g, '_')
+          .replace(/^_|_$/g, '')}_${selectionLabel}`;
+        // Ensure uniqueness by appending (n)
+        let folderName = baseName;
+        let candidatePath = path.join(destRoot, folderName);
+        if (fs.existsSync(candidatePath)) {
+          let i = 0;
+          while (fs.existsSync(path.join(destRoot, `${baseName} (${i})`))) i++;
+          folderName = `${baseName} (${i})`;
+          candidatePath = path.join(destRoot, folderName);
+        }
+        const finalDest = candidatePath;
         fs.mkdirSync(finalDest, { recursive: true });
 
-        if (packageType === 'original') {
-          // Write original.svg
+        const writeOriginalSvg = () => {
           const svgContent = Buffer.from(project.svgData, 'base64').toString('utf-8');
-          fs.writeFileSync(path.join(finalDest, `${project.name}.svg`), svgContent);
-        } else {
-          for (const dir of targets) {
-            if (fs.existsSync(dir)) {
-              const baseName = path.basename(dir);
-              copyRecursive(dir, path.join(finalDest, baseName));
-            }
+          const svgDir = path.join(finalDest, 'svg');
+          fs.mkdirSync(svgDir, { recursive: true });
+          fs.writeFileSync(path.join(svgDir, `${project.name}.svg`), svgContent);
+        };
+
+        switch (packageType) {
+          case 'web': {
+            await ensureGenerated(['web']);
+            copyRecursive(path.join(baseDir, 'web-icons'), path.join(finalDest, 'web'));
+            break;
+          }
+          case 'desktop': {
+            await ensureGenerated(['desktop']);
+            copyRecursive(path.join(baseDir, 'desktop-icons'), path.join(finalDest, 'desktop'));
+            break;
+          }
+          case 'mobile': {
+            await ensureGenerated(['ios', 'android']);
+            const mobileDest = path.join(finalDest, 'mobile');
+            copyRecursive(path.join(baseDir, 'ios-icons'), path.join(mobileDest, 'ios-icons'));
+            copyRecursive(path.join(baseDir, 'android-icons'), path.join(mobileDest, 'android-icons'));
+            break;
+          }
+          case 'original': {
+            writeOriginalSvg();
+            break;
+          }
+          case 'all':
+          default: {
+            await ensureGenerated(['web', 'desktop', 'ios', 'android']);
+            copyRecursive(path.join(baseDir, 'web-icons'), path.join(finalDest, 'web'));
+            copyRecursive(path.join(baseDir, 'desktop-icons'), path.join(finalDest, 'desktop'));
+            const mobileDest = path.join(finalDest, 'mobile');
+            copyRecursive(path.join(baseDir, 'ios-icons'), path.join(mobileDest, 'ios-icons'));
+            copyRecursive(path.join(baseDir, 'android-icons'), path.join(mobileDest, 'android-icons'));
+            writeOriginalSvg();
+            break;
           }
         }
         return true;

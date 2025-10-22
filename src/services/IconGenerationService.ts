@@ -1,6 +1,8 @@
 // IconGenerationService - Core icon generation logic (migrated from icon-generator.ts)
 
 import type { GenerationResult, IconType } from '../types/Project.js';
+import * as fs from 'fs';
+import * as path from 'path';
 
 interface IconSize {
   name: string;
@@ -155,9 +157,6 @@ export class IconGenerationService {
   }
 
   private createOutputPath(basePath: string, iconType: IconType): string {
-    const fs = require('fs');
-    const path = require('path');
-    
     const outputPath = path.join(basePath, `${iconType}-icons`);
     
     if (!fs.existsSync(outputPath)) {
@@ -168,9 +167,6 @@ export class IconGenerationService {
   }
 
   private async generateSingleIcon(svgBuffer: Buffer, outputPath: string, iconSpec: IconSize): Promise<void> {
-    const fs = require('fs');
-    const path = require('path');
-    
     try {
       // Import resvg dynamically
       const { Resvg } = await import('@resvg/resvg-js');
@@ -208,8 +204,9 @@ export class IconGenerationService {
     // This would use png2icons or ImageMagick as fallback
     
     try {
-      // Try png2icons first
-      const png2icons = require('png2icons');
+      // Try png2icons first (optional dependency)
+      const mod: any = await import('png2icons');
+      const png2icons: any = mod.default ?? mod;
       
       // Generate different sizes for ICO/ICNS
       const icoSizes = [16, 24, 32, 48, 64, 128, 256];
@@ -229,9 +226,6 @@ export class IconGenerationService {
         if (buffer) icnsBuffers.push(buffer);
       }
       
-      const fs = require('fs');
-      const path = require('path');
-      
       // Generate ICO file for Windows
       if (icoBuffers.length > 0) {
         const icoData = png2icons.createICO(icoBuffers, png2icons.BEZIER, 0, false);
@@ -248,9 +242,9 @@ export class IconGenerationService {
         }
       }
       
-    } catch (error) {
-      console.warn('png2icons failed, trying ImageMagick fallback:', error);
-      // Fallback to ImageMagick implementation would go here
+    } catch {
+      // Silently skip ICO/ICNS creation when png2icons is unavailable
+      return;
     }
   }
 
@@ -275,9 +269,6 @@ export class IconGenerationService {
   }
 
   private async createManifest(outputPath: string, iconType: IconType, iconSizes: IconSize[], svgData: string): Promise<void> {
-    const fs = require('fs');
-    const path = require('path');
-    
     const manifest = {
       generated: new Date().toISOString(),
       iconType: iconType,

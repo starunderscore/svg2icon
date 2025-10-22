@@ -143,9 +143,16 @@ export class ProjectTable {
 
   private async handleDownload(project: Project, packageType: string): Promise<void> {
     try {
-      await this.props.projectService.downloadProject(project.id, packageType as any);
+      const ok = await this.props.projectService.downloadProject(project.id, packageType as any);
+      const label = packageType === 'original' ? 'svg' : packageType;
+      if (ok) {
+        this.props.eventManager.emit('download:success', `Downloaded ${label} package for "${project.name}"`);
+      } else {
+        this.props.eventManager.emit('download:error', `Download canceled or failed for "${project.name}"`);
+      }
     } catch (error) {
       console.error('Failed to download project:', error);
+      this.props.eventManager.emit('download:error', 'Failed to download icons');
     }
   }
 
