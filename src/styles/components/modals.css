@@ -55,6 +55,50 @@
   margin: 0;
 }
 
+/* Right-edge icon button that renders as a vertical white line */
+.modal-head-close {
+  /* Full-height icon button on header's right */
+  align-self: stretch;
+  width: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  border-top-right-radius: var(--border-radius-lg);
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+  position: relative; /* for horizontal line */
+}
+
+/* Render the vertical white line at the left edge of the button */
+/* (divider rendered via border-left; no pseudo-element needed) */
+
+.modal-head-close:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* Slight emphasis on hover: thicken the line a touch */
+/* Draw a horizontal white line centered inside the icon button */
+.modal-head-close::after {
+  content: '';
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  top: 50%;
+  height: 1.5px;
+  background: rgba(255, 255, 255, 0.95);
+  transform: translateY(-50%);
+  border-radius: 2px;
+}
+
+.modal-head-close:hover::after {
+  height: 2px; /* subtle emphasis on hover */
+}
+
+/* Hide legacy inner line span if present */
+.modal-head-line { display: none; }
+
 .modal-close {
   background: none;
   border: none;
@@ -97,7 +141,7 @@
 }
 
 .modal-card.is-medium {
-  width: 600px;
+  width: 680px; /* slightly wider to prevent horizontal jitter */
 }
 
 .modal-card.is-large {
@@ -117,7 +161,7 @@
   transition: all var(--transition-normal);
   cursor: pointer;
   background: var(--bg-tertiary);
-  margin-bottom: 1.5rem;
+  margin-bottom: 0;
 }
 
 .file-upload-area:hover,
@@ -159,6 +203,14 @@
 /* Delete confirmation modal specific */
 .delete-confirmation {
   text-align: center;
+}
+
+/* Left-align form controls inside delete modal */
+.delete-confirmation .form-section,
+.delete-confirmation .label,
+.delete-confirmation .control,
+.delete-confirmation .help {
+  text-align: left;
 }
 
 .delete-warning-icon {
@@ -256,17 +308,104 @@
 .delete-confirmation-input:focus {
   outline: none;
   border-color: var(--border-focus);
-  box-shadow: 0 0 0 0.125em rgba(34, 197, 94, 0.25);
 }
 
 .delete-confirmation-input.is-invalid {
   border-color: var(--danger);
-  box-shadow: 0 0 0 0.125em rgba(239, 68, 68, 0.25);
 }
 
 .delete-confirmation-input.is-valid {
   border-color: var(--success);
-  box-shadow: 0 0 0 0.125em rgba(16, 185, 129, 0.25);
+}
+
+/* Inline project name + copy row */
+.delete-copy-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1rem 0 0.5rem 0;
+}
+
+.delete-project-name-inline {
+  font-weight: 600;
+  color: var(--text-primary);
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  background: var(--bg-secondary);
+}
+
+/* Edit modal SVG section */
+.svg-section-container {
+  height: 161px; /* lowered height +1px as requested */
+  border: none;  /* remove outer border */
+  border-radius: var(--border-radius);
+  background: var(--bg-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.svg-fixed {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  min-width: 280px; /* keep width stable between modes */
+}
+
+.svg-replace-btn { white-space: nowrap; }
+
+.svg-dropzone {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: none;
+}
+
+/* Tweak preview box inside edit modal SVG section */
+.svg-section-container .svg-preview-large {
+  width: 96px;
+  height: 96px;
+  border: none;            /* remove inner border */
+  background: transparent; /* cleaner look */
+  margin: 0;               /* align vertically */
+}
+
+.svg-cancel-action {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}
+
+/* Input with right-side copy button */
+.control.has-right-action {
+  position: relative;
+}
+
+.control.has-right-action .input[disabled] {
+  color: var(--text-secondary);
+  background: var(--bg-tertiary);
+}
+
+.copy-button-inline {
+  position: absolute;
+  right: 0.375rem;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 30px;
+  padding: 0 0.5rem;
+  border-radius: var(--border-radius);
+}
+
+.control.has-right-action .input {
+  padding-right: 3.25rem; /* make room for copy button */
 }
 
 /* Settings modal specific */
@@ -302,6 +441,7 @@
   align-items: center;
   justify-content: space-between;
   margin-bottom: 1.5rem;
+  flex-wrap: wrap; /* allow wrapping on very narrow screens */
 }
 
 .settings-item:last-child {
@@ -361,24 +501,34 @@
   display: flex;
   gap: 0.75rem;
   margin-top: 0.75rem;
+  justify-content: flex-end; /* align to right in wide screens */
+  flex-wrap: wrap;
+}
+
+/* When inside a settings-item row, remove extra top margin */
+.settings-item .theme-selector {
+  margin-top: 0;
 }
 
 .theme-option {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 1rem;
+  padding: 0.6rem 0.9rem;
   border: 2px solid var(--border-color);
-  border-radius: var(--border-radius);
+  border-radius: 999px; /* pill */
   cursor: pointer;
-  transition: all var(--transition-fast);
+  transition: transform var(--transition-fast), background var(--transition-fast), border-color var(--transition-fast);
   background: var(--bg-tertiary);
-  min-width: 80px;
+  min-width: 84px;
+  box-shadow: var(--shadow-sm);
 }
 
 .theme-option:hover {
   border-color: var(--accent-primary);
   background: var(--bg-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }
 
 .theme-option.is-active {
@@ -387,9 +537,9 @@
 }
 
 .theme-preview {
-  width: 32px;
-  height: 24px;
-  border-radius: 4px;
+  width: 40px;
+  height: 28px;
+  border-radius: 6px;
   margin-bottom: 0.5rem;
   border: 1px solid var(--border-color);
   position: relative;
@@ -416,4 +566,33 @@
 
 .theme-option.is-active .theme-option-label {
   color: var(--accent-primary);
+}
+
+@media (max-width: 560px) {
+  .theme-selector { justify-content: center; }
+}
+
+/* Privacy info row including toggle */
+.settings-section .privacy-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+/* Updates: show current version next to button */
+.current-version {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.privacy-text {
+  flex: 1 1 auto;
+}
+
+@media (max-width: 560px) {
+  .settings-section .privacy-info {
+    flex-direction: column;
+    align-items: stretch;
+  }
 }

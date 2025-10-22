@@ -39,29 +39,19 @@ export class SettingsModal extends Modal {
               <h4 class="settings-item-title">Theme</h4>
               <p class="settings-item-description">Choose your preferred color scheme</p>
             </div>
-          </div>
-          
-          <div class="theme-selector">
-            <div class="theme-option" data-theme="light">
-              <div class="theme-preview light">
-                <div class="theme-sample-header"></div>
-                <div class="theme-sample-content"></div>
+            <div class="theme-selector">
+              <div class="theme-option" data-theme="light">
+                <div class="theme-preview light"></div>
+                <span class="theme-option-label">Light</span>
               </div>
-              <span class="theme-option-label">Light</span>
-            </div>
-            <div class="theme-option" data-theme="dark">
-              <div class="theme-preview dark">
-                <div class="theme-sample-header"></div>
-                <div class="theme-sample-content"></div>
+              <div class="theme-option" data-theme="system">
+                <div class="theme-preview system"></div>
+                <span class="theme-option-label">System</span>
               </div>
-              <span class="theme-option-label">Dark</span>
-            </div>
-            <div class="theme-option" data-theme="system">
-              <div class="theme-preview system">
-                <div class="theme-sample-header"></div>
-                <div class="theme-sample-content"></div>
+              <div class="theme-option" data-theme="dark">
+                <div class="theme-preview dark"></div>
+                <span class="theme-option-label">Dark</span>
               </div>
-              <span class="theme-option-label">System</span>
             </div>
           </div>
         </div>
@@ -76,21 +66,19 @@ export class SettingsModal extends Modal {
           </h3>
           
           <div class="settings-item">
-            <div class="settings-item-info">
-              <h4 class="settings-item-title">Anonymous Usage Analytics</h4>
-              <p class="settings-item-description">
-                Help improve SVG2Icon by sharing anonymous usage statistics. 
-                This includes feature usage, error reports, and performance metrics.
-              </p>
+            <div class="privacy-info">
+              <div class="privacy-text">
+                <h4 class="settings-item-title">Anonymous Usage Analytics</h4>
+                <p class="settings-item-description">
+                  Help improve SVG2Icon by sharing anonymous usage statistics. This includes feature usage, error reports, and performance metrics.
+                </p>
+                <p><strong>What we collect:</strong> Feature usage, icon generation counts, error reports</p>
+                <p><strong>What we don't collect:</strong> Your SVG files, project names, file paths, or personal data</p>
+              </div>
+              <div class="settings-toggle" id="telemetry-toggle">
+                <div class="settings-toggle-handle"></div>
+              </div>
             </div>
-            <div class="settings-toggle" id="telemetry-toggle">
-              <div class="settings-toggle-handle"></div>
-            </div>
-          </div>
-          
-          <div class="privacy-info">
-            <p><strong>What we collect:</strong> Feature usage, icon generation counts, error reports</p>
-            <p><strong>What we don't collect:</strong> Your SVG files, project names, file paths, or personal data</p>
           </div>
         </div>
 
@@ -116,6 +104,7 @@ export class SettingsModal extends Modal {
           </div>
           
           <div class="update-actions">
+            <div class="current-version" id="current-version"></div>
             <button class="button" type="button" id="check-updates-btn">
               Check for Updates
             </button>
@@ -123,32 +112,7 @@ export class SettingsModal extends Modal {
           </div>
         </div>
 
-        <!-- General Section -->
-        <div class="settings-section">
-          <h3 class="settings-section-title">
-            <svg class="settings-section-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-            </svg>
-            General
-          </h3>
-          
-          <div class="settings-item">
-            <div class="settings-item-info">
-              <h4 class="settings-item-title">Default Icon Type</h4>
-              <p class="settings-item-description">The icon type selected by default for new projects</p>
-            </div>
-            <div class="control">
-              <select id="default-icon-type" class="select">
-                <option value="universal">Universal</option>
-                <option value="ios">iOS</option>
-                <option value="android">Android</option>
-                <option value="desktop">Desktop</option>
-                <option value="web">Web</option>
-              </select>
-            </div>
-          </div>
-        </div>
+        
 
         <!-- About Section -->
         <div class="settings-section">
@@ -162,16 +126,11 @@ export class SettingsModal extends Modal {
           <div class="about-info">
             <div class="app-info">
               <h4>SVG2Icon</h4>
-              <p>Version 1.1.0</p>
-              <p>Professional SVG to icon converter</p>
             </div>
             
             <div class="links">
               <button class="button is-text" type="button" id="open-website">
                 Visit Website
-              </button>
-              <button class="button is-text" type="button" id="view-licenses">
-                View Licenses
               </button>
               <button class="button is-text" type="button" id="report-issue">
                 Report Issue
@@ -179,7 +138,7 @@ export class SettingsModal extends Modal {
             </div>
             
             <div class="brand-section" style="margin-top: 1.25rem; display: flex; align-items: center; gap: 0.75rem; justify-content: center;">
-              <img src="../src/assets/star-underscore/favicon-32x32.png" alt="StarUnderscore" width="20" height="20" />
+              <img src="../assets/star-underscore/favicon-32x32.png" alt="StarUnderscore" width="20" height="20" />
               <span style="color: var(--text-secondary);">Proudly made by <a href="#" id="open-website" style="color: var(--accent-primary); text-decoration: none;">StarUnderscore.com</a></span>
             </div>
           </div>
@@ -198,6 +157,15 @@ export class SettingsModal extends Modal {
     await this.loadSettings();
     this.bindEvents();
     this.updateUI();
+    // Populate current version above update button
+    try {
+      const ver = await window.electronAPI.app.getVersion();
+      const verEl = document.getElementById('current-version');
+      if (verEl) verEl.textContent = `Version ${ver}`;
+    } catch (e) {
+      const verEl = document.getElementById('current-version');
+      if (verEl) verEl.textContent = '';
+    }
   }
 
   protected override async onAction(action: string): Promise<boolean> {
@@ -240,12 +208,7 @@ export class SettingsModal extends Modal {
       this.handleToggle('autoUpdate');
     });
 
-    // Default icon type
-    const defaultIconType = document.getElementById('default-icon-type') as HTMLSelectElement;
-    defaultIconType?.addEventListener('change', (e) => {
-      const target = e.target as HTMLSelectElement;
-      this.handleSettingChange('defaultIconType', target.value);
-    });
+    // Default icon type section removed
 
     // Update check
     const checkUpdatesBtn = document.getElementById('check-updates-btn');
@@ -255,11 +218,7 @@ export class SettingsModal extends Modal {
 
     // External links
     document.getElementById('open-website')?.addEventListener('click', () => {
-      this.openExternalLink('https://starunderscore.com');
-    });
-
-    document.getElementById('view-licenses')?.addEventListener('click', () => {
-      this.showLicenses();
+      this.openExternalLink('https://www.starunderscore.com/products/maverick-spirit/svg2icon');
     });
 
     document.getElementById('report-issue')?.addEventListener('click', () => {
@@ -278,11 +237,7 @@ export class SettingsModal extends Modal {
     this.updateToggle('telemetry-toggle', this.settings.telemetry !== false);
     this.updateToggle('auto-update-toggle', this.settings.autoUpdate === true);
 
-    // Update default icon type
-    const defaultIconSelect = document.getElementById('default-icon-type') as HTMLSelectElement;
-    if (defaultIconSelect) {
-      defaultIconSelect.value = this.settings.defaultIconType || 'universal';
-    }
+    // Default icon type section removed
   }
 
   private updateToggle(toggleId: string, isActive: boolean): void {

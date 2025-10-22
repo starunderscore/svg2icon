@@ -1,7 +1,7 @@
 // ProjectRow component - Individual table row for each project
 
 import { ProjectActions } from './ProjectActions.js';
-import type { Project, IconType } from '../../types/Project.js';
+import type { Project } from '../../types/Project.js';
 import type { ProjectService } from '../../services/ProjectService.js';
 import type { EventManager } from '../../utils/events.js';
 
@@ -26,8 +26,7 @@ export class ProjectRow {
     this.projectActions = new ProjectActions({
       project: props.project,
       onEdit: props.onEdit,
-      onDelete: props.onDelete,
-      onGenerate: (iconType) => this.handleGenerate(iconType)
+      onDelete: props.onDelete
     });
   }
 
@@ -253,39 +252,33 @@ export class ProjectRow {
     }
   }
 
-  private async handleGenerate(iconType: IconType): Promise<void> {
-    try {
-      await this.props.projectService.generateIcons(this.props.project.id, iconType);
-      this.props.eventManager.emit('project:generation_completed', {
-        projectId: this.props.project.id,
-        iconType
-      });
-    } catch (error) {
-      console.error('Failed to generate icons:', error);
-      this.props.eventManager.emit('project:generation_failed', {
-        projectId: this.props.project.id,
-        iconType,
-        error: error instanceof Error ? error.message : 'Unknown error'
-      });
-    }
-  }
+  // Icon generation per type removed from row actions
 
   private toggleActionsMenu(): void {
     // legacy (no-op) retained for compatibility
   }
 
   private closeActionsMenu(): void {
-    if (this.actionsPortal) {
-      document.body.removeChild(this.actionsPortal);
-      this.actionsPortal = null;
-      document.removeEventListener('click', this.handleGlobalClick, true);
-      window.removeEventListener('scroll', this.handleViewportChange, true);
-      window.removeEventListener('resize', this.handleViewportChange, true);
-      // Remove active state from trigger
-      const trigger = this.element?.querySelector('.actions-trigger') as HTMLElement | null;
-      if (trigger) {
-        trigger.classList.remove('is-active');
+    if (!this.actionsPortal) return;
+
+    // Safely remove portal if it still exists in the DOM
+    try {
+      if (document.body.contains(this.actionsPortal)) {
+        document.body.removeChild(this.actionsPortal);
       }
+    } catch { /* ignore */ }
+
+    this.actionsPortal = null;
+
+    // Detach listeners
+    document.removeEventListener('click', this.handleGlobalClick, true);
+    window.removeEventListener('scroll', this.handleViewportChange, true);
+    window.removeEventListener('resize', this.handleViewportChange, true);
+
+    // Remove active state from trigger
+    const trigger = this.element?.querySelector('.actions-trigger') as HTMLElement | null;
+    if (trigger) {
+      trigger.classList.remove('is-active');
     }
   }
 

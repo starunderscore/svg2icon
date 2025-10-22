@@ -21,6 +21,7 @@ export interface CreateProjectData {
 export interface UpdateProjectData {
   name?: string;
   iconTypes?: IconType[];
+  svgFile?: File; // renderer-only; converted to base64 before sending to main
 }
 
 export interface ProjectStats {

@@ -1,12 +1,11 @@
 // ProjectActions component - Dropdown menu for project actions
 
-import type { Project, IconType } from '../../types/Project.js';
+import type { Project } from '../../types/Project.js';
 
 interface ProjectActionsProps {
   project: Project;
   onEdit: (project: Project) => void;
   onDelete: (project: Project) => void;
-  onGenerate: (iconType: IconType) => void;
 }
 
 export class ProjectActions {
@@ -62,18 +61,12 @@ export class ProjectActions {
 
   private handleAction(element: HTMLElement): void {
     const action = element.dataset.action;
-    const iconType = element.dataset.iconType;
 
     switch (action) {
       case 'edit':
         this.props.onEdit(this.props.project);
         break;
         
-      case 'generate':
-        if (iconType) {
-          this.props.onGenerate(iconType as IconType);
-        }
-        break;
         
       case 'delete':
         this.props.onDelete(this.props.project);

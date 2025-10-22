@@ -70,6 +70,15 @@ export class ProjectService {
         updateData.iconTypes = data.iconTypes;
       }
 
+      if ((data as any).svgFile instanceof File) {
+        const file = (data as any).svgFile as File;
+        if (!this.isValidSvgFile(file)) {
+          throw new Error('Invalid SVG file. Please select a valid SVG file.');
+        }
+        const svgData = await this.fileToBase64(file);
+        updateData.svgData = svgData;
+      }
+
       const project = await window.electronAPI.projects.update(id, updateData);
       
       // Update cache if it exists

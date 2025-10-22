@@ -1,7 +1,7 @@
 // EditProjectModal - Modal for editing existing projects
 
 import { Modal } from '../common/Modal.js';
-import type { Project, UpdateProjectData, IconType } from '../../types/Project.js';
+import type { Project, UpdateProjectData } from '../../types/Project.js';
 import type { ProjectService } from '../../services/ProjectService.js';
 import type { EventManager } from '../../utils/events.js';
 
@@ -14,7 +14,8 @@ interface EditProjectModalProps {
 export class EditProjectModal extends Modal {
   private props: EditProjectModalProps;
   private projectName: string;
-  private selectedIconTypes: IconType[];
+  private selectedFile: File | null = null;
+  private svgMode: 'preview' | 'upload' = 'preview';
 
   constructor(props: EditProjectModalProps) {
     super({
@@ -24,12 +25,19 @@ export class EditProjectModal extends Modal {
     });
     this.props = props;
     this.projectName = props.project.name;
-    this.selectedIconTypes = [...props.project.iconTypes];
+    // icon types removed from UI; keep existing project data unchanged
   }
 
   protected override getContent(): string {
     return `
       <div class="edit-project-form">
+        <div class="form-section">
+          <label class="label">SVG</label>
+          <div id="svg-section" class="svg-section-container">
+            <!-- Filled on open -->
+          </div>
+        </div>
+
         <div class="form-section">
           <label class="label">Project Name</label>
           <div class="control">
@@ -41,98 +49,10 @@ export class EditProjectModal extends Modal {
               maxlength="100"
             />
           </div>
-          <p class="help">Update the name to better describe your project.</p>
         </div>
 
-        <div class="form-section">
-          <label class="label">SVG Preview</label>
-          <div class="svg-preview-container">
-            <div class="svg-preview-large">
-              ${this.createSvgPreview()}
-            </div>
-            <div class="svg-info">
-              <div class="svg-info-item">
-                <span class="label">Created:</span>
-                <span class="value">${this.formatDate(this.props.project.createdAt)}</span>
-              </div>
-              <div class="svg-info-item">
-                <span class="label">Last Updated:</span>
-                <span class="value">${this.formatDate(this.props.project.updatedAt)}</span>
-              </div>
-              ${this.props.project.generatedAt ? `
-                <div class="svg-info-item">
-                  <span class="label">Last Generated:</span>
-                  <span class="value">${this.formatDate(this.props.project.generatedAt)}</span>
-                </div>
-              ` : ''}
-            </div>
-          </div>
-        </div>
-
-        <div class="form-section">
-          <label class="label">Icon Types</label>
-          <div class="icon-type-checkboxes">
-            <label class="checkbox-item">
-              <input type="checkbox" value="universal" ${this.selectedIconTypes.includes('universal') ? 'checked' : ''} />
-              <span class="checkmark"></span>
-              <div class="checkbox-content">
-                <div class="checkbox-label">Universal</div>
-                <div class="checkbox-description">Complete cross-platform package</div>
-              </div>
-            </label>
-            <label class="checkbox-item">
-              <input type="checkbox" value="ios" ${this.selectedIconTypes.includes('ios') ? 'checked' : ''} />
-              <span class="checkmark"></span>
-              <div class="checkbox-content">
-                <div class="checkbox-label">iOS</div>
-                <div class="checkbox-description">App Store ready icons</div>
-              </div>
-            </label>
-            <label class="checkbox-item">
-              <input type="checkbox" value="android" ${this.selectedIconTypes.includes('android') ? 'checked' : ''} />
-              <span class="checkmark"></span>
-              <div class="checkbox-content">
-                <div class="checkbox-label">Android</div>
-                <div class="checkbox-description">Google Play ready icons</div>
-              </div>
-            </label>
-            <label class="checkbox-item">
-              <input type="checkbox" value="desktop" ${this.selectedIconTypes.includes('desktop') ? 'checked' : ''} />
-              <span class="checkmark"></span>
-              <div class="checkbox-content">
-                <div class="checkbox-label">Desktop</div>
-                <div class="checkbox-description">Windows, macOS, Linux</div>
-              </div>
-            </label>
-            <label class="checkbox-item">
-              <input type="checkbox" value="web" ${this.selectedIconTypes.includes('web') ? 'checked' : ''} />
-              <span class="checkmark"></span>
-              <div class="checkbox-content">
-                <div class="checkbox-label">Web</div>
-                <div class="checkbox-description">PWA and favicons</div>
-              </div>
-            </label>
-          </div>
-          <p class="help">Select which icon formats you want to generate for this project.</p>
-        </div>
-
-        <div class="form-section">
-          <label class="label">Actions</label>
-          <div class="action-buttons">
-            <button class="button is-primary" type="button" id="regenerate-icons">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
-              </svg>
-              Regenerate Icons
-            </button>
-            <button class="button" type="button" id="download-original">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-              </svg>
-              Download Original SVG
-            </button>
-          </div>
-        </div>
+        
+        
       </div>
     `;
   }
@@ -148,7 +68,8 @@ export class EditProjectModal extends Modal {
 
   protected override async onOpen(): Promise<void> {
     this.bindFormEvents();
-    this.bindActionButtons();
+    this.renderSvgSection();
+    this.bindSvgSectionEvents();
   }
 
   protected override async onAction(action: string): Promise<boolean> {
@@ -180,41 +101,19 @@ export class EditProjectModal extends Modal {
       });
     }
 
-    // Bind checkbox events
-    const checkboxes = document.querySelectorAll('.icon-type-checkboxes input[type="checkbox"]');
-    checkboxes.forEach(checkbox => {
-      checkbox.addEventListener('change', () => {
-        this.updateSelectedIconTypes();
-      });
-    });
+    // No icon type checkboxes anymore
   }
 
-  private bindActionButtons(): void {
-    const regenerateBtn = document.getElementById('regenerate-icons');
-    const downloadBtn = document.getElementById('download-original');
+  // No action buttons in edit modal
 
-    regenerateBtn?.addEventListener('click', () => {
-      this.handleRegenerateIcons();
-    });
-
-    downloadBtn?.addEventListener('click', () => {
-      this.handleDownloadOriginal();
-    });
-  }
-
-  private updateSelectedIconTypes(): void {
-    const checkboxes = document.querySelectorAll('.icon-type-checkboxes input[type="checkbox"]:checked');
-    this.selectedIconTypes = Array.from(checkboxes).map(cb => (cb as HTMLInputElement).value) as IconType[];
-  }
+  // Icon types removed
 
   private async saveChanges(): Promise<void> {
     if (!this.projectName) {
       throw new Error('Project name cannot be empty.');
     }
 
-    if (this.selectedIconTypes.length === 0) {
-      throw new Error('Please select at least one icon type.');
-    }
+    // No icon types to validate
 
     const updates: UpdateProjectData = {};
     let hasChanges = false;
@@ -225,11 +124,11 @@ export class EditProjectModal extends Modal {
       hasChanges = true;
     }
 
-    // Check if icon types changed
-    const currentTypes = [...this.props.project.iconTypes].sort();
-    const newTypes = [...this.selectedIconTypes].sort();
-    if (JSON.stringify(currentTypes) !== JSON.stringify(newTypes)) {
-      updates.iconTypes = this.selectedIconTypes;
+    // Icon types are not editable anymore
+
+    // If new SVG selected, include it
+    if (this.selectedFile) {
+      (updates as any).svgFile = this.selectedFile;
       hasChanges = true;
     }
 
@@ -239,55 +138,14 @@ export class EditProjectModal extends Modal {
     }
   }
 
-  private async handleRegenerateIcons(): Promise<void> {
-    try {
-      const regenerateBtn = document.getElementById('regenerate-icons') as HTMLButtonElement;
-      regenerateBtn.classList.add('is-loading');
-      regenerateBtn.disabled = true;
-
-      // Generate icons for each selected type
-      for (const iconType of this.selectedIconTypes) {
-        await this.props.projectService.generateIcons(this.props.project.id, iconType);
-      }
-
-      this.props.eventManager.emit('project:generation_completed', {
-        projectId: this.props.project.id,
-        iconTypes: this.selectedIconTypes
-      });
-
-      regenerateBtn.classList.remove('is-loading');
-      regenerateBtn.disabled = false;
-      
-      // Show success message
-      this.showSuccess('Icons regenerated successfully!');
-    } catch (error) {
-      console.error('Failed to regenerate icons:', error);
-      this.showError('Failed to regenerate icons');
-    }
-  }
-
-  private handleDownloadOriginal(): void {
-    try {
-      // Convert base64 to blob and download
-      const svgData = atob(this.props.project.svgData);
-      const blob = new Blob([svgData], { type: 'image/svg+xml' });
-      const url = URL.createObjectURL(blob);
-      
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${this.props.project.name}.svg`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      
-      URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error('Failed to download original SVG:', error);
-      this.showError('Failed to download SVG file');
-    }
-  }
+  // Actions removed (regenerate, download original)
 
   private createSvgPreview(): string {
+    if (this.selectedFile) {
+      // Show temporary preview for newly selected file
+      return `<img id="svg-live-preview" alt="SVG Preview" />`;
+    }
+
     if (!this.props.project.svgData) {
       return `
         <div class="svg-preview-placeholder">No preview available</div>
@@ -308,10 +166,7 @@ export class EditProjectModal extends Modal {
     return new Date(dateString).toLocaleString();
   }
 
-  private showSuccess(message: string): void {
-    // Implement success notification
-    console.log('Success:', message);
-  }
+  // Success notifications no longer used here
 
   private showError(message: string): void {
     // Implement error notification
@@ -327,5 +182,100 @@ export class EditProjectModal extends Modal {
       "'": '&#039;'
     };
     return text.replace(/[&<>"']/g, (m) => map[m]);
+  }
+
+  private renderSvgSection(): void {
+    const container = document.getElementById('svg-section');
+    if (!container) return;
+
+    if (this.svgMode === 'preview' && (this.selectedFile || this.props.project.svgData)) {
+      container.innerHTML = `
+        <div class="svg-fixed">
+          <div class="svg-preview-large">
+            ${this.createSvgPreview()}
+          </div>
+          <button id="btn-remove-svg" class="button svg-replace-btn" type="button">Replace SVG</button>
+        </div>
+      `;
+
+      // If showing live preview for selected file, load it into img
+      if (this.selectedFile) {
+        const img = document.getElementById('svg-live-preview') as HTMLImageElement | null;
+        if (img) {
+          const reader = new FileReader();
+          reader.onload = () => { img.src = reader.result as string; };
+          reader.readAsDataURL(this.selectedFile);
+        }
+      }
+    } else {
+      container.innerHTML = `
+        <div id="svg-dropzone" class="file-upload-area svg-dropzone" role="button" tabindex="0" aria-label="Upload SVG file">
+          <div class="file-upload-icon">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+            </svg>
+          </div>
+          <div class="file-upload-text">Drop your SVG file here or click to browse</div>
+          <div class="file-upload-hint">Supports SVG up to 10MB</div>
+        </div>
+        <button id="btn-cancel-replace" class="button svg-cancel-action" type="button" title="Cancel">Cancel</button>
+        <input id="svg-file-input" type="file" accept=".svg,image/svg+xml" style="display: none;" />
+      `;
+    }
+  }
+
+  private bindSvgSectionEvents(): void {
+    const container = document.getElementById('svg-section');
+    if (!container) return;
+
+    const removeBtn = document.getElementById('btn-remove-svg');
+    if (removeBtn) {
+      removeBtn.addEventListener('click', () => {
+        this.svgMode = 'upload';
+        this.renderSvgSection();
+        this.bindSvgSectionEvents();
+      });
+    }
+
+    const dropzone = document.getElementById('svg-dropzone');
+    const fileInput = document.getElementById('svg-file-input') as HTMLInputElement | null;
+    const cancelBtn = document.getElementById('btn-cancel-replace');
+    if (dropzone && fileInput) {
+      dropzone.addEventListener('click', () => fileInput.click());
+      dropzone.addEventListener('dragover', (e) => { e.preventDefault(); dropzone.classList.add('is-active'); });
+      dropzone.addEventListener('dragleave', () => dropzone.classList.remove('is-active'));
+      dropzone.addEventListener('drop', (e) => {
+        e.preventDefault(); dropzone.classList.remove('is-active');
+        const f = e.dataTransfer?.files?.[0]; if (f) this.handleNewSvgFile(f);
+      });
+      fileInput.addEventListener('change', (e) => {
+        const f = (e.target as HTMLInputElement).files?.[0]; if (f) this.handleNewSvgFile(f);
+      });
+    }
+
+    if (cancelBtn) {
+      cancelBtn.addEventListener('click', () => {
+        // Return to preview without changing selected file
+        this.svgMode = 'preview';
+        this.renderSvgSection();
+        this.bindSvgSectionEvents();
+      });
+    }
+  }
+
+  private handleNewSvgFile(file: File): void {
+    // Basic validation similar to ProjectService
+    if (!file.name.toLowerCase().endsWith('.svg') && !(file.type || '').includes('svg')) {
+      alert('Please select a valid SVG file.');
+      return;
+    }
+    if (file.size > 10 * 1024 * 1024) {
+      alert('File size must be less than 10MB.');
+      return;
+    }
+    this.selectedFile = file;
+    this.svgMode = 'preview';
+    this.renderSvgSection();
+    this.bindSvgSectionEvents();
   }
 }

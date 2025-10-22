@@ -28,7 +28,11 @@ export abstract class Modal {
       <div class="modal-card modal-${this.options.size}">
         <header class="modal-card-head">
           <p class="modal-card-title">${this.options.title}</p>
-          ${this.options.showClose ? '<button class="delete" aria-label="close" data-action="cancel"></button>' : ''}
+          ${this.options.showClose ? `
+            <button class="modal-head-close" aria-label="close" title="Close" data-action="cancel">
+              <span class="modal-head-line" aria-hidden="true"></span>
+            </button>
+          ` : ''}
         </header>
         <section class="modal-card-body">${this.getContent()}</section>
         <footer class="modal-card-foot">${this.getFooterActions()}</footer>
@@ -69,4 +73,3 @@ export abstract class Modal {
     resolve?.(this.result);
   }
 }
-

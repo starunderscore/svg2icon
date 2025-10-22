@@ -41,20 +41,21 @@ export class DeleteProjectModal extends Modal {
           This action cannot be undone. This will permanently delete the project 
           <strong>"${this.escapeHtml(projectName)}"</strong> and all associated data.
         </p>
-        
-        <div class="delete-project-info">
-          <div>Please type the project name to confirm:</div>
-          <div class="delete-project-name">${this.escapeHtml(projectName)}</div>
-        </div>
-        
-        <div class="delete-copy-section">
-          <div class="delete-copy-header">
-            <label class="delete-copy-label" for="project-name-copy">Project name:</label>
-            <button class="copy-button" type="button" id="copy-button">
+        <div class="form-section">
+          <label class="label" for="project-name-copy-input">Project name</label>
+          <div class="control has-right-action">
+            <input 
+              id="project-name-copy-input"
+              class="input"
+              type="text"
+              value="${this.escapeHtml(projectName)}"
+              disabled
+              aria-disabled="true"
+            />
+            <button class="copy-button copy-button-inline" type="button" id="copy-button" title="Copy name">
               ${this.isCopied ? 'Copied!' : 'Copy'}
             </button>
           </div>
-          <div class="delete-project-name" id="project-name-copy">${this.escapeHtml(projectName)}</div>
         </div>
         
         <div class="form-section">
@@ -87,7 +88,9 @@ export class DeleteProjectModal extends Modal {
 
   protected override async onAction(action: string): Promise<boolean> {
     if (action === 'cancel') {
-      return true; // Close modal
+      // Close without confirming deletion
+      this.setResult(false);
+      return true;
     }
 
     if (action === 'delete') {
@@ -96,15 +99,9 @@ export class DeleteProjectModal extends Modal {
         return false; // Keep modal open
       }
 
-      try {
-        await this.props.projectService.delete(this.props.project.id);
-        this.props.eventManager.emit('project:deleted', this.props.project.id);
-        return true; // Close modal on success
-      } catch (error) {
-        console.error('Failed to delete project:', error);
-        this.showError(error instanceof Error ? error.message : 'Failed to delete project');
-        return false; // Keep modal open
-      }
+      // Confirm; actual deletion will be handled by caller
+      this.setResult(true);
+      return true;
     }
 
     return false;
@@ -112,12 +109,12 @@ export class DeleteProjectModal extends Modal {
 
   private setupCopyButton(): void {
     const copyButton = document.getElementById('copy-button');
-    const projectNameElement = document.getElementById('project-name-copy');
+    const projectNameInput = document.getElementById('project-name-copy-input') as HTMLInputElement | null;
 
-    if (copyButton && projectNameElement) {
+    if (copyButton && projectNameInput) {
       copyButton.addEventListener('click', async () => {
         try {
-          await navigator.clipboard.writeText(this.props.project.name);
+          await navigator.clipboard.writeText(projectNameInput.value);
           this.setCopiedState(true);
           
           // Reset copy state after 2 seconds
@@ -126,7 +123,7 @@ export class DeleteProjectModal extends Modal {
           }, 2000);
         } catch (error) {
           // Fallback for browsers that don't support clipboard API
-          this.selectText(projectNameElement);
+          projectNameInput.select();
         }
       });
     }

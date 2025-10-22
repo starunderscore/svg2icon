@@ -186,7 +186,6 @@
 [data-theme="dark"] .textarea:focus,
 [data-theme="dark"] .select select:focus {
   border-color: var(--border-focus);
-  box-shadow: 0 0 0 0.125em rgba(59, 130, 246, 0.25);
 }
 
 [data-theme="dark"] .input::placeholder,
