@@ -218,24 +218,26 @@
 
 /* Special header buttons */
 .btn-new-project {
-  background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
-  color: white;
-  border: none;
-  padding: 0.75rem 1.5rem;
+  background: var(--accent-primary);
+  color: #ffffff;
+  border: 1px solid var(--border-color);
+  height: 2.75rem; /* match settings button height */
+  padding: 0 1rem; /* rectangular, not pill */
   border-radius: var(--border-radius);
   font-weight: 500;
   cursor: pointer;
   transition: all var(--transition-fast);
-  display: flex;
+  display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
   font-size: 0.9375rem;
 }
 
 .btn-new-project:hover {
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-lg);
-  background: linear-gradient(135deg, var(--accent-hover) 0%, var(--accent-primary) 100%);
+  background: var(--accent-hover);
+  color: #ffffff;
+  border-color: var(--border-color);
 }
 
 .btn-settings {
