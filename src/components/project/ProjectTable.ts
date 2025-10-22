@@ -108,8 +108,9 @@ export class ProjectTable {
 
   private async handleEditProject(project: Project): Promise<void> {
     try {
-      const { EditProjectModal } = await import('../modals/EditProjectModal.js');
-      const modal = new EditProjectModal({
+      const { SvgFormModal } = await import('../modals/SvgFormModal.js');
+      const modal = new SvgFormModal({
+        mode: 'edit',
         project,
         projectService: this.props.projectService,
         eventManager: this.props.eventManager

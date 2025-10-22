@@ -196,8 +196,9 @@ class SVG2IconApp {
 
   private async handleNewProject(): Promise<void> {
     try {
-      const { CreateProjectModal } = await import('../components/modals/CreateProjectModal.js');
-      const modal = new CreateProjectModal({
+      const { SvgFormModal } = await import('../components/modals/SvgFormModal.js');
+      const modal = new SvgFormModal({
+        mode: 'create',
         projectService: this.projectService,
         eventManager: this.eventManager
       });

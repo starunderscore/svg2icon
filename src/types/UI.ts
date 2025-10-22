@@ -1,6 +1,6 @@
 // UI component types for SVG2Icon
 
-import type { Project, IconType } from './Project.js';
+import type { Project } from './Project.js';
 import type { ProjectService } from '../services/ProjectService.js';
 import type { EventManager } from '../utils/events.js';
 
@@ -52,7 +52,6 @@ export interface ProjectActionsProps extends BaseComponentProps {
   project: Project;
   onEdit: (project: Project) => void;
   onDelete: (project: Project) => void;
-  onGenerate: (iconType: IconType) => void;
   onDuplicate?: (project: Project) => void;
   onExport?: (project: Project) => void;
 }
@@ -65,16 +64,7 @@ export interface ModalProps extends BaseComponentProps {
   onClose?: () => void;
 }
 
-export interface CreateProjectModalProps extends ModalProps {
-  projectService: ProjectService;
-  eventManager: EventManager;
-}
-
-export interface EditProjectModalProps extends ModalProps {
-  project: Project;
-  projectService: ProjectService;
-  eventManager: EventManager;
-}
+// Unified modal is SvgFormModal; legacy create/edit modal props removed
 
 export interface DeleteProjectModalProps extends ModalProps {
   project: Project;
