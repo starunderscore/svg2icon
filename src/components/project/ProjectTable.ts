@@ -35,27 +35,24 @@ export class ProjectTable {
     if (!this.container) return;
 
     this.container.innerHTML = `
-      <table class="project-table project-table-head">
-        <thead>
-          <tr>
-            <th>ICON</th>
-            <th>Name</th>
-            <th>Created</th>
-            <th>Downloads</th>
-            <th></th>
-          </tr>
-        </thead>
-      </table>
-      <div class="project-table-body-scroll">
-        <table class="project-table">
+        <table class="project-table" style="height: calc(100vh - 182px);">
+          <thead>
+            <tr>
+              <th>ICON</th>
+              <th>Name</th>
+              <th>Created</th>
+              <th>Downloads</th>
+              <th></th>
+            </tr>
+          </thead>
           <tbody id="project-table-body">
             <!-- Project rows will be rendered here -->
           </tbody>
         </table>
-      </div>
     `;
 
     // Header rendered
+    // Height managed inline on table; no body inline styles
   }
 
   private renderRows(): void {
@@ -150,4 +147,6 @@ export class ProjectTable {
       console.error('Failed to download project:', error);
     }
   }
+
+  // No dynamic resizing needed; table height set inline.
 }
