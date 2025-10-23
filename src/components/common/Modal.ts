@@ -29,7 +29,7 @@ export abstract class Modal {
         <header class="modal-card-head">
           <p class="modal-card-title">${this.options.title}</p>
           ${this.options.showClose ? `
-            <button class="modal-head-close" aria-label="close" title="Close" data-action="cancel">
+            <button class="modal-head-close" aria-label="close" title="Close" data-action="close">
               <span class="modal-head-line" aria-hidden="true"></span>
             </button>
           ` : ''}

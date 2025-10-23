@@ -260,3 +260,33 @@
   color: var(--text-primary);
   border-color: var(--accent-primary);
 }
+
+/* Help button (powder blue) */
+.btn-help {
+  /* Informational deep blue */
+  background: #14496c;
+  color: #ffffff;
+  border: 1px solid #14496c;
+  padding: 0.75rem;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  line-height: 2.75rem; /* increase line-height for better centering */
+}
+
+.btn-help:hover {
+  background: #175a89;
+  border-color: #175a89;
+  color: #ffffff;
+}
+
+/* Increase line-height for right-side action bar icons */
+.header-right .btn-settings,
+.header-right .btn-help {
+  line-height: 2.75rem;
+}

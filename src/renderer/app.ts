@@ -59,7 +59,8 @@ class SVG2IconApp {
     
     this.appHeader = new AppHeader({
       onNewProject: () => this.handleNewProject(),
-      onSettings: () => this.handleSettings()
+      onSettings: () => this.handleSettings(),
+      onHelp: () => this.handleHelp()
     });
     
     this.mainContent = new MainContent({
@@ -233,6 +234,17 @@ class SVG2IconApp {
     } catch (error) {
       console.error('Failed to show settings modal:', error);
       this.showError('Failed to open settings dialog');
+    }
+  }
+
+  private async handleHelp(): Promise<void> {
+    try {
+      const { HelpModal } = await import('../components/modals/HelpModal.js');
+      const modal = new HelpModal();
+      await modal.show();
+    } catch (error) {
+      console.error('Failed to show help modal:', error);
+      this.showError('Failed to open help');
     }
   }
 
