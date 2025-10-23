@@ -2,8 +2,14 @@ let currentRoot = '';
 let currentPath = '';
 
 async function loadTOC() {
-  const res = await fetch('toc.json');
-  return res.json();
+  const candidates = ['toc.json','../toc.json','../../toc.json'];
+  for (const path of candidates) {
+    try {
+      const res = await fetch(path);
+      if (res.ok) return await res.json();
+    } catch {}
+  }
+  throw new Error('Failed to load toc.json');
 }
 
 function $(sel){ return document.querySelector(sel); }
@@ -211,11 +217,14 @@ function renderCallout(kind, content){
 (async function init(){
   const toc = await loadTOC();
   const select = $('#version');
-  const versions = Object.keys(toc.versions);
+  const all = Object.keys(toc.versions);
+  const filter = (window).VERSIONS_FILTER || null;
+  const versions = filter ? all.filter(v => filter.includes(v)) : all;
+  const defaultVersion = versions.includes(toc.default) ? toc.default : versions[0];
   versions.forEach(v => {
     const opt = document.createElement('option');
     opt.value = v; opt.textContent = v;
-    if (v === toc.default) opt.selected = true;
+    if (v === defaultVersion) opt.selected = true;
     select.appendChild(opt);
   });
 
@@ -229,7 +238,18 @@ function renderCallout(kind, content){
     }
   }
 
+  // Allow version override via query param ?v=
+  const params = new URLSearchParams(location.search);
+  const vParam = params.get('v');
+  if (vParam && versions.includes(vParam)) {
+    Array.from(select.options).forEach(function(opt){ opt.selected = opt.value === vParam; });
+  }
+
   select.addEventListener('change', () => mount(select.value));
+  // If nothing selected (edge-case), select first filtered version
+  if (!select.value) {
+    select.value = versions[0];
+  }
   mount(select.value);
   $('#content').addEventListener('click', (e) => {
     const a = e.target.closest('a');

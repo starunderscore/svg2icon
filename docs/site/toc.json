@@ -1,57 +1,230 @@
 {
   "versions": {
     "1.1.0": {
-      "root": "../manuals/user-manual/v1.1.0",
+      "root": "../../manuals/user-manual/v1.1.0",
       "sections": [
-        { "title": "Overview", "pages": [
-          { "title": "Manual Overview", "path": "README.md" }
-        ]},
-        { "title": "Getting Started", "pages": [
-          { "title": "Installation", "path": "getting-started/installation.md" },
-          { "title": "Quick Start", "path": "getting-started/quick-start.md" },
-          { "title": "UI Overview", "path": "getting-started/ui-overview.md" }
-        ]},
-        { "title": "Projects", "pages": [
-          { "title": "Create", "path": "projects/creating-a-project.md" },
-          { "title": "Edit", "path": "projects/editing-a-project.md" },
-          { "title": "Delete", "path": "projects/deleting-a-project.md" }
-        ]},
-        { "title": "SVG Preparation", "pages": [
-          { "title": "Optimizing SVGs", "path": "svg-prep/optimizing-svgs.md" },
-          { "title": "Common Pitfalls", "path": "svg-prep/common-pitfalls.md" }
-        ]},
-        { "title": "Generating Icons", "pages": [
-          { "title": "Overview", "path": "generating-icons/index.md" },
-          { "title": "Web", "path": "generating-icons/web.md" },
-          { "title": "Mobile", "path": "generating-icons/mobile.md" },
-          { "title": "Desktop", "path": "generating-icons/desktop.md" },
-          { "title": "All-In-One", "path": "generating-icons/all-in-one.md" }
-        ]},
-        { "title": "Downloads", "pages": [
-          { "title": "Downloading the ZIP", "path": "downloads/downloading-the-zip.md" },
-          { "title": "Folder Structure", "path": "downloads/folder-structure.md" },
-          { "title": "Verifying Assets", "path": "downloads/verifying-assets.md" }
-        ]},
-        { "title": "Customization", "pages": [
-          { "title": "Settings", "path": "customization/settings.md" },
-          { "title": "Themes", "path": "customization/themes.md" },
-          { "title": "Keyboard Shortcuts", "path": "customization/keyboard-shortcuts.md" }
-        ]},
-        { "title": "Troubleshooting", "pages": [
-          { "title": "Common Errors", "path": "troubleshooting/common-errors.md" },
-          { "title": "Performance Tips", "path": "troubleshooting/performance-tips.md" }
-        ]},
-        { "title": "Reference", "pages": [
-          { "title": "Glossary", "path": "reference/glossary.md" },
-          { "title": "FAQ", "path": "reference/faq.md" },
-          { "title": "Release Notes", "path": "reference/release-notes.md" }
-        ]}
+        {
+          "title": "Overview",
+          "pages": [
+            {
+              "title": "Manual Overview",
+              "path": "README.md"
+            }
+          ]
+        },
+        {
+          "title": "Getting Started",
+          "pages": [
+            {
+              "title": "Installation",
+              "path": "getting-started/installation.md"
+            },
+            {
+              "title": "Quick Start",
+              "path": "getting-started/quick-start.md"
+            },
+            {
+              "title": "UI Overview",
+              "path": "getting-started/ui-overview.md"
+            }
+          ]
+        },
+        {
+          "title": "Projects",
+          "pages": [
+            {
+              "title": "Create",
+              "path": "projects/creating-a-project.md"
+            },
+            {
+              "title": "Edit",
+              "path": "projects/editing-a-project.md"
+            },
+            {
+              "title": "Delete",
+              "path": "projects/deleting-a-project.md"
+            }
+          ]
+        },
+        {
+          "title": "SVG Preparation",
+          "pages": [
+            {
+              "title": "Optimizing SVGs",
+              "path": "svg-prep/optimizing-svgs.md"
+            },
+            {
+              "title": "Common Pitfalls",
+              "path": "svg-prep/common-pitfalls.md"
+            }
+          ]
+        },
+        {
+          "title": "Generating Icons",
+          "pages": [
+            {
+              "title": "Overview",
+              "path": "generating-icons/index.md"
+            },
+            {
+              "title": "Web",
+              "path": "generating-icons/web.md"
+            },
+            {
+              "title": "Mobile",
+              "path": "generating-icons/mobile.md"
+            },
+            {
+              "title": "Desktop",
+              "path": "generating-icons/desktop.md"
+            },
+            {
+              "title": "All-In-One",
+              "path": "generating-icons/all-in-one.md"
+            }
+          ]
+        },
+        {
+          "title": "Downloads",
+          "pages": [
+            {
+              "title": "Downloading the ZIP",
+              "path": "downloads/downloading-the-zip.md"
+            },
+            {
+              "title": "Folder Structure",
+              "path": "downloads/folder-structure.md"
+            },
+            {
+              "title": "Verifying Assets",
+              "path": "downloads/verifying-assets.md"
+            }
+          ]
+        },
+        {
+          "title": "Customization",
+          "pages": [
+            {
+              "title": "Settings",
+              "path": "customization/settings.md"
+            },
+            {
+              "title": "Themes",
+              "path": "customization/themes.md"
+            },
+            {
+              "title": "Keyboard Shortcuts",
+              "path": "customization/keyboard-shortcuts.md"
+            }
+          ]
+        },
+        {
+          "title": "Troubleshooting",
+          "pages": [
+            {
+              "title": "Common Errors",
+              "path": "troubleshooting/common-errors.md"
+            },
+            {
+              "title": "Performance Tips",
+              "path": "troubleshooting/performance-tips.md"
+            }
+          ]
+        },
+        {
+          "title": "Reference",
+          "pages": [
+            {
+              "title": "Glossary",
+              "path": "reference/glossary.md"
+            },
+            {
+              "title": "FAQ",
+              "path": "reference/faq.md"
+            },
+            {
+              "title": "Release Notes",
+              "path": "reference/release-notes.md"
+            }
+          ]
+        }
       ]
     },
     "1.0.0": {
-      "root": "../manuals/user-manual/v1.0.0",
+      "root": "../../manuals/user-manual/v1.0.0",
       "pages": [
-        { "title": "Overview", "path": "README.md" }
+        {
+          "title": "Overview",
+          "path": "README.md"
+        }
+      ]
+    },
+    "tech-1.1.0": {
+      "root": "../../manuals/tech-guide/v1.1.0",
+      "sections": [
+        {
+          "title": "Overview",
+          "pages": [
+            {
+              "title": "Tech Overview",
+              "path": "README.md"
+            }
+          ]
+        },
+        {
+          "title": "Setup",
+          "pages": [
+            {
+              "title": "Prerequisites",
+              "path": "setup.md"
+            }
+          ]
+        },
+        {
+          "title": "Development",
+          "pages": [
+            {
+              "title": "Run Dev",
+              "path": "development.md"
+            }
+          ]
+        },
+        {
+          "title": "Build",
+          "pages": [
+            {
+              "title": "Build Artifacts",
+              "path": "builds.md"
+            }
+          ]
+        },
+        {
+          "title": "Packaging",
+          "pages": [
+            {
+              "title": "Dist",
+              "path": "packaging.md"
+            }
+          ]
+        },
+        {
+          "title": "Support",
+          "pages": [
+            {
+              "title": "Troubleshooting",
+              "path": "troubleshooting.md"
+            }
+          ]
+        }
+      ]
+    },
+    "tech-1.0.0": {
+      "root": "../../manuals/tech-guide/v1.0.0",
+      "pages": [
+        {
+          "title": "Tech Overview",
+          "path": "README.md"
+        }
       ]
     }
   },
