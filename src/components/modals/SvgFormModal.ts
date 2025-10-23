@@ -19,6 +19,7 @@ export class SvgFormModal extends Modal {
   private projectName = '';
   private selectedFile: File | null = null;
   private svgMode: 'preview' | 'upload' = 'upload';
+  private existingNames: Set<string> = new Set();
 
   constructor(props: SvgFormModalProps) {
     super({ title: props.mode === 'create' ? 'Create New Project' : 'Edit Project', size: 'medium', className: 'svg-form-modal' });
@@ -41,6 +42,7 @@ export class SvgFormModal extends Modal {
           <label class="label">Project Name</label>
           <div class="control">
             <input id="project-name-input" class="input" type="text" placeholder="e.g., Client Portal Icons, Personal Blog Logo" maxlength="100" value="${this.escapeHtml(this.projectName)}" />
+            <div id="name-error" class="help" style="min-height: 1.25rem; color: var(--text-muted);"></div>
           </div>
         </div>
       </div>
@@ -54,6 +56,11 @@ export class SvgFormModal extends Modal {
   }
 
   protected override async onOpen(): Promise<void> {
+    try {
+      const all = await this.props.projectService.getAll();
+      const selfId = this.props.project?.id;
+      all.filter(p => p.id !== selfId).forEach(p => this.existingNames.add(p.name.toLowerCase()));
+    } catch {}
     this.renderSvgSection();
     this.bindSvgSectionEvents();
     this.bindFormEvents();
@@ -84,11 +91,22 @@ export class SvgFormModal extends Modal {
     const nameInput = document.getElementById('project-name-input') as HTMLInputElement | null;
     const primaryBtn = document.querySelector('[data-action="save"]') as HTMLButtonElement | null;
     nameInput?.addEventListener('input', (e) => {
-      this.projectName = (e.target as HTMLInputElement).value.trim();
+      const el = e.target as HTMLInputElement;
+      const filtered = el.value.replace(/[^A-Za-z0-9 _.-]/g, '');
+      if (filtered !== el.value) {
+        const pos = el.selectionStart || filtered.length;
+        el.value = filtered;
+        el.setSelectionRange(pos, pos);
+      }
+      this.projectName = el.value.trim();
+      this.applyNameValidation();
       if (primaryBtn && this.props.mode === 'create') {
-        primaryBtn.disabled = !(this.projectName && this.selectedFile);
+        const ok = this.projectName && this.selectedFile && this.isNameValid(this.projectName);
+        primaryBtn.disabled = !ok;
       }
     });
+
+    this.applyNameValidation();
   }
 
   private renderSvgSection(): void {
@@ -180,7 +198,10 @@ export class SvgFormModal extends Modal {
       if (nameInput) nameInput.value = this.projectName;
     }
     const primaryBtn = document.querySelector('[data-action="save"]') as HTMLButtonElement | null;
-    if (primaryBtn && this.props.mode === 'create') primaryBtn.disabled = !(this.projectName && this.selectedFile);
+    if (primaryBtn && this.props.mode === 'create') {
+      const ok = this.projectName && this.selectedFile && this.isNameValid(this.projectName);
+      primaryBtn.disabled = !ok;
+    }
     this.svgMode = 'preview';
     this.renderSvgSection();
     this.bindSvgSectionEvents();
@@ -199,7 +220,10 @@ export class SvgFormModal extends Modal {
 
   private async createProject(): Promise<void> {
     if (!this.projectName || !this.selectedFile) throw new Error('Please provide a project name and select an SVG file.');
-    await this.props.projectService.create({ name: this.projectName, svgFile: this.selectedFile });
+    const project = await this.props.projectService.create({ name: this.projectName, svgFile: this.selectedFile });
+    try {
+      this.props.eventManager.emit('project:created', project);
+    } catch {}
   }
 
   private async saveChanges(): Promise<void> {
@@ -220,9 +244,35 @@ export class SvgFormModal extends Modal {
     return true;
   }
 
+  private isNameValid(name: string): boolean {
+    if (!name) return false;
+    if (!/^[A-Za-z0-9 _.-]+$/.test(name)) return false;
+    if (this.existingNames.has(name.toLowerCase())) return false;
+    return true;
+  }
+
+  private applyNameValidation(): void {
+    const input = document.getElementById('project-name-input') as HTMLInputElement | null;
+    const hint = document.getElementById('name-error') as HTMLDivElement | null;
+    if (!input || !hint) return;
+    const name = this.projectName;
+    let error = '';
+    if (!name) {
+      error = '';
+    } else if (!/^[A-Za-z0-9 _.-]+$/.test(name)) {
+      error = 'Use letters, numbers, space, dot, dash, underscore only';
+    } else if (this.existingNames.has(name.toLowerCase())) {
+      error = 'A project with this name already exists';
+    }
+    input.classList.remove('is-invalid', 'is-valid');
+    if (name.length > 0) {
+      input.classList.add(error ? 'is-invalid' : 'is-valid');
+    }
+    hint.textContent = error;
+  }
+
   private escapeHtml(text: string): string {
     const map: Record<string, string> = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
     return text.replace(/[&<>"']/g, (m) => map[m]);
   }
 }
-

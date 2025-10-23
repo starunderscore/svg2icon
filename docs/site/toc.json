@@ -28,7 +28,7 @@
           { "title": "All-In-One", "path": "generating-icons/all-in-one.md" }
         ]},
         { "title": "Downloads", "pages": [
-          { "title": "Choosing Output Folder", "path": "downloads/choosing-output-folder.md" },
+          { "title": "Downloading the ZIP", "path": "downloads/downloading-the-zip.md" },
           { "title": "Folder Structure", "path": "downloads/folder-structure.md" },
           { "title": "Verifying Assets", "path": "downloads/verifying-assets.md" }
         ]},

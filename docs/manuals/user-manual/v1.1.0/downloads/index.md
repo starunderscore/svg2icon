@@ -1,7 +1,7 @@
 # Downloads & Output
 
-Where files go, how they’re organized, and quick ways to check them.
+How ZIP downloads are named, what’s inside, and how to check them.
 
-- [Choosing Output Folder](choosing-output-folder.md)
+- [Downloading the ZIP](downloading-the-zip.md)
 - [Folder Structure](folder-structure.md)
 - [Verifying Assets](verifying-assets.md)

@@ -75,7 +75,7 @@ export class DeleteProjectModal extends Modal {
   protected override getFooterActions(): string {
     return `
       <button class="button" type="button" data-action="cancel">Cancel</button>
-      <button class="button is-danger" type="button" data-action="delete" disabled>
+      <button class="button is-danger" type="button" id="delete-confirm-btn" data-action="delete" disabled>
         I understand the consequences, delete this project
       </button>
     `;
@@ -131,7 +131,7 @@ export class DeleteProjectModal extends Modal {
 
   private setupConfirmationInput(): void {
     const input = document.getElementById('confirmation-input') as HTMLInputElement;
-    const deleteButton = document.querySelector('[data-action="delete"]') as HTMLButtonElement;
+    const deleteButton = document.getElementById('delete-confirm-btn') as HTMLButtonElement;
 
     if (input && deleteButton) {
       input.addEventListener('input', (e) => {

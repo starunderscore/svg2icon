@@ -8,7 +8,7 @@ A quick tour to help you feel at home.
 
 ## Project table
 - Each row is a project (thumbnail, name, date, downloads, actions)
-- Download buttons: Web, Mobile, Desktop, All, plus SVG for the original file
+- Download buttons: Web, Mobile, Desktop, All — each downloads a ZIP package; SVG downloads the original file
 
 ## Notifications
 Short success or error messages appear at the bottom‑right after actions like creating a project or finishing a download.

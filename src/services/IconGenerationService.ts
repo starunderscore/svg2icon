@@ -138,6 +138,16 @@ export class IconGenerationService {
         }
       }
 
+      // Generate extras for web (favicon.ico and icons-head.html)
+      if (iconType === 'web') {
+        try {
+          await this.generateWebExtras(svgBuffer, iconOutputPath);
+        } catch (error) {
+          const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+          errors.push(`Failed to generate web extras: ${errorMessage}`);
+        }
+      }
+
       // Create manifest file
       await this.createManifest(iconOutputPath, iconType, iconSizes, svgData);
 
@@ -368,13 +378,13 @@ export class IconGenerationService {
         });
       }
     }
+    // End special cases
 
     // Write manifest
     fs.writeFileSync(
       path.join(outputPath, 'manifest.json'),
       JSON.stringify(manifest, null, 2)
     );
-
     // Also save the original SVG
     const svgContent = Buffer.from(svgData, 'base64').toString('utf-8');
     fs.writeFileSync(
@@ -393,5 +403,91 @@ export class IconGenerationService {
       web: { name: 'Web', description: 'PWA and web ready', badge: '🌍' }
     };
     return infoMap[iconType] || infoMap['universal'];
+  }
+
+  private async generateWebExtras(svgBuffer: Buffer, outputPath: string): Promise<void> {
+    // Attempt to create favicon.ico (multi-size) and write icons-head.html template
+    // favicon.ico
+    try {
+      // Prefer png2icons if available
+      try {
+        const mod: any = await import('png2icons');
+        const png2icons: any = mod.default ?? mod;
+        const b16 = await this.svgToPngBuffer(svgBuffer, 16);
+        const b32 = await this.svgToPngBuffer(svgBuffer, 32);
+        const buffers: Buffer[] = [];
+        if (b16) buffers.push(b16);
+        if (b32) buffers.push(b32);
+        if (buffers.length) {
+          const ico = png2icons.createICO(buffers, png2icons.BEZIER, 0, false);
+          if (ico && ico.length > 0) {
+            fs.writeFileSync(path.join(outputPath, 'favicon.ico'), ico);
+          }
+        }
+      } catch {
+        // Fallback to ImageMagick if present
+        const hasMagick = this.hasCmd('magick');
+        const hasConvert = this.hasCmd('convert');
+        const f16 = path.join(outputPath, 'favicon-16.png');
+        const f32 = path.join(outputPath, 'favicon-32.png');
+        const out = path.join(outputPath, 'favicon.ico');
+        if (fs.existsSync(f16) || fs.existsSync(f32)) {
+          if (hasMagick) {
+            const args = [f16, f32, out].filter(Boolean) as string[];
+            spawnSync('magick', args, { stdio: 'ignore' });
+          } else if (hasConvert) {
+            const args = [f16, f32, out].filter(Boolean) as string[];
+            spawnSync('convert', args, { stdio: 'ignore' });
+          }
+        }
+      }
+    } catch {
+      // ignore errors producing favicon.ico
+    }
+
+    // icons-head.html template
+    const headHtml = `<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Your App Name</title>
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" sizes="16x16" href="/web/favicon-16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/web/favicon-32.png">
+    <link rel="icon" href="/web/favicon.ico">
+
+    <!-- Apple touch icons (iOS) -->
+    <link rel="apple-touch-icon" sizes="57x57" href="/web/apple-touch-icon-57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/web/apple-touch-icon-60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/web/apple-touch-icon-72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/web/apple-touch-icon-76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/web/apple-touch-icon-114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/web/apple-touch-icon-120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/web/apple-touch-icon-144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/web/apple-touch-icon-152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/web/apple-touch-icon-180.png">
+
+    <!-- Android/Chrome icons -->
+    <link rel="icon" type="image/png" sizes="192x192" href="/web/manifest-192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/web/manifest-512.png">
+
+    <!-- Optional mobile meta -->
+    <meta name="theme-color" content="#000000">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+  </head>
+  <body>
+    <h1>Web Icons Template</h1>
+    <p>Copy the tags in the HEAD into your site. Adjust paths if needed.</p>
+  </body>
+</html>
+`;
+    try {
+      fs.writeFileSync(path.join(outputPath, 'icons-head.html'), headHtml, 'utf-8');
+    } catch {
+      // ignore
+    }
   }
 }

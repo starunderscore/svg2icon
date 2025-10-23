@@ -1,24 +1,32 @@
 # Editing a Project
 
-Update the name or replace the SVG.
+Tweak the SVG or rename the project. Follow the red-square highlights in each image.
 
-From the project row, open Actions → Edit. Make your changes, then save.
+## Open “Edit”
+From the project row, open the Actions menu and choose Edit.
+
+[Image: view: app (table); arrow: Actions → Edit; squares: Actions menu]
 
 ## Replace the SVG
-[Image: view: edit project modal; arrow: 1) SVG preview area; 2) Replace SVG button; 3) Cancel (in drop area)]
+Switch from the preview to a drop area to choose a new SVG.
 
-- Click Replace SVG to switch from the preview to a drop area and pick a new file
-- Click Cancel (in the drop area) to return to the previous preview without saving
+[Image: view: edit project modal; arrow: Click “Replace SVG” then pick a file; squares: Replace SVG button]
 
 ## Rename the project
-[Image: view: edit project modal; arrow: 1) Project Name input; 2) Save Changes button]
+Enter a clear, searchable name (letters, numbers, space, dot, dash, underscore).
 
-- Update the Project Name
-- Click Save Changes to apply
+[Image: view: edit project modal; arrow: Type the project name; squares: Project Name input]
+
+> Remember: Project names use filename-safe characters — letters, numbers, space, dot, dash, and underscore.
+
+> Tip: If a name already exists, you’ll see an error. When you save, the app adds a suffix like " (n)" to keep names unique.
 
 ## Save changes
-Click “Save Changes” to apply your updates.
+Click Save Changes to apply your updates.
 
-[Image: view: edit project modal; arrow: 1) Save Changes button]
+[Image: view: edit project modal; arrow: Click “Save Changes”; squares: Save Changes button]
 
-> Remember: Click “Save Changes” when you’re done.
+## Changes applied
+Your updates appear in the table (name and/or SVG).
+
+[Image: view: app (table); arrow: Updated project row; squares: Updated row]

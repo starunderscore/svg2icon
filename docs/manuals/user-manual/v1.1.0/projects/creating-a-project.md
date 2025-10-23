@@ -1,29 +1,29 @@
 # Creating a Project
 
-Create a project by adding your SVG and confirming a name. The flow is steady and predictable so you can focus on the file, not the UI.
+Create a project by adding your SVG and confirming a clear name. Follow the red-square highlights in each image.
+
+## Open “New SVG”
+Click the New SVG button to start a new project.
+![ ](images/projects/creating-a-project/Empty-table-view.png)
 
 ## Add your SVG
-Open “New SVG”, then drag in a file or use the file picker.
-
-[Image: view: create project modal; arrow: 1) SVG drop area (or preview); 2) Replace SVG button (optional)]
-
-> Tip: You can switch between the drop area and the preview before saving.
+Drop your SVG into the modal or use the file picker.
+![ ](images/projects/creating-a-project/modal-svg-select.png)
 
 ## Name the project
-The name auto‑fills from the filename. Adjust it to something clear and searchable if you like.
+Enter a name you’ll recognize later. The name can use letters, numbers, spaces, dot, dash, and underscore.
+![ ](images/projects/creating-a-project/modal-project-name-input.png)
 
-[Image: view: create project modal; arrow: 1) Project Name input]
+> Remember: Project names use filename-safe characters — letters, numbers, space, dot, dash, and underscore.
 
-Short names make the table easier to scan.
-
-## Create the project
-Click “Create Project”. A notification appears in the bottom‑right and your project shows up in the table as a new row.
-
-[Image: view: project table; arrow: 1) newly created project row; 2) SVG download button (optional)]
-
-> Remember: You can download the original SVG later from the row’s “SVG” button.
+> Tip: If a name already exists, you’ll see an error. When you save, the app adds a suffix like " (n)" to keep names unique.
 
 ## Save
-Click “Create Project” to save your new project.
+Click Create Project to save.
+![ ](images/projects/creating-a-project/modal-select-create-project-save-button.png)
 
-[Image: view: create project modal; arrow: 1) Create Project button]
+## Project added
+Your new project appears in the table as a new row.
+![ ](images/projects/creating-a-project/table-view-new-row.png)
+
+> Remember: You can download the original SVG later from the row’s “SVG” button.

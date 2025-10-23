@@ -1,6 +1,7 @@
 // MainContent component - Main application content area
 
 import { ProjectTable } from '../project/ProjectTable.js';
+import { CONTENT_HEIGHT } from '../../constants/layout.js';
 import type { Project } from '../../types/Project.js';
 import type { ProjectService } from '../../services/ProjectService.js';
 import type { EventManager } from '../../utils/events.js';
@@ -45,10 +46,10 @@ export class MainContent {
 
     this.container.innerHTML = `
       <div class="main-content-inner">
-        <div id="project-table-container" class="project-table-wrapper">
+        <div id="project-table-container" class="project-table-wrapper" style="height: ${CONTENT_HEIGHT};">
           <!-- Project table will be rendered here -->
         </div>
-        <div id="empty-state" class="empty-state" style="display: none;">
+        <div id="empty-state" class="empty-state" style="display: none; height: ${CONTENT_HEIGHT};">
           <div class="empty-state-icon">
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
@@ -86,15 +87,27 @@ export class MainContent {
   private updateEmptyState(): void {
     if (!this.container) return;
 
-    const tableContainer = this.container.querySelector('#project-table-container');
-    const emptyState = this.container.querySelector('#empty-state');
+    const tableContainer = this.container.querySelector('#project-table-container') as HTMLElement | null;
+    const emptyState = this.container.querySelector('#empty-state') as HTMLElement | null;
 
     if (this.projects.length === 0) {
-      tableContainer?.setAttribute('style', 'display: none;');
-      emptyState?.setAttribute('style', 'display: block;');
+      if (tableContainer) {
+        tableContainer.style.display = 'none';
+        tableContainer.style.height = CONTENT_HEIGHT;
+      }
+      if (emptyState) {
+        emptyState.style.display = 'flex';
+        emptyState.style.flexDirection = 'column';
+        emptyState.style.justifyContent = 'center';
+        emptyState.style.alignItems = 'center';
+        emptyState.style.height = CONTENT_HEIGHT;
+      }
     } else {
-      tableContainer?.setAttribute('style', 'display: block;');
-      emptyState?.setAttribute('style', 'display: none;');
+      if (tableContainer) {
+        tableContainer.style.display = 'block';
+        tableContainer.style.height = CONTENT_HEIGHT;
+      }
+      if (emptyState) emptyState.style.display = 'none';
     }
 
     // Update footer count

@@ -1,6 +1,7 @@
 // ProjectTable component - Main data table for SVG projects
 
 import { ProjectRow } from './ProjectRow.js';
+import { CONTENT_HEIGHT } from '../../constants/layout.js';
 import type { Project } from '../../types/Project.js';
 import type { ProjectService } from '../../services/ProjectService.js';
 import type { EventManager } from '../../utils/events.js';
@@ -50,6 +51,10 @@ export class ProjectTable {
           </tbody>
         </table>
     `;
+
+    // Apply shared content height to table
+    const tableEl = this.container.querySelector('.project-table') as HTMLTableElement | null;
+    if (tableEl) tableEl.style.height = CONTENT_HEIGHT;
 
     // Header rendered
     // Height managed inline on table; no body inline styles

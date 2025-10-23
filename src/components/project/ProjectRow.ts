@@ -81,7 +81,7 @@ export class ProjectRow {
       </td>
       <td class="download-buttons-cell">
         <div class="download-buttons">
-          <button class="download-btn" data-download="all" title="Download all formats">All</button>
+          <button class="download-btn" data-download="all" title="Download all-in-one package">All</button>
           <button class="download-btn" data-download="mobile" title="Download mobile package">Mobile</button>
           <button class="download-btn" data-download="desktop" title="Download desktop package">Desktop</button>
           <button class="download-btn" data-download="web" title="Download web package">Web</button>

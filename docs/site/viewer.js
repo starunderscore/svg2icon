@@ -66,6 +66,15 @@ function markdownToHtml(md){
     const start = line.match(/^```\s*([a-z0-9+_-]*)\s*$/i);
     if (start && !inCode) { inCode = true; codeLang = start[1] || ''; codeLines = []; continue; }
     if (inCode) { if (/^```\s*$/.test(line)) { html += renderCode(codeLines.join('\n'), codeLang); inCode = false; codeLang=''; codeLines=[]; } else { codeLines.push(line); } continue; }
+    // Markdown image: ![alt](src)
+    const mImgMd = line.match(/^\s*!\[(.*?)\]\((.*?)\)\s*$/);
+    if (mImgMd) {
+      if (inList) { html += '</ul>'; inList = false; }
+      const alt = mImgMd[1] || '';
+      const src = resolveAssetSrc(mImgMd[2] || '');
+      html += `<div class="doc-image"><img src="${src}" alt="${esc(alt)}"/></div>`;
+      continue;
+    }
     if (/^\s*\|/.test(line) && i+1 < lines.length && /^\s*\|\s*[-:]/.test(lines[i+1])) {
       const header = splitTableRow(line);
       i++;
@@ -128,16 +137,27 @@ function renderCode(text, lang){
   return `<pre class="${cls}"><code>${esc(text)}</code></pre>`;
 }
 
+function resolveAssetSrc(path){
+  if (/^https?:/i.test(path) || path.startsWith('/')) return path;
+  return `${currentRoot}/${path}`;
+}
+
 function renderImageCard(desc){
-  const out = { view: '', arrows: [] };
+  const out = { view: '', arrows: [], squares: [] };
   const parts = desc.split(/\s*;\s*/).filter(Boolean);
   for (const p of parts) {
     const mView = p.match(/^view:\s*(.+)$/i);
     const mArrow = p.match(/^arrow:\s*(.+)$/i);
+    const mSquare = p.match(/^squares?:\s*(.+)$/i);
     if (mView) { out.view = mView[1]; continue; }
     if (mArrow) {
       const items = mArrow[1].split(/\s*;\s*/).filter(Boolean);
       out.arrows.push(...items);
+      continue;
+    }
+    if (mSquare) {
+      const items = mSquare[1].split(/\s*;\s*/).filter(Boolean);
+      out.squares.push(...items);
       continue;
     }
   }
@@ -148,6 +168,11 @@ function renderImageCard(desc){
   if (out.arrows.length) {
     body += `<div class="img-meta"><span class="img-label">Arrows:</span></div><ul class="img-arrows">`;
     out.arrows.forEach((it) => { body += `<li>${esc(it)}</li>`; });
+    body += `</ul>`;
+  }
+  if (out.squares.length) {
+    body += `<div class="img-meta"><span class="img-label">Red Squares:</span></div><ul class="img-arrows">`;
+    out.squares.forEach((it) => { body += `<li>${esc(it)}</li>`; });
     body += `</ul>`;
   }
   if (!body) {
@@ -226,4 +251,3 @@ function resolveRelative(base, link){
     return link;
   }
 }
-

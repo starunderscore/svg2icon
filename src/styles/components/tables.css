@@ -22,7 +22,6 @@
   font-size: 0.875rem;
   table-layout: fixed;
   display: block;    /* enable block thead/tbody layout */
-  /* height set inline on table to calc(100vh - 182px) */
 }
 
 .project-table thead {

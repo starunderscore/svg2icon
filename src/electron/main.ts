@@ -120,14 +120,14 @@ export class ElectronMain {
 
     ipcMain.handle('files:selectOutputFolder', async () => {
       try {
-        const result = await dialog.showOpenDialog(this.window, {
-          properties: ['openDirectory'],
-          title: 'Select Output Folder'
+        const result = await dialog.showSaveDialog(this.window, {
+          title: 'Save ZIP',
+          defaultPath: path.join(app.getPath('downloads'), 'icons.zip'),
+          filters: [{ name: 'ZIP archive', extensions: ['zip'] }]
         });
-
-        return result.canceled ? null : result.filePaths[0];
+        return result.canceled ? null : result.filePath;
       } catch (error) {
-        console.error('Failed to select output folder:', error);
+        console.error('Failed to select save location:', error);
         return null;
       }
     });
@@ -158,13 +158,6 @@ export class ElectronMain {
           } as any);
         };
 
-        const chosen = await dialog.showOpenDialog(this.window, {
-          properties: ['openDirectory', 'createDirectory'],
-          title: 'Select download destination'
-        });
-        if (chosen.canceled || !chosen.filePaths.length) return false;
-        const destRoot = chosen.filePaths[0];
-
         const copyRecursive = (src: string, dest: string) => {
           if (!fs.existsSync(src)) return;
           const stat = fs.statSync(src);
@@ -179,30 +172,35 @@ export class ElectronMain {
           }
         };
 
-        // Build outer folder name: {projectname}_{selection}
-        const selectionLabel = packageType === 'original' ? 'svg' : packageType;
-        const baseName = `${project.name
-          .toLowerCase()
-          .replace(/[^a-z0-9]+/g, '_')
-          .replace(/_+/g, '_')
-          .replace(/^_|_$/g, '')}_${selectionLabel}`;
-        // Ensure uniqueness by appending (n)
-        let folderName = baseName;
-        let candidatePath = path.join(destRoot, folderName);
-        if (fs.existsSync(candidatePath)) {
-          let i = 0;
-          while (fs.existsSync(path.join(destRoot, `${baseName} (${i})`))) i++;
-          folderName = `${baseName} (${i})`;
-          candidatePath = path.join(destRoot, folderName);
-        }
-        const finalDest = candidatePath;
+        // Build outer folder and zip name: <project name> - <selection> - svg2icon
+        const selectionLabelRaw = packageType === 'original' ? 'SVG' : packageType.toUpperCase();
+        const displayBaseName = `${project.name} - ${selectionLabelRaw} - svg2icon`;
+        const safeBaseName = displayBaseName.replace(/[\\/:*?"<>|]+/g, ' ').replace(/\s+/g, ' ').trim();
+        const defaultZipName = `${safeBaseName}.zip`;
+        const saveResult = await dialog.showSaveDialog(this.window, {
+          title: 'Save ZIP',
+          defaultPath: path.join(app.getPath('downloads'), defaultZipName),
+          filters: [{ name: 'ZIP archive', extensions: ['zip'] }]
+        });
+        if (saveResult.canceled || !saveResult.filePath) return false;
+        const zipPath = saveResult.filePath.endsWith('.zip') ? saveResult.filePath : `${saveResult.filePath}.zip`;
+        // Use a staging folder to assemble contents
+        const finalDest = path.join(app.getPath('temp'), `${safeBaseName}.staging`);
+        fs.mkdirSync(finalDest, { recursive: true });
         fs.mkdirSync(finalDest, { recursive: true });
 
         const writeOriginalSvg = () => {
           const svgContent = Buffer.from(project.svgData, 'base64').toString('utf-8');
           const svgDir = path.join(finalDest, 'svg');
           fs.mkdirSync(svgDir, { recursive: true });
-          fs.writeFileSync(path.join(svgDir, `${project.name}.svg`), svgContent);
+          // Sanitize similar to outer folder naming
+          const baseSafe = project.name
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, '_')
+            .replace(/_+/g, '_')
+            .replace(/^_|_$/g, '');
+          const fileName = `${baseSafe}_original.svg`;
+          fs.writeFileSync(path.join(svgDir, fileName), svgContent);
         };
 
         switch (packageType) {
@@ -239,7 +237,36 @@ export class ElectronMain {
             break;
           }
         }
-        return true;
+        // Zip the staging folder
+        const zipOk = (() => {
+          const hasCmd = (cmd: string) => {
+            try { return require('child_process').spawnSync(cmd, ['-v'], { stdio: 'ignore' }).status === 0; } catch { return false; }
+          };
+          try {
+            if (process.platform === 'win32') {
+              // Use PowerShell Compress-Archive
+              const ps = hasCmd('powershell');
+              if (ps) {
+                const script = `Compress-Archive -Path "${finalDest}/*" -DestinationPath "${zipPath}" -Force`;
+                require('child_process').spawnSync('powershell', ['-NoProfile', '-Command', script], { stdio: 'ignore' });
+                return fs.existsSync(zipPath);
+              }
+            }
+            if (hasCmd('zip')) {
+              require('child_process').spawnSync('zip', ['-r', zipPath, '.'], { cwd: finalDest, stdio: 'ignore' });
+              return fs.existsSync(zipPath);
+            }
+            if (hasCmd('7z')) {
+              require('child_process').spawnSync('7z', ['a', zipPath, '.'], { cwd: finalDest, stdio: 'ignore' });
+              return fs.existsSync(zipPath);
+            }
+          } catch {}
+          return false;
+        })();
+
+        // Cleanup staging folder and return
+        try { fs.rmSync(finalDest, { recursive: true, force: true }); } catch {}
+        return zipOk;
       } catch (error) {
         console.error('Failed to download project:', error);
         return false;

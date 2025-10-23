@@ -19,13 +19,13 @@ Use the sidebar to explore topics. This page gives you a friendly high‑level t
 1. Click “New SVG”, drop your SVG, and confirm the name (auto‑filled from filename)
 2. Save — your project appears in the table
 3. Click a Download option (Web / Mobile / Desktop / All)
-4. Pick a folder; a notification appears in the bottom‑right
+4. Save the ZIP; a notification appears in the bottom‑right
 5. Need the original again? Download the SVG from the row’s “SVG” button anytime
 
 ## Output at a glance
 
 ```tree
-<project name> - svg2icon/
+<project name> - <download selection> - svg2icon.zip/
 ├─ web/
 │  ├─ favicon-16.png
 │  ├─ favicon-32.png
