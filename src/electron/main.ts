@@ -350,6 +350,8 @@ export class ElectronMain {
       // Implementation for checking updates
       return { hasUpdate: false, version: app.getVersion() };
     });
+
+    // Removed app:getPackageVersion; updater modal only shows app version
   }
 
   private setupMenu(): void {

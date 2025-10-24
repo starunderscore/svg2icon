@@ -82,67 +82,7 @@ export class SettingsModal extends Modal {
           </div>
         </div>
 
-        <!-- Updates Section -->
-        <div class="settings-section">
-          <h3 class="settings-section-title">
-            <svg class="settings-section-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
-            </svg>
-            Updates
-          </h3>
-          
-          <div class="settings-item">
-            <div class="settings-item-info">
-              <h4 class="settings-item-title">Automatic Updates</h4>
-              <p class="settings-item-description">
-                Automatically download and install updates when available
-              </p>
-            </div>
-            <div class="settings-toggle" id="auto-update-toggle">
-              <div class="settings-toggle-handle"></div>
-            </div>
-          </div>
-          
-          <div class="update-actions">
-            <div class="current-version" id="current-version"></div>
-            <button class="button" type="button" id="check-updates-btn">
-              Check for Updates
-            </button>
-            <div class="update-status" id="update-status"></div>
-          </div>
-        </div>
-
         
-
-        <!-- About Section -->
-        <div class="settings-section">
-          <h3 class="settings-section-title">
-            <svg class="settings-section-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
-            About
-          </h3>
-          
-          <div class="about-info">
-            <div class="app-info">
-              <h4>SVG2Icon</h4>
-            </div>
-            
-            <div class="links">
-              <button class="button is-text" type="button" id="open-website">
-                Visit Website
-              </button>
-              <button class="button is-text" type="button" id="report-issue">
-                Report Issue
-              </button>
-            </div>
-            
-            <div class="brand-section" style="margin-top: 1.25rem; display: flex; align-items: center; gap: 0.75rem; justify-content: center;">
-              <img src="../assets/star-underscore/favicon-32x32.png" alt="StarUnderscore" width="20" height="20" />
-              <span style="color: var(--text-secondary);">Proudly made by <a href="#" id="open-website" style="color: var(--accent-primary); text-decoration: none;">StarUnderscore.com</a></span>
-            </div>
-          </div>
-        </div>
       </div>
     `;
   }
@@ -157,15 +97,6 @@ export class SettingsModal extends Modal {
     await this.loadSettings();
     this.bindEvents();
     this.updateUI();
-    // Populate current version above update button
-    try {
-      const ver = await window.electronAPI.app.getVersion();
-      const verEl = document.getElementById('current-version');
-      if (verEl) verEl.textContent = `Version ${ver}`;
-    } catch (e) {
-      const verEl = document.getElementById('current-version');
-      if (verEl) verEl.textContent = '';
-    }
   }
 
   protected override async onAction(action: string): Promise<boolean> {
@@ -198,32 +129,15 @@ export class SettingsModal extends Modal {
 
     // Toggle switches
     const telemetryToggle = document.getElementById('telemetry-toggle');
-    const autoUpdateToggle = document.getElementById('auto-update-toggle');
 
     telemetryToggle?.addEventListener('click', () => {
       this.handleToggle('telemetry');
     });
 
-    autoUpdateToggle?.addEventListener('click', () => {
-      this.handleToggle('autoUpdate');
-    });
 
     // Default icon type section removed
 
-    // Update check
-    const checkUpdatesBtn = document.getElementById('check-updates-btn');
-    checkUpdatesBtn?.addEventListener('click', () => {
-      this.handleCheckUpdates();
-    });
-
-    // External links
-    document.getElementById('open-website')?.addEventListener('click', () => {
-      this.openExternalLink('https://www.starunderscore.com/products/maverick-spirit/svg2icon');
-    });
-
-    document.getElementById('report-issue')?.addEventListener('click', () => {
-      this.openExternalLink('https://github.com/starunderscore/svg2icon/issues');
-    });
+    // No Updates/About items here anymore (moved to dedicated modals)
   }
 
   private updateUI(): void {
@@ -235,7 +149,6 @@ export class SettingsModal extends Modal {
 
     // Update toggles
     this.updateToggle('telemetry-toggle', this.settings.telemetry !== false);
-    this.updateToggle('auto-update-toggle', this.settings.autoUpdate === true);
 
     // Default icon type section removed
   }
@@ -271,47 +184,5 @@ export class SettingsModal extends Modal {
     }
   }
 
-  private async handleSettingChange(setting: string, value: any): Promise<void> {
-    try {
-      await this.props.settingsService.set(setting as any, value);
-      this.settings[setting] = value;
-    } catch (error) {
-      console.error(`Failed to change ${setting}:`, error);
-    }
-  }
-
-  private async handleCheckUpdates(): Promise<void> {
-    const statusElement = document.getElementById('update-status');
-    const button = document.getElementById('check-updates-btn') as HTMLButtonElement;
-
-    if (button && statusElement) {
-      button.classList.add('is-loading');
-      button.disabled = true;
-      statusElement.textContent = 'Checking for updates...';
-
-      try {
-        const result = await window.electronAPI.app.checkForUpdates();
-        if (result.hasUpdate) {
-          statusElement.textContent = `Update available: ${result.version}`;
-        } else {
-          statusElement.textContent = 'You are running the latest version';
-        }
-      } catch (error) {
-        statusElement.textContent = 'Unable to check for updates';
-      } finally {
-        button.classList.remove('is-loading');
-        button.disabled = false;
-      }
-    }
-  }
-
-  private openExternalLink(url: string): void {
-    // Implementation would depend on your Electron setup
-    console.log('Opening external link:', url);
-  }
-
-  private showLicenses(): void {
-    // Implementation for showing license information
-    console.log('Showing licenses');
-  }
+  // (Deprecated handlers removed: check updates, external links, licenses)
 }

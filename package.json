@@ -1,6 +1,6 @@
 {
   "name": "svg2icon",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "SVG to PNG icon generator for mobile, desktop, and web",
   "main": "dist/main.js",
   "type": "module",
