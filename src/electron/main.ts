@@ -353,10 +353,47 @@ export class ElectronMain {
   }
 
   private setupMenu(): void {
-    // Remove default menu on Windows/Linux
-    if (process.platform !== 'darwin') {
-      Menu.setApplicationMenu(null);
+    const isMac = process.platform === 'darwin';
+    const template: any[] = [];
+    if (isMac) {
+      template.push({
+        label: app.name,
+        submenu: [
+          { role: 'about' },
+          { type: 'separator' },
+          { role: 'hide' },
+          { role: 'hideOthers' },
+          { role: 'unhide' },
+          { type: 'separator' },
+          { role: 'quit' }
+        ]
+      });
     }
+    template.push({
+      label: 'File',
+      submenu: [
+        { label: 'New Project', click: () => { try { this.window.webContents.send('menu:new-project'); } catch {} } },
+        { type: 'separator' },
+        isMac ? { role: 'close' } : { role: 'quit' }
+      ]
+    });
+    template.push({
+      label: 'Help',
+      submenu: [
+        { label: 'User Manual', click: () => { try { this.window.webContents.send('menu:user-manual'); } catch {} } },
+        { label: 'Tech Guide', click: () => { try { this.window.webContents.send('menu:tech-guide'); } catch {} } },
+        { type: 'separator' },
+        { label: 'About', click: async () => {
+            try {
+              await dialog.showMessageBox(this.window, {
+                type: 'info', title: 'About', message: `SVG2Icon ${app.getVersion()}`
+              });
+            } catch {}
+        }}
+      ]
+    });
+    const menu = Menu.buildFromTemplate(template as any);
+    Menu.setApplicationMenu(menu);
   }
 
   // Note: renderer sends base64; no file conversion here in v1.1.0

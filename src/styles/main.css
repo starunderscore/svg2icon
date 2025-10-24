@@ -265,6 +265,8 @@ body {
   gap: 1rem;
 }
 
+/* (Native menu bar via Electron handles File/Help) */
+
 /* Loading overlay */
 .loading-overlay {
   position: fixed;

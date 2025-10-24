@@ -69,13 +69,23 @@
   border-top-right-radius: var(--border-radius-lg);
   transition: background-color var(--transition-fast), color var(--transition-fast);
   position: relative; /* for horizontal line */
+  overflow: hidden; /* contain shine */
+  backdrop-filter: saturate(160%) blur(2px); /* subtle glass */
+  -webkit-backdrop-filter: saturate(160%) blur(2px);
+  /* no border in idle to keep a pure line look */
+  /* Visually taller than the header by extending outside with negative margins */
+  margin-top: -6px;
+  margin-bottom: -6px;
+  border-bottom-right-radius: var(--border-radius-lg);
 }
 
 /* Render the vertical white line at the left edge of the button */
 /* (divider rendered via border-left; no pseudo-element needed) */
 
 .modal-head-close:hover {
-  background: rgba(255, 255, 255, 0.08);
+  /* Flat anime-glass: light, crisp, minimal depth */
+  background: linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.08));
+  box-shadow: 0 0 0 2px var(--accent-primary);
 }
 
 /* Slight emphasis on hover: thicken the line a touch */
@@ -94,6 +104,30 @@
 
 .modal-head-close:hover::after {
   height: 2px; /* subtle emphasis on hover */
+}
+
+/* Quick one-off shine sweep on hover */
+.modal-head-close::before {
+  content: '';
+  position: absolute;
+  top: -90%;
+  left: -70%;
+  width: 140%;
+  height: 280%;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.55) 50%, transparent 100%);
+  transform: translateX(-140%);
+  opacity: 0;
+  border-radius: inherit;
+}
+
+.modal-head-close:hover::before {
+  animation: headclose-shine 650ms ease-out 1;
+}
+
+@keyframes headclose-shine {
+  0% { transform: translateX(-140%); opacity: 0; }
+  12% { opacity: 1; }
+  100% { transform: translateX(220%); opacity: 0; }
 }
 
 /* Hide legacy inner line span if present */

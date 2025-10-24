@@ -74,5 +74,7 @@ export class AppHeader {
     newProjectBtn?.addEventListener('click', () => {
       this.props.onNewProject();
     });
+
+    // Native menu handles File/Help; no toolbar interactions here
   }
 }

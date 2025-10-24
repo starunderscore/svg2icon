@@ -17,19 +17,14 @@ function createWindow() {
     minWidth: 800,
     minHeight: 560,
     center: true,
-    autoHideMenuBar: true,
+    autoHideMenuBar: false,
     webPreferences: {
       contextIsolation: true,
       preload: path.join(__dirname, 'electron', 'preload.js'),
     },
   });
 
-  try {
-    if (process.platform !== 'darwin') {
-      Menu.setApplicationMenu(null);
-      mainWindow.setMenuBarVisibility(false);
-    }
-  } catch {}
+  // Use native application menu (configured in ElectronMain)
 
   // Initialize core IPC handlers
   core = new ElectronMain(mainWindow);
