@@ -37,6 +37,14 @@ declare global {
         getVersion: () => Promise<string>;
         checkForUpdates: () => Promise<any>;
       };
+      menu: {
+        onNewProject: (cb: () => void) => void;
+        onOpenSettings: (cb: () => void) => void;
+        onCheckUpdates: (cb: () => void) => void;
+        onUserManual: (cb: () => void) => void;
+        onTechGuide: (cb: () => void) => void;
+        onAbout: (cb: () => void) => void;
+      };
     };
   }
 }
@@ -175,6 +183,16 @@ class SVG2IconApp {
     });
 
     // No content toolbar new-project now; header button handles creation
+    
+    // Menu events from native menu
+    try {
+      window.electronAPI.menu.onNewProject(() => this.handleNewProject());
+      window.electronAPI.menu.onOpenSettings(() => this.handleSettings());
+      window.electronAPI.menu.onCheckUpdates(() => this.handleUpdater());
+      window.electronAPI.menu.onUserManual(() => this.handleHelp());
+      window.electronAPI.menu.onTechGuide(() => this.handleHelp());
+      window.electronAPI.menu.onAbout(() => this.handleAbout());
+    } catch {}
   }
 
   private async loadProjects(): Promise<void> {
@@ -245,6 +263,28 @@ class SVG2IconApp {
     } catch (error) {
       console.error('Failed to show help modal:', error);
       this.showError('Failed to open help');
+    }
+  }
+
+  private async handleUpdater(): Promise<void> {
+    try {
+      const { UpdaterModal } = await import('../components/modals/UpdaterModal.js');
+      const modal = new UpdaterModal();
+      await modal.show();
+    } catch (error) {
+      console.error('Failed to show updater modal:', error);
+      this.showError('Failed to open updater');
+    }
+  }
+
+  private async handleAbout(): Promise<void> {
+    try {
+      const { AboutModal } = await import('../components/modals/AboutModal.js');
+      const modal = new AboutModal();
+      await modal.show();
+    } catch (error) {
+      console.error('Failed to show about modal:', error);
+      this.showError('Failed to open About');
     }
   }
 

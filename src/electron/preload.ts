@@ -29,4 +29,13 @@ contextBridge.exposeInMainWorld('electronAPI', {
     getVersion: () => ipcRenderer.invoke('app:getVersion'),
     checkForUpdates: () => ipcRenderer.invoke('app:checkForUpdates'),
   },
+  // Menu event subscriptions (whitelisted)
+  menu: {
+    onNewProject: (cb: () => void) => ipcRenderer.on('menu:new-project', () => cb()),
+    onOpenSettings: (cb: () => void) => ipcRenderer.on('menu:open-settings', () => cb()),
+    onCheckUpdates: (cb: () => void) => ipcRenderer.on('menu:check-updates', () => cb()),
+    onUserManual: (cb: () => void) => ipcRenderer.on('menu:user-manual', () => cb()),
+    onTechGuide: (cb: () => void) => ipcRenderer.on('menu:tech-guide', () => cb()),
+    onAbout: (cb: () => void) => ipcRenderer.on('menu:about', () => cb()),
+  },
 });

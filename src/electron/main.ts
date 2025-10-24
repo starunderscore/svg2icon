@@ -1,6 +1,6 @@
 // Electron main process - SVG2Icon v1.1.0
 
-import { BrowserWindow, ipcMain, dialog, app, Menu } from 'electron';
+import { BrowserWindow, ipcMain, dialog, app, Menu, shell } from 'electron';
 import * as path from 'path';
 import * as fs from 'fs';
 import { StorageService } from './storage.js';
@@ -372,24 +372,28 @@ export class ElectronMain {
     template.push({
       label: 'File',
       submenu: [
-        { label: 'New Project', click: () => { try { this.window.webContents.send('menu:new-project'); } catch {} } },
+        { label: 'New Project', accelerator: 'CmdOrCtrl+N', click: () => { try { this.window.webContents.send('menu:new-project'); } catch {} } },
+        { label: 'Settings', accelerator: 'CmdOrCtrl+,', click: () => { try { this.window.webContents.send('menu:open-settings'); } catch {} } },
         { type: 'separator' },
-        isMac ? { role: 'close' } : { role: 'quit' }
+        isMac ? { role: 'close' } : { role: 'quit', accelerator: 'CmdOrCtrl+Q' }
+      ]
+    });
+    // Tools menu: holds updater for now; About remains in Help
+    template.push({
+      label: 'Tools',
+      submenu: [
+        { label: 'Check for Updates', accelerator: 'CmdOrCtrl+Shift+U', click: () => { try { this.window.webContents.send('menu:check-updates'); } catch {} } },
       ]
     });
     template.push({
       label: 'Help',
       submenu: [
-        { label: 'User Manual', click: () => { try { this.window.webContents.send('menu:user-manual'); } catch {} } },
-        { label: 'Tech Guide', click: () => { try { this.window.webContents.send('menu:tech-guide'); } catch {} } },
+        { label: 'User Manual', accelerator: 'F1', click: () => { try { this.window.webContents.send('menu:user-manual'); } catch {} } },
+        { label: 'Tech Guide', accelerator: 'Shift+F1', click: () => { try { this.window.webContents.send('menu:tech-guide'); } catch {} } },
         { type: 'separator' },
-        { label: 'About', click: async () => {
-            try {
-              await dialog.showMessageBox(this.window, {
-                type: 'info', title: 'About', message: `SVG2Icon ${app.getVersion()}`
-              });
-            } catch {}
-        }}
+        { label: 'Report Issue', accelerator: 'CmdOrCtrl+Alt+R', click: async () => { try { await shell.openExternal('https://github.com/starunderscore/svg2icon/issues'); } catch {} } },
+        { type: 'separator' },
+        { label: 'About', accelerator: 'CmdOrCtrl+I', click: () => { try { this.window.webContents.send('menu:about'); } catch {} } }
       ]
     });
     const menu = Menu.buildFromTemplate(template as any);
