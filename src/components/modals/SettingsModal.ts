@@ -66,17 +66,41 @@ export class SettingsModal extends Modal {
           </h3>
           
           <div class="settings-item">
-            <div class="privacy-info">
-              <div class="privacy-text">
-                <h4 class="settings-item-title">Anonymous Usage Analytics</h4>
-                <p class="settings-item-description">
-                  Help improve SVG2Icon by sharing anonymous usage statistics. This includes feature usage, error reports, and performance metrics.
-                </p>
-                <p><strong>What we collect:</strong> Feature usage, icon generation counts, error reports</p>
-                <p><strong>What we don't collect:</strong> Your SVG files, project names, file paths, or personal data</p>
+            <div class="privacy-card">
+              <div class="privacy-header">
+                <div class="privacy-left">
+                  <svg class="privacy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2l7 4v5c0 5-3.5 9-7 11-3.5-2-7-6-7-11V6l7-4z"/>
+                  </svg>
+                  <div class="privacy-title">
+                    <h4 class="settings-item-title" style="margin:0;">Anonymous Usage Analytics</h4>
+                    <span id="telemetry-status" class="privacy-status">Disabled</span>
+                  </div>
+                </div>
+                <div class="settings-toggle" id="telemetry-toggle">
+                  <div class="settings-toggle-handle"></div>
+                </div>
               </div>
-              <div class="settings-toggle" id="telemetry-toggle">
-                <div class="settings-toggle-handle"></div>
+              <p class="settings-item-description">
+                Help improve SVG2Icon with anonymous usage stats. We only capture high‑level feature usage, performance, and error signals.
+              </p>
+              <div class="privacy-grid">
+                <div class="privacy-list">
+                  <div class="privacy-list-title">We collect</div>
+                  <ul>
+                    <li>Feature usage</li>
+                    <li>Icon generation counts</li>
+                    <li>Error reports</li>
+                  </ul>
+                </div>
+                <div class="privacy-list">
+                  <div class="privacy-list-title">We don’t collect</div>
+                  <ul>
+                    <li>SVG files or project names</li>
+                    <li>Local file paths</li>
+                    <li>Personal data</li>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
@@ -149,6 +173,13 @@ export class SettingsModal extends Modal {
 
     // Update toggles
     this.updateToggle('telemetry-toggle', this.settings.telemetry !== false);
+    // Update privacy status pill
+    const status = document.getElementById('telemetry-status');
+    if (status) {
+      const enabled = this.settings.telemetry !== false;
+      status.textContent = enabled ? 'Enabled' : 'Disabled';
+      status.classList.toggle('is-active', enabled);
+    }
 
     // Default icon type section removed
   }

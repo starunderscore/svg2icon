@@ -95,8 +95,10 @@ export class ProjectRow {
       <td class="project-actions-cell">
         <div class="project-actions">
           <button class="actions-trigger" type="button" title="More actions">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/>
+            <svg class="actions-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="6" r="2.5" fill="currentColor"></circle>
+              <circle cx="12" cy="12" r="2.5" fill="currentColor"></circle>
+              <circle cx="12" cy="18" r="2.5" fill="currentColor"></circle>
             </svg>
           </button>
           <div id="actions-menu-${project.id}" class="dropdown-menu">

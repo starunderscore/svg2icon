@@ -372,14 +372,21 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
 }
 
 .actions-trigger:hover {
   background: var(--bg-hover);
   color: var(--text-primary);
   border-color: var(--accent-primary); /* green border on hover */
+}
+
+/* Make the actions icon larger for visibility */
+.actions-trigger svg {
+  width: 20px;
+  height: 20px;
+  opacity: 0.95;
 }
 
 .actions-trigger:focus {
