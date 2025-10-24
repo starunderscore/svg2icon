@@ -27,20 +27,30 @@ export class DeleteProjectModal extends Modal {
 
   protected override getContent(): string {
     const projectName = this.props.project.name;
+    const svgData = this.props.project?.svgData || '';
+    const svgPreview = svgData
+      ? `<div class="svg-preview-delete"><img src="data:image/svg+xml;base64,${svgData}" alt="Project SVG preview" /></div>`
+      : '';
     
     return `
       <div class="delete-confirmation">
-        <div class="delete-warning-icon">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.96-.833-2.73 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/>
-          </svg>
+        <div class="delete-content-row">
+          ${svgPreview}
+          <div class="delete-warning-col">
+            <div class="delete-heading-row">
+              <span class="delete-heading-icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.96-.833-2.73 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+                </svg>
+              </span>
+              <h3 class="delete-warning-title">Are you absolutely sure?</h3>
+            </div>
+            <p class="delete-warning-text">
+              This action cannot be undone. This will permanently delete the project 
+              <strong>"${this.escapeHtml(projectName)}"</strong> and all associated data.
+            </p>
+          </div>
         </div>
-        
-        <h3 class="delete-warning-title">Are you absolutely sure?</h3>
-        <p class="delete-warning-text">
-          This action cannot be undone. This will permanently delete the project 
-          <strong>"${this.escapeHtml(projectName)}"</strong> and all associated data.
-        </p>
         <div class="form-section">
           <label class="label" for="project-name-copy-input">Project name</label>
           <div class="control has-right-action">

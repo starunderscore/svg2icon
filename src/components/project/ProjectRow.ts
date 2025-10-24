@@ -28,6 +28,10 @@ export class ProjectRow {
       onEdit: props.onEdit,
       onDelete: props.onDelete
     });
+
+    // Clear loading states when a download completes (success or error)
+    this.props.eventManager.on('download:success', () => this.clearDownloadLoading());
+    this.props.eventManager.on('download:error', () => this.clearDownloadLoading());
   }
 
   render(): HTMLTableRowElement {
@@ -244,12 +248,17 @@ export class ProjectRow {
       button.classList.add('is-loading');
       
       this.props.onDownload(this.props.project, type);
-      
-      // Remove loading state after a delay
+      // Actual removal happens on global download events; keep a fallback timeout
       setTimeout(() => {
         button.classList.remove('is-loading');
-      }, 2000);
+      }, 5000);
     }
+  }
+
+  private clearDownloadLoading(): void {
+    const buttons = this.element?.querySelectorAll('.download-btn.is-loading');
+    if (!buttons) return;
+    buttons.forEach(b => (b as HTMLButtonElement).classList.remove('is-loading'));
   }
 
   // Icon generation per type removed from row actions

@@ -6,6 +6,7 @@ import * as fs from 'fs';
 import { StorageService } from './storage.js';
 import { IconGenerationService } from '../services/IconGenerationService.js';
 import type { Project, CreateProjectData, UpdateProjectData } from '../types/Project.js';
+import { spawnSync } from 'child_process';
 
 export class ElectronMain {
   private window: BrowserWindow;
@@ -104,13 +105,12 @@ export class ElectronMain {
     // File operations
     ipcMain.handle('files:selectSvg', async () => {
       try {
-        const result = await dialog.showOpenDialog(this.window, {
+        const result = await this.withForeground(() => dialog.showOpenDialog(this.window, {
           properties: ['openFile'],
           filters: [
             { name: 'SVG Files', extensions: ['svg'] }
           ]
-        });
-
+        }));
         return result.canceled ? null : result.filePaths[0];
       } catch (error) {
         console.error('Failed to select SVG file:', error);
@@ -172,16 +172,31 @@ export class ElectronMain {
           }
         };
 
-        // Build outer folder and zip name: <project name> - <selection> - svg2icon
-        const selectionLabelRaw = packageType === 'original' ? 'SVG' : packageType.toUpperCase();
+        // Build outer folder and zip name: <project name> - <download selection> - svg2icon
+        const selectionLabelMap: Record<string, string> = {
+          web: 'Web',
+          desktop: 'Desktop',
+          mobile: 'Mobile',
+          all: 'All',
+          original: 'SVG'
+        };
+        const selectionLabelRaw = selectionLabelMap[packageType] || 'All';
         const displayBaseName = `${project.name} - ${selectionLabelRaw} - svg2icon`;
         const safeBaseName = displayBaseName.replace(/[\\/:*?"<>|]+/g, ' ').replace(/\s+/g, ' ').trim();
-        const defaultZipName = `${safeBaseName}.zip`;
-        const saveResult = await dialog.showSaveDialog(this.window, {
+        // Pre-decide default filename with (n) suffix in Downloads
+        const downloadsDir = app.getPath('downloads');
+        let defaultZipName = `${safeBaseName}.zip`;
+        if (fs.existsSync(path.join(downloadsDir, defaultZipName))) {
+          let i = 1;
+          while (fs.existsSync(path.join(downloadsDir, `${safeBaseName} (${i}).zip`))) i++;
+          defaultZipName = `${safeBaseName} (${i}).zip`;
+        }
+        // Bring window to front to ensure dialog is foregrounded
+        const saveResult = await this.withForeground(() => dialog.showSaveDialog(this.window, {
           title: 'Save ZIP',
           defaultPath: path.join(app.getPath('downloads'), defaultZipName),
           filters: [{ name: 'ZIP archive', extensions: ['zip'] }]
-        });
+        }));
         if (saveResult.canceled || !saveResult.filePath) return false;
         const zipPath = saveResult.filePath.endsWith('.zip') ? saveResult.filePath : `${saveResult.filePath}.zip`;
         // Use a staging folder to assemble contents
@@ -239,26 +254,34 @@ export class ElectronMain {
         }
         // Zip the staging folder
         const zipOk = (() => {
-          const hasCmd = (cmd: string) => {
-            try { return require('child_process').spawnSync(cmd, ['-v'], { stdio: 'ignore' }).status === 0; } catch { return false; }
+          const hasCmd = (cmd: string, args: string[] = ['-v']) => {
+            try { return spawnSync(cmd, args, { stdio: 'ignore' }).status === 0; } catch { return false; }
           };
           try {
             if (process.platform === 'win32') {
               // Use PowerShell Compress-Archive
-              const ps = hasCmd('powershell');
-              if (ps) {
+              if (hasCmd('powershell', ['-NoProfile','-Command','$PSVersionTable.PSVersion'])) {
                 const script = `Compress-Archive -Path "${finalDest}/*" -DestinationPath "${zipPath}" -Force`;
-                require('child_process').spawnSync('powershell', ['-NoProfile', '-Command', script], { stdio: 'ignore' });
-                return fs.existsSync(zipPath);
+                spawnSync('powershell', ['-NoProfile', '-Command', script], { stdio: 'ignore' });
+                if (fs.existsSync(zipPath)) return true;
               }
             }
             if (hasCmd('zip')) {
-              require('child_process').spawnSync('zip', ['-r', zipPath, '.'], { cwd: finalDest, stdio: 'ignore' });
-              return fs.existsSync(zipPath);
+              spawnSync('zip', ['-r', zipPath, '.'], { cwd: finalDest, stdio: 'ignore' });
+              if (fs.existsSync(zipPath)) return true;
             }
             if (hasCmd('7z')) {
-              require('child_process').spawnSync('7z', ['a', zipPath, '.'], { cwd: finalDest, stdio: 'ignore' });
-              return fs.existsSync(zipPath);
+              spawnSync('7z', ['a', zipPath, '.'], { cwd: finalDest, stdio: 'ignore' });
+              if (fs.existsSync(zipPath)) return true;
+            }
+            // Fallback: Python zipfile module (common on Linux/macOS)
+            if (hasCmd('python3', ['-c', 'import sys'])) {
+              spawnSync('python3', ['-m', 'zipfile', '-c', zipPath, '.'], { cwd: finalDest, stdio: 'ignore' });
+              if (fs.existsSync(zipPath)) return true;
+            }
+            if (hasCmd('python', ['-c', 'import sys'])) {
+              spawnSync('python', ['-m', 'zipfile', '-c', zipPath, '.'], { cwd: finalDest, stdio: 'ignore' });
+              if (fs.existsSync(zipPath)) return true;
             }
           } catch {}
           return false;
@@ -342,5 +365,30 @@ export class ElectronMain {
   cleanup(): void {
     // Cleanup resources
     this.storageService.close();
+  }
+
+  // Ensure dialogs appear in the foreground across platforms
+  private async withForeground<T>(fn: () => Promise<T>): Promise<T> {
+    // Nudge the window to the foreground
+    try { this.window.show(); this.window.focus(); } catch {}
+    // On some Linux WMs, a short always-on-top pulse ensures the native dialog appears above
+    let restoreTimer: NodeJS.Timeout | null = null;
+    const prevAOT = this.window.isAlwaysOnTop();
+    try {
+      if (process.platform === 'linux') {
+        this.window.setAlwaysOnTop(true, 'pop-up-menu');
+        restoreTimer = setTimeout(() => {
+          try { this.window.setAlwaysOnTop(prevAOT); } catch {}
+        }, 400);
+      }
+      const result = await fn();
+      return result;
+    } finally {
+      if (restoreTimer) {
+        // If timer hasn't fired yet, clear and restore now
+        clearTimeout(restoreTimer);
+        try { this.window.setAlwaysOnTop(prevAOT); } catch {}
+      }
+    }
   }
 }
