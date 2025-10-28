@@ -6,8 +6,8 @@
   <meta name="theme-color" content="#0f172a">
   <title>SVG2Icon - Icon Generator</title>
   
-  <!-- Bulma CSS Framework -->
-  <link rel="stylesheet" href="../../node_modules/bulma/css/bulma.min.css">
+  <!-- Content Security Policy -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' https://app.posthog.com https://us-assets.i.posthog.com; connect-src 'self' https://app.posthog.com https://us.i.posthog.com https://us-assets.i.posthog.com; font-src 'self' data:;">
   
   <!-- Custom Styles -->
   <link rel="stylesheet" href="../styles/main.css">
@@ -395,12 +395,14 @@
       });
     }
 
-    // Performance monitoring
+    // Performance monitoring (Navigation Timing Level 2 with fallback)
     window.addEventListener('load', () => {
-      if (window.performance && window.performance.timing) {
-        const loadTime = window.performance.timing.loadEventEnd - window.performance.timing.navigationStart;
-        console.log('Page load time:', loadTime + 'ms');
-      }
+      try {
+        const navEntries = performance.getEntriesByType ? performance.getEntriesByType('navigation') : null;
+        const nav = navEntries && navEntries[0];
+        const ms = nav && nav.loadEventEnd ? Math.round(nav.loadEventEnd) : Math.round(performance.now());
+        console.log('Page load time:', ms + 'ms');
+      } catch {}
     });
 
     // Console welcome message

@@ -83,9 +83,18 @@
 /* (divider rendered via border-left; no pseudo-element needed) */
 
 .modal-head-close:hover {
-  /* Flat anime-glass: light, crisp, minimal depth */
+  /* Subtle hover; adjusted per theme below */
   background: linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.08));
-  box-shadow: 0 0 0 2px var(--accent-primary);
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+/* Keyboard focus outline to match app-wide green focus */
+.modal-head-close:focus,
+.modal-head-close:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+  box-shadow: none;
 }
 
 /* Slight emphasis on hover: thicken the line a touch */
@@ -97,7 +106,7 @@
   right: 12px;
   top: 50%;
   height: 1.5px;
-  background: rgba(255, 255, 255, 0.95);
+  background: currentColor; /* line follows button color */
   transform: translateY(-50%);
   border-radius: 2px;
 }
@@ -122,6 +131,20 @@
 
 .modal-head-close:hover::before {
   animation: headclose-shine 650ms ease-out 1;
+}
+
+[data-theme="dark"] .modal-head-close { color: rgba(255,255,255,0.92); }
+/* Light mode: use darker text-like color for the line */
+[data-theme="light"] .modal-head-close { color: rgba(40, 40, 38, 0.9); }
+
+[data-theme="light"] .modal-head-close:hover {
+  background: linear-gradient(135deg, rgba(0,0,0,0.06), rgba(0,0,0,0.03));
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+[data-theme="light"] .modal-head-close::before {
+  background: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.2) 50%, transparent 100%);
 }
 
 @keyframes headclose-shine {
@@ -392,6 +415,11 @@
   border-color: var(--border-focus);
 }
 
+/* Hover: match app input hover behavior */
+.delete-confirmation-input:not(:disabled):hover {
+  border-color: var(--border-focus);
+}
+
 .delete-confirmation-input.is-invalid {
   border-color: var(--danger);
 }
@@ -495,6 +523,11 @@
   margin-bottom: 2rem;
   padding-bottom: 2rem;
   border-bottom: 1px solid var(--border-light);
+}
+
+/* Light mode: use a slightly darker divider for clarity */
+[data-theme="light"] .settings-section {
+  border-bottom-color: var(--border-strong);
 }
 
 .settings-section:last-child {

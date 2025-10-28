@@ -15,6 +15,7 @@
   
   --border-color: #23322c;
   --border-light: #2d4039;    /* row separators */
+  --border-strong: #33463f;    /* slightly stronger divider when needed */
   --border-focus: #22c55e;    /* green focus */
   
   --accent-primary: #22c55e;  /* green */

@@ -43,6 +43,13 @@
   border-color: var(--border-focus);
 }
 
+/* Hover state: use green theme border (no outer outline) */
+.input:not(:disabled):hover,
+.textarea:not(:disabled):hover,
+.select select:not(:disabled):hover {
+  border-color: var(--border-focus);
+}
+
 .input::placeholder,
 .textarea::placeholder {
   color: var(--text-muted);

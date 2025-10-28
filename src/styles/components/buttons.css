@@ -34,6 +34,14 @@
   outline-offset: 2px;
 }
 
+/* Themed hover for cancel/close actions (single green border, no outer outline) */
+.button[data-action="cancel"]:hover,
+.button[data-action="close"]:hover,
+#btn-cancel-replace.button:hover {
+  border-color: var(--accent-primary);
+  outline: none;
+}
+
 .button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
@@ -47,9 +55,9 @@
   border-color: var(--accent-primary);
 }
 
-.button.is-primary:hover {
+.button.is-primary:not(:disabled):hover {
   background: linear-gradient(135deg, var(--accent-hover) 0%, var(--accent-primary) 100%);
-  border-color: var(--accent-hover);
+  border-color: var(--accent-primary);
 }
 
 .button.is-success {
@@ -259,6 +267,26 @@
   background: var(--bg-hover);
   color: var(--text-primary);
   border-color: var(--accent-primary);
+}
+
+/* Light mode refinement: crisper, elevated settings button */
+[data-theme="light"] .btn-settings {
+  background: #ffffff;
+  color: var(--text-secondary);
+  border-color: var(--border-color);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+[data-theme="light"] .btn-settings:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border-color: var(--accent-primary);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+[data-theme="light"] .btn-settings:focus {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
 }
 
 /* Help button (powder blue) */

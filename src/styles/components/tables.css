@@ -26,7 +26,12 @@
 
 .project-table thead {
   background: var(--bg-tertiary);
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 3px solid var(--border-color); /* stronger header divider */
+}
+
+/* Light mode: stronger header divider for clarity */
+[data-theme="light"] .project-table thead {
+  border-bottom-color: var(--border-strong);
 }
 
 /* Make header and body block-level for independent scrolling of body */
@@ -87,7 +92,7 @@
   text-align: left;
   font-weight: 600;
   color: var(--text-primary);
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: none; /* thead handles the divider */
   font-size: 0.875rem;
   text-transform: uppercase;
   letter-spacing: 0.025em;
@@ -146,6 +151,12 @@
 /* Ensure explicit rule for row class as well */
 .project-row {
   border-bottom: 1px solid var(--border-light);
+}
+
+/* Light mode: strengthen row separator for better contrast */
+[data-theme="light"] .project-table tbody tr,
+[data-theme="light"] .project-row {
+  border-bottom-color: var(--border-strong);
 }
 
 .project-table tbody tr:hover {

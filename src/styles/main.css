@@ -1,10 +1,6 @@
 /* Main stylesheet - SVG2Icon v1.1.0 */
 
-/* UI font (Inter) */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
-/* Import Bulma */
-@import '../../node_modules/bulma/css/bulma.min.css';
+/* UI font: use system stack (no remote fetch) */
 
 /* Import component styles */
 @import './components/buttons.css';
@@ -14,32 +10,33 @@
 
 /* CSS Variables for theming */
 :root {
-  /* Light theme colors */
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8f9fa;
-  --bg-tertiary: #e9ecef;
-  --bg-hover: #e2e8f0;
-  --bg-active: #cbd5e1;
-  
-  --text-primary: #212529;
-  --text-secondary: #6c757d;
-  --text-muted: #adb5bd;
-  --text-inverse: #ffffff;
-  
-  --border-color: #dee2e6;
-  --border-light: #e9ecef;
-  --border-focus: #3b82f6;
-  
-  --accent-primary: #3b82f6;
-  --accent-secondary: #6366f1;
-  --accent-hover: #2563eb;
-  
-  --success: #10b981;
-  --success-bg: rgba(16, 185, 129, 0.1);
-  --warning: #f59e0b;
-  --warning-bg: rgba(245, 158, 11, 0.1);
-  --danger: #ef4444;
-  --danger-bg: rgba(239, 68, 68, 0.1);
+  /* Light theme (Warm Stone Neutral) */
+  --bg-primary:   #faf9f7;   /* canvas */
+  --bg-secondary: #f0efec;   /* cards/panels */
+  --bg-tertiary:  #e8e6e1;   /* inputs/controls */
+  --bg-hover:     #e3e1db;   /* hover */
+  --bg-active:    #dcd9d2;   /* active */
+
+  --text-primary:   #1f1f1c; /* near-black stone */
+  --text-secondary: #4a4945; /* muted */
+  --text-muted:     #7a786f; /* soft */
+  --text-inverse:   #ffffff;
+
+  --border-color: #e5e3de;   /* refined border */
+  --border-light: #eeece7;   /* separators */
+  --border-strong: #d6d3cc;  /* darker separators for light mode */
+  --border-focus: #2f9e6a;   /* tie to accent */
+
+  --accent-primary:   #2f9e6a; /* natural green */
+  --accent-secondary: #25875a;
+  --accent-hover:     #1f744d;
+
+  --success:    #198754;
+  --success-bg: rgba(25, 135, 84, 0.12);
+  --warning:    #b26b1a;
+  --warning-bg: rgba(178, 107, 26, 0.12);
+  --danger:     #b91c1c;
+  --danger-bg:  rgba(185, 28, 28, 0.12);
   
   /* Spacing and layout */
   --header-height: 80px;
@@ -95,7 +92,7 @@ body {
 .app-header {
   height: var(--header-height);
   background-color: var(--bg-secondary);
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 3px solid var(--border-color);
   display: flex;
   align-items: center;
   padding: 0 2rem 0 1rem; /* bring content ~1rem from left edge */
@@ -132,7 +129,11 @@ body {
 /* Footer beneath the table */
 .app-footer {
   background: var(--bg-secondary);
-  border-top: 1px solid var(--border-color);
+  border-top: 3px solid var(--border-color);
+  box-shadow: 0 -1px 0 rgba(0,0,0,0.04) inset; /* subtle separation */
+  position: sticky;
+  bottom: 0;
+  z-index: 40;
 }
 
 .app-footer-inner {
@@ -141,6 +142,18 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 0 1rem; /* tighter footer spacing as requested */
+}
+
+/* Light mode: slightly stronger divider for clarity */
+[data-theme="light"] .app-footer {
+  border-top: 3px solid var(--border-strong);
+  box-shadow: 0 -2px 0 rgba(0,0,0,0.035) inset;
+}
+
+/* Dark mode: adjust contrast subtly */
+[data-theme="dark"] .app-footer {
+  border-top-color: var(--border-light);
+  box-shadow: 0 -1px 0 rgba(255,255,255,0.04) inset;
 }
 
 .footer-project-count {
@@ -210,6 +223,21 @@ body {
   overflow: auto; /* only scroll here */
   height: 100%;
 }
+
+/* Paper-like background only in light mode */
+[data-theme="light"] .content-card {
+  background:
+    radial-gradient(1200px 600px at -10% -20%, rgba(255,255,255,0.35), transparent 60%),
+    radial-gradient(900px 500px at 120% -10%, rgba(255,255,255,0.3), transparent 55%),
+    linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.02)),
+    var(--bg-secondary);
+}
+
+/* Keep product rows clean (no paper background) in light mode */
+[data-theme="light"] .project-table-wrapper { background: var(--bg-secondary); }
+/* Slightly deeper row tone for structure against stone canvas */
+[data-theme="light"] .project-table tbody tr { background: #ece8e1; }
+[data-theme="light"] .project-table tbody tr:hover { background: #e6e2da; }
 
 /* Header components */
 .header-content {
