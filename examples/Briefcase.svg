@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Briefcase App Icon</title>
+  <desc id="desc">A clean briefcase icon with a rounded-square background, optimized for mobile app icons.</desc>
+
+  <!-- Square background for app icon -->
+  <rect x="48" y="48" width="416" height="416" rx="0" fill="#a855f7"/>
+
+  <!-- Briefcase body (shorter height for better proportions) -->
+  <rect x="144" y="188" width="224" height="180" rx="28" fill="#ffffff"/>
+
+  <!-- Handle -->
+  <rect x="200" y="144" width="112" height="44" rx="22" fill="#ffffff"/>
+  <!-- Handle cutout (use background color to create separation) -->
+  <rect x="218" y="156" width="76" height="22" rx="11" fill="#a855f7"/>
+
+  <!-- (Removed interior details: seam, latches) -->
+
+</svg>

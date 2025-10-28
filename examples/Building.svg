@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Building Icon</title>
+  <desc id="desc">A simple, flat building icon designed for mobile app icons.</desc>
+
+  <!-- Square background for app icon -->
+  <rect x="48" y="48" width="416" height="416" rx="0" fill="#2563eb"/>
+
+  <!-- Building body -->
+  <rect x="156" y="136" width="200" height="280" rx="16" fill="#ffffff"/>
+
+  <!-- Windows: 3x3 grid, using background color to appear as cutouts -->
+  <rect x="186" y="172" width="30" height="30" rx="6" fill="#2563eb" shape-rendering="crispEdges"/>
+  <rect x="242" y="172" width="30" height="30" rx="6" fill="#2563eb" shape-rendering="crispEdges"/>
+  <rect x="298" y="172" width="30" height="30" rx="6" fill="#2563eb" shape-rendering="crispEdges"/>
+
+  <rect x="186" y="228" width="30" height="30" rx="6" fill="#2563eb" shape-rendering="crispEdges"/>
+  <rect x="242" y="228" width="30" height="30" rx="6" fill="#2563eb" shape-rendering="crispEdges"/>
+  <rect x="298" y="228" width="30" height="30" rx="6" fill="#2563eb" shape-rendering="crispEdges"/>
+
+  <rect x="186" y="284" width="30" height="30" rx="6" fill="#2563eb" shape-rendering="crispEdges"/>
+  <rect x="242" y="284" width="30" height="30" rx="6" fill="#2563eb" shape-rendering="crispEdges"/>
+  <rect x="298" y="284" width="30" height="30" rx="6" fill="#2563eb" shape-rendering="crispEdges"/>
+
+  <!-- Door -->
+  <rect x="234" y="352" width="44" height="64" rx="8" fill="#2563eb" shape-rendering="crispEdges"/>
+  <circle cx="266" cy="384" r="4" fill="#ffffff"/>
+</svg>
