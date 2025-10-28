@@ -55,11 +55,26 @@ export abstract class Modal {
   private bindFooterActions(): void {
     if (!this.container) return;
     this.container.addEventListener('click', async (e) => {
-      const el = e.target as HTMLElement;
-      const action = el?.getAttribute('data-action');
+      // Normalize target to an Element to safely use closest()
+      let node = e.target as Node | null;
+      while (node && !(node instanceof Element)) {
+        node = node.parentNode;
+      }
+      const baseEl = node as Element | null;
+      const actionEl = baseEl?.closest?.('[data-action]') as HTMLElement | null;
+      const action = actionEl?.getAttribute('data-action');
       if (!action) return;
       e.preventDefault();
-      const ok = await this.onAction(action);
+
+      // Try the requested action first
+      let ok = await this.onAction(action);
+
+      // If not handled, fall back between 'close' and 'cancel'
+      if (!ok) {
+        if (action === 'close') ok = await this.onAction('cancel');
+        else if (action === 'cancel') ok = await this.onAction('close');
+      }
+
       if (ok) this.close();
     });
   }

@@ -11,6 +11,8 @@
       .card h2 { margin:0 0 0.5rem 0; }
       .card p { color: var(--muted); flex:1; }
       .card .actions { margin-top: 1rem; }
+      .card-link { text-decoration:none; color: inherit; }
+      .card-link:hover { border-color: var(--accent); }
       .btn { display:inline-block; background:#1d4ed8; color:#fff; padding:0.5rem 0.9rem; border-radius:8px; text-decoration:none; border:1px solid #1e40af; }
       .btn:hover { background:#2563eb; }
     </style>
@@ -21,22 +23,20 @@
     </header>
     <main class="site-content">
       <div class="landing">
-        <div class="card">
+        <a class="card card-link" href="viewers/user-manual.html">
           <h2>User Manual</h2>
           <p>Friendly, user-first guide to creating projects and downloading icon packages.</p>
           <div class="actions">
-            <a class="btn" href="viewers/user-manual.html">Open v1.1.0</a>
-            <a class="btn" href="viewers/user-manual.html?v=1.0.0" style="margin-left:0.5rem; background:#374151; border-color:#374151;">v1.0.0</a>
+            <span class="btn" style="pointer-events:none;">Open v1.1.0</span>
           </div>
-        </div>
-        <div class="card">
+        </a>
+        <a class="card card-link" href="viewers/tech-guide.html?v=tech-1.1.0">
           <h2>Tech Guide</h2>
-          <p>Build and package from source: setup, dev, dist, and troubleshooting.</p>
+          <p>Build and package from source: setup, dev, and dist.</p>
           <div class="actions">
-            <a class="btn" href="viewers/tech-guide.html">Open v1.1.0</a>
-            <a class="btn" href="viewers/tech-guide.html?v=tech-1.0.0" style="margin-left:0.5rem; background:#374151; border-color:#374151;">v1.0.0</a>
+            <span class="btn" style="pointer-events:none;">Open v1.1.0</span>
           </div>
-        </div>
+        </a>
       </div>
     </main>
   </body>
