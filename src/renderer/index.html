@@ -9,6 +9,24 @@
   <!-- Content Security Policy -->
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' https://app.posthog.com https://us-assets.i.posthog.com; connect-src 'self' https://app.posthog.com https://us.i.posthog.com https://us-assets.i.posthog.com; font-src 'self' data:;">
   
+  <!-- Apply saved theme ASAP to avoid flash on load -->
+  <script>
+    (function() {
+      try {
+        var params = new URLSearchParams(location.search);
+        var saved = params.get('theme') || localStorage.getItem('svg2icon_theme') || 'dark';
+        if (saved === 'system') {
+          saved = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.documentElement.setAttribute('data-theme', saved);
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute('content', saved === 'dark' ? '#0f172a' : '#ffffff');
+      } catch (e) {
+        /* keep default */
+      }
+    })();
+  </script>
+  
   <!-- Custom Styles -->
   <link rel="stylesheet" href="../styles/main.css">
   <link rel="stylesheet" href="../styles/themes/dark.css">

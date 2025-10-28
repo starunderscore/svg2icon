@@ -289,7 +289,10 @@ class SVG2IconApp {
   }
 
   private applyTheme(theme: string): void {
-    document.documentElement.setAttribute('data-theme', theme);
+    const resolved = theme === 'system'
+      ? (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+      : theme;
+    document.documentElement.setAttribute('data-theme', resolved);
     
     // Update theme-color meta tag for better OS integration
     let themeColorMeta = document.querySelector('meta[name="theme-color"]') as HTMLMetaElement;
@@ -299,7 +302,7 @@ class SVG2IconApp {
       document.head.appendChild(themeColorMeta);
     }
     
-    themeColorMeta.content = theme === 'dark' ? '#0f172a' : '#ffffff';
+    themeColorMeta.content = resolved === 'dark' ? '#0f172a' : '#ffffff';
   }
 
   private showLoading(message: string = 'Loading...'): void {

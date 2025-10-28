@@ -22,10 +22,13 @@ export class SettingsService {
     try {
       const savedSettings = await window.electronAPI.settings.get();
       this.settings = { ...this.settings, ...savedSettings };
+      // Keep localStorage in sync for ultra-early theme application in index.html
+      try { localStorage.setItem('svg2icon_theme', this.settings.theme || 'dark'); } catch {}
       this.initialized = true;
     } catch (error) {
       console.error('Failed to load settings:', error);
       this.settings = this.getDefaultSettings();
+      try { localStorage.setItem('svg2icon_theme', this.settings.theme); } catch {}
       this.initialized = true;
     }
   }
@@ -62,6 +65,8 @@ export class SettingsService {
   async setTheme(theme: 'light' | 'dark' | 'system'): Promise<void> {
     await this.set('theme', theme);
     await window.electronAPI.settings.setTheme(theme);
+    // Sync localStorage for next startup
+    try { localStorage.setItem('svg2icon_theme', theme); } catch {}
   }
 
   async toggleTheme(): Promise<string> {
