@@ -62,7 +62,9 @@ export class SettingsService {
     }
   }
 
-  async setTheme(theme: 'light' | 'dark' | 'system'): Promise<void> {
+  async setTheme(_theme: 'light' | 'dark' | 'system'): Promise<void> {
+    // Force dark theme regardless of input
+    const theme: 'dark' = 'dark';
     await this.set('theme', theme);
     await window.electronAPI.settings.setTheme(theme);
     // Sync localStorage for next startup
@@ -70,10 +72,9 @@ export class SettingsService {
   }
 
   async toggleTheme(): Promise<string> {
-    const currentTheme = await this.get('theme');
-    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    await this.setTheme(newTheme);
-    return newTheme;
+    // Dark mode is enforced
+    await this.setTheme('dark');
+    return 'dark';
   }
 
   private getDefaultSettings(): AppSettings {
@@ -95,11 +96,9 @@ export class SettingsService {
     }));
   }
 
-  private resolveTheme(theme: 'light' | 'dark' | 'system'): 'light' | 'dark' {
-    if (theme === 'system') {
-      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    }
-    return theme;
+  private resolveTheme(_theme: 'light' | 'dark' | 'system'): 'light' | 'dark' {
+    // Always resolve to dark
+    return 'dark';
   }
 
   getAppliedTheme(): 'light' | 'dark' {
@@ -109,11 +108,6 @@ export class SettingsService {
 
   // Listen for system theme changes
   setupSystemThemeListener(): void {
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', async (e) => {
-      const currentTheme = await this.get('theme');
-      if (currentTheme === 'system') {
-        this.applyTheme('system');
-      }
-    });
+    // No-op since dark theme is enforced
   }
 }

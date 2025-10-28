@@ -15,6 +15,7 @@ async function loadTOC() {
 function $(sel){ return document.querySelector(sel); }
 
 function renderNav(pagesOrSections, onClick) {
+  // Backward-compatible: render either a flat list of pages or a list of sections
   const nav = $('#toc');
   nav.innerHTML = '';
   if (Array.isArray(pagesOrSections) && pagesOrSections.length && pagesOrSections[0].pages) {
@@ -38,7 +39,7 @@ function renderNav(pagesOrSections, onClick) {
   } else {
     const sec = document.createElement('div');
     sec.className = 'nav-section';
-    for (const p of pagesOrSections) {
+    for (const p of pagesOrSections || []) {
       const a = document.createElement('a');
       a.href = '#';
       a.className = 'nav-link';
@@ -47,6 +48,45 @@ function renderNav(pagesOrSections, onClick) {
       sec.appendChild(a);
     }
     nav.appendChild(sec);
+  }
+}
+
+function renderTOC(cfg, onClick) {
+  const nav = $('#toc');
+  nav.innerHTML = '';
+  // Render top-level pages first if present
+  if (cfg.pages && Array.isArray(cfg.pages) && cfg.pages.length) {
+    const sec = document.createElement('div');
+    sec.className = 'nav-section';
+    for (const p of cfg.pages) {
+      const a = document.createElement('a');
+      a.href = '#';
+      a.className = 'nav-link';
+      a.textContent = p.title;
+      a.addEventListener('click', (e) => { e.preventDefault(); onClick(p.path); });
+      sec.appendChild(a);
+    }
+    nav.appendChild(sec);
+  }
+  // Then render sections (if present)
+  if (cfg.sections && Array.isArray(cfg.sections) && cfg.sections.length) {
+    for (const section of cfg.sections) {
+      const title = document.createElement('div');
+      title.className = 'nav-title';
+      title.textContent = section.title;
+      nav.appendChild(title);
+      const sec = document.createElement('div');
+      sec.className = 'nav-section';
+      for (const p of section.pages) {
+        const a = document.createElement('a');
+        a.href = '#';
+        a.className = 'nav-link';
+        a.textContent = p.title;
+        a.addEventListener('click', (e) => { e.preventDefault(); onClick(p.path); });
+        sec.appendChild(a);
+      }
+      nav.appendChild(sec);
+    }
   }
 }
 
@@ -230,11 +270,11 @@ function renderCallout(kind, content){
 
   function mount(version){
     const cfg = toc.versions[version];
-    renderNav(cfg.sections || cfg.pages, (path) => loadMarkdown(cfg.root, path));
-    if (cfg.sections && cfg.sections[0] && cfg.sections[0].pages[0]) {
-      loadMarkdown(cfg.root, cfg.sections[0].pages[0].path);
-    } else if (cfg.pages && cfg.pages[0]) {
+    renderTOC(cfg, (path) => loadMarkdown(cfg.root, path));
+    if (cfg.pages && cfg.pages[0]) {
       loadMarkdown(cfg.root, cfg.pages[0].path);
+    } else if (cfg.sections && cfg.sections[0] && cfg.sections[0].pages[0]) {
+      loadMarkdown(cfg.root, cfg.sections[0].pages[0].path);
     }
   }
 

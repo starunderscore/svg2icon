@@ -12,17 +12,14 @@
   <!-- Apply saved theme ASAP to avoid flash on load -->
   <script>
     (function() {
+      // Enforce dark theme immediately
       try {
-        var params = new URLSearchParams(location.search);
-        var saved = params.get('theme') || localStorage.getItem('svg2icon_theme') || 'dark';
-        if (saved === 'system') {
-          saved = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-        }
-        document.documentElement.setAttribute('data-theme', saved);
+        document.documentElement.setAttribute('data-theme', 'dark');
+        localStorage.setItem('svg2icon_theme', 'dark');
         var meta = document.querySelector('meta[name="theme-color"]');
-        if (meta) meta.setAttribute('content', saved === 'dark' ? '#0f172a' : '#ffffff');
+        if (meta) meta.setAttribute('content', '#0f172a');
       } catch (e) {
-        /* keep default */
+        // keep default
       }
     })();
   </script>
@@ -30,7 +27,7 @@
   <!-- Custom Styles -->
   <link rel="stylesheet" href="../styles/main.css">
   <link rel="stylesheet" href="../styles/themes/dark.css">
-  <link rel="stylesheet" href="../styles/themes/light.css">
+  <!-- Light theme stylesheet removed (dark mode enforced) -->
   <link rel="stylesheet" href="../styles/components/buttons.css">
   <link rel="stylesheet" href="../styles/components/modals.css">
   <link rel="stylesheet" href="../styles/components/tables.css">
@@ -370,48 +367,22 @@
       }
     });
 
-    // Theme management
+    // Theme management (dark mode enforced)
     function applyInitialTheme() {
       try {
-        const savedTheme = localStorage.getItem('svg2icon_theme') || 'dark';
-        let resolvedTheme = savedTheme;
-        
-        if (savedTheme === 'system') {
-          resolvedTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-        }
-        
-        document.documentElement.setAttribute('data-theme', resolvedTheme);
-        
-        // Update theme-color meta tag
+        document.documentElement.setAttribute('data-theme', 'dark');
+        localStorage.setItem('svg2icon_theme', 'dark');
         const themeColorMeta = document.querySelector('meta[name="theme-color"]');
-        if (themeColorMeta) {
-          themeColorMeta.setAttribute('content', resolvedTheme === 'dark' ? '#0f172a' : '#ffffff');
-        }
-        
-        console.log('Applied theme:', resolvedTheme);
+        if (themeColorMeta) themeColorMeta.setAttribute('content', '#0f172a');
+        console.log('Applied theme: dark');
       } catch (error) {
         console.error('Theme application failed:', error);
-        // Fallback to dark theme
         document.documentElement.setAttribute('data-theme', 'dark');
       }
     }
 
-    // Apply theme immediately
+    // Apply enforced theme immediately
     applyInitialTheme();
-
-    // Listen for system theme changes
-    if (window.matchMedia) {
-      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
-        try {
-          const savedTheme = localStorage.getItem('svg2icon_theme');
-          if (savedTheme === 'system') {
-            applyInitialTheme();
-          }
-        } catch (error) {
-          console.error('System theme change handler failed:', error);
-        }
-      });
-    }
 
     // Performance monitoring (Navigation Timing Level 2 with fallback)
     window.addEventListener('load', () => {

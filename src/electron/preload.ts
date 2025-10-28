@@ -28,6 +28,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   app: {
     getVersion: () => ipcRenderer.invoke('app:getVersion'),
     checkForUpdates: () => ipcRenderer.invoke('app:checkForUpdates'),
+    openExternal: (url: string) => ipcRenderer.invoke('app:openExternal', url),
   },
   // Menu event subscriptions (whitelisted)
   menu: {

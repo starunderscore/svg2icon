@@ -77,7 +77,19 @@ export class AboutModal extends Modal {
   }
 
   private openExternalLink(url: string): void {
-    // Placeholder: opening external links can be implemented via IPC if needed
-    console.log('Opening external link:', url);
+    try {
+      // Ask main process to open the link in default browser
+      // Non-blocking; errors are logged to console
+      (async () => {
+        try {
+          const ok = await window.electronAPI.app.openExternal(url);
+          if (!ok) console.warn('Open external returned false:', url);
+        } catch (e) {
+          console.error('Failed to open external link:', url, e);
+        }
+      })();
+    } catch (e) {
+      console.error('Open external link handler error:', e);
+    }
   }
 }

@@ -315,9 +315,10 @@ export class ElectronMain {
       }
     });
 
-    ipcMain.handle('settings:setTheme', async (event, theme: string) => {
+    ipcMain.handle('settings:setTheme', async (_event, _theme: string) => {
       try {
-        await this.storageService.setSetting('theme', theme);
+        // Enforce dark theme only
+        await this.storageService.setSetting('theme', 'dark');
       } catch (error) {
         console.error('Failed to set theme:', error);
         throw error;
@@ -349,6 +350,16 @@ export class ElectronMain {
     ipcMain.handle('app:checkForUpdates', async () => {
       // Implementation for checking updates
       return { hasUpdate: false, version: app.getVersion() };
+    });
+
+    ipcMain.handle('app:openExternal', async (_event, url: string) => {
+      try {
+        await shell.openExternal(url);
+        return true;
+      } catch (error) {
+        console.error('Failed to open external URL:', url, error);
+        return false;
+      }
     });
 
     // Removed app:getPackageVersion; updater modal only shows app version

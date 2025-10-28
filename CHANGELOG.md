@@ -8,7 +8,7 @@ Format: Based on Keep a Changelog. Versions follow Semantic Versioning.
 
 Nothing yet — tracking begins after 1.2.0.
 
-## [1.2.0] - 2025-10-23
+## [1.1.0] - 2025-10-23
 
 UI overhaul and workflow refinements. This release focuses on a coherent end‑to‑end experience in the app; documentation updates are tracked separately.
 

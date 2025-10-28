@@ -55,7 +55,7 @@ if (platform === 'linux') {
     console.log('Skipping Windows build: wine not found. Install wine64 to enable cross-build.');
   }
 } else if (platform === 'win32') {
-  // Default to x64 only for v1.0.0 to avoid 32-bit native dependency issues (e.g., sharp)
+  // Default to x64 only to avoid 32-bit native dependency issues (e.g., sharp)
   const arches = ['x64'];
   for (const arch of arches) {
     const out = `release/win/${arch}`;

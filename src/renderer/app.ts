@@ -36,6 +36,7 @@ declare global {
       app: {
         getVersion: () => Promise<string>;
         checkForUpdates: () => Promise<any>;
+        openExternal: (url: string) => Promise<boolean>;
       };
       menu: {
         onNewProject: (cb: () => void) => void;

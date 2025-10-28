@@ -25,7 +25,7 @@ export class SettingsModal extends Modal {
   protected override getContent(): string {
     return `
       <div class="settings-content">
-        <!-- Theme Section -->
+        <!-- Theme Section (Dark mode enforced) -->
         <div class="settings-section">
           <h3 class="settings-section-title">
             <svg class="settings-section-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -37,18 +37,10 @@ export class SettingsModal extends Modal {
           <div class="settings-item">
             <div class="settings-item-info">
               <h4 class="settings-item-title">Theme</h4>
-              <p class="settings-item-description">Choose your preferred color scheme</p>
+              <p class="settings-item-description">Dark mode is enforced for this app.</p>
             </div>
             <div class="theme-selector">
-              <div class="theme-option" data-theme="light">
-                <div class="theme-preview light"></div>
-                <span class="theme-option-label">Light</span>
-              </div>
-              <div class="theme-option" data-theme="system">
-                <div class="theme-preview system"></div>
-                <span class="theme-option-label">System</span>
-              </div>
-              <div class="theme-option" data-theme="dark">
+              <div class="theme-option is-active" data-theme="dark" style="cursor: default;">
                 <div class="theme-preview dark"></div>
                 <span class="theme-option-label">Dark</span>
               </div>
@@ -140,16 +132,7 @@ export class SettingsModal extends Modal {
   }
 
   private bindEvents(): void {
-    // Theme selection
-    const themeOptions = document.querySelectorAll('.theme-option');
-    themeOptions.forEach(option => {
-      option.addEventListener('click', () => {
-        const theme = (option as HTMLElement).dataset.theme;
-        if (theme) {
-          this.handleThemeChange(theme);
-        }
-      });
-    });
+    // Theme selection disabled (dark mode enforced)
 
     // Toggle switches
     const telemetryToggle = document.getElementById('telemetry-toggle');
@@ -165,10 +148,10 @@ export class SettingsModal extends Modal {
   }
 
   private updateUI(): void {
-    // Update theme selection
-    const currentTheme = this.settings.theme || 'dark';
+    // Theme selection fixed to dark
+    this.settings.theme = 'dark';
     document.querySelectorAll('.theme-option').forEach(option => {
-      option.classList.toggle('is-active', (option as HTMLElement).dataset.theme === currentTheme);
+      option.classList.toggle('is-active', (option as HTMLElement).dataset.theme === 'dark');
     });
 
     // Update toggles

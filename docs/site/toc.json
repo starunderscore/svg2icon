@@ -127,11 +127,13 @@
     },
     "tech-1.1.0": {
       "root": "../../manuals/tech-guide/v1.1.0",
+      "pages": [
+        { "title": "Tech Overview", "path": "README.md" }
+      ],
       "sections": [
         {
           "title": "Install & Run App",
           "pages": [
-            { "title": "Tech Overview",     "path": "README.md" },
             { "title": "Prerequisites",      "path": "setup.md" },
             { "title": "Run Dev",            "path": "development.md" },
             { "title": "Build Artifacts",    "path": "builds.md" },
