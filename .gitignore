@@ -179,14 +179,6 @@ $RECYCLE.BIN/
 *.sublime-project
 
 # Icon Generator specific output (for testing)
-*-icons/
-test-output/
-generated-icons/
-
-# Temporary SVG files (if any)
-temp-*.svg
-test-*.svg
-
 # Log files
 *.log
 logs/
