@@ -1,292 +1,141 @@
-# 🚀 SVG2Icon
+# SVG2Icon — Icon Generator (v1.1.0)
 
-A powerful desktop application built with Electron and TypeScript that converts SVG files into complete PNG icon sets for mobile, desktop, and web app development.
+Convert a single SVG into complete, production‑ready icon sets for Web, Mobile, and Desktop. SVG2Icon is a desktop app built with Electron + TypeScript.
 
-## ✨ Features
+## Install & Run
 
-- **🎨 SVG to PNG Conversion** - High-quality vector to raster conversion with resvg
-- **📱 Mobile-Ready Icon Sets** - Generate all required sizes for iOS and Android
-- **🌍 Universal Mode** - Organized folders for mobile/desktop/web platforms
-- **🎯 Six Target Platforms**:
-  - **Universal** - Complete cross-platform package with organized folders
-  - **iOS App Icons** - All required sizes for App Store submission
-  - **Android App Icons** - Complete density folder structure  
-  - **Desktop App Icons** - Windows ICO, macOS ICNS, Linux PNG ready
-  - **Electron App Icons** - Electron-builder ready with assets/ structure
-  - **Web App Icons** - PWA manifests, favicons, and touch icons
-- **🖼️ Live Preview** - See your SVG before conversion
-- **📁 Organized Output** - Proper folder structure with detailed manifest
-- **⚡ Automatic ICO/ICNS Creation** - png2icons + ImageMagick fallback
-- **🐧 Cross-Platform** - Works on Windows, macOS, and Linux
-- **🎨 Modern UI** - Beautiful, intuitive Electron interface with theme support
-- **📊 Telemetry** - Anonymous usage tracking for development insights
+Prebuilt releases: GitHub Releases (TBA). On Linux, install `.deb` or `.rpm`. On Windows, install the NSIS `.exe`.
 
-## 🚀 Quick Start
-
-### Prerequisites
-
-- Node.js (v16 or higher)
-- npm or yarn
-
-### Installation
-
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/yourusername/svg2icon
-   cd svg2icon
-   ```
-
-2. **Install dependencies:**
-   ```bash
-   npm install
-   ```
-
-3. **Set up PostHog (optional):**
-   - Get your API key from PostHog
-   - Replace `YOUR_API_KEY_HERE` in `src/renderer/services/TelemetryService.js`
-
-4. **Build and run:**
-   ```bash
-   npm run build
-   npm start
-   ```
-
-### Development Mode
-
+Dev (contributors):
 ```bash
+git clone https://github.com/starunderscore/svg2icon
+cd svg2icon
+npm install
 npm run dev
 ```
 
-## 📋 Universal Icon Sets
-
-The **Universal** option creates organized folders for different platforms:
-
-```
-universal-icons/
-├── mobile/
-│   ├── ios/          # iOS App Store icons
-│   └── android/      # Android density folders
-├── desktop/          # Windows ICO, macOS ICNS, Linux PNG
-└── web/             # PWA manifests, favicons, touch icons
-```
-
-### iOS App Icons
-- **iPhone**: 60x60, 120x120, 180x180
-- **iPad**: 76x76, 152x152, 167x167
-- **Universal**: 20x20, 29x29, 40x40 (1x, 2x, 3x)
-- **App Store**: 1024x1024
-
-### Android App Icons
-- **LDPI to XXXHDPI**: Complete density coverage
-- **Play Store**: 512x512
-
-### Desktop App Icons
-- **Windows ICO**: Auto-generated
-- **macOS ICNS**: Auto-generated
-- **Linux PNG**: 512x512
-
-### Web App Icons (PWA)
-- **Favicons**: 16x16, 32x32
-- **Apple Touch Icons**: Complete set
-- **PWA Manifest**: 192x192, 512x512
-
-## 🎯 Usage
-
-1. **Launch the app** using `npm start`
-2. **Select your SVG file** - Click "Select SVG File" and choose your vector icon
-3. **Choose icon type** - Select from Universal, iOS, Android, Desktop, Web
-4. **Set output folder** - Click "Choose Output Folder" to specify where icons will be saved
-5. **Generate icons** - Click "Generate Icons" and wait for processing to complete
-
-## ⚙️ Development
-
-### Project Structure
-
-```
-svg2icon/
-├── src/
-│   ├── main.ts                    # Main Electron process
-│   ├── icon-generator.ts          # Core conversion logic
-│   └── renderer/
-│       ├── index.html             # UI interface
-│       ├── styles.css             # Application styles
-│       ├── renderer.js            # Main orchestrator
-│       ├── services/
-│       │   ├── TelemetryService.js    # PostHog tracking
-│       │   ├── SettingsManager.js     # App settings
-│       │   └── FileManager.js         # File operations
-│       └── ui/
-│           └── UIManager.js           # UI state management
-├── dist/                          # Compiled TypeScript output
-├── package.json
-├── tsconfig.json
-└── README.md
-```
-
-### Available Scripts
-
-- `npm run build` - Compile TypeScript to JavaScript
-- `npm start` - Build and run the app
-- `npm run dev` - Run in development mode with DevTools
-- `npm run pack` - Package the app (without installer)
-- `npm run dist` - Create distributable installer
-
-### Building for Distribution
-
+Build artifacts:
 ```bash
-# From Ubuntu (recommended): produces Linux .deb + .rpm (x64)
 npm run dist
-
-# Artifacts will be in the 'release' folder
 ```
-For platform-specific prerequisites and commands (Windows NSIS, Linux DEB/RPM), see `docs/BUILDING.md`.
+Artifacts are written under `release/` (platform‑specific subfolders).
 
-## 🔄 Updates
+## Documentation (placeholders)
+Replace these with your published docs URLs when ready.
 
-- Windows (NSIS): in‑app updates via GitHub Releases using `electron-updater`.
-  - Users can enable/disable automatic updates in Settings.
-  - When enabled, the app checks on startup and applies updates.
-- Linux (.deb/.rpm): the app notifies and opens the GitHub release page; install updates with your package manager.
-  - If you prefer full in‑app auto‑update on Linux, consider shipping an AppImage target.
+| Manual | Version | Link |
+| --- | --- | --- |
+| User Manual | v1.1.0 | https://example.com/docs/svg2icon/user-manual/v1.1.0 |
+| Tech Guide | v1.1.0 | https://example.com/docs/tech-guide/v1.1.0 |
 
-Release hosting uses GitHub Releases. If publishing via CI, set `GH_TOKEN` and run `electron-builder --publish always` or use the existing `npm run dist` outputs and upload the artifacts (`.exe`, `.blockmap`, `latest.yml` on Windows; `.deb/.rpm`, `latest-linux.yml` on Linux).
+## Quick usage
+1) Click “New SVG”, drop your SVG, confirm the name
+2) Pick a Download option (Web / Mobile / Desktop / All / SVG)
+3) Save the ZIP (named as shown above)
+4) Extract and use platform folders
 
-## 🛠️ Technical Details
+## Highlights
+- Single‑source: drop in one SVG; get platform folders out
+- Targets: Web, Mobile (iOS + Android), Desktop, All‑In‑One, and Original SVG
+- Correct sizes and filenames for each platform
+- Clean ZIP naming: `<project name> - <Selection> - svg2icon.zip`
+ 
+## Output overview
 
-### Dependencies
-
-- **Electron** - Cross-platform desktop app framework
-- **TypeScript** - Type-safe JavaScript development
-- **@resvg/resvg-js** - Primary SVG to PNG conversion
-- **png2icons** - ICO and ICNS file generation
-- **ImageMagick** - Fallback ICO/ICNS creation (auto-detected)
-- **PostHog** - Anonymous usage analytics
-
-### Smart Fallback System
-
-The app uses multiple methods for optimal icon generation:
-1. **png2icons** (if available) → Fastest, best quality ICO/ICNS
-2. **ImageMagick** (if installed) → Universal, reliable fallback  
-3. **Manual instructions** → Always provided as backup option
-
-### Cross-Platform Support
-
-- **Linux**: DEB + RPM (x64)
-- **macOS**: Ready (ICNS wired) if targeted later
-- **Windows**: NSIS installer (x64)
-
-### Architecture
-
-- **Main Process** (`main.ts`) - Handles file system operations and app lifecycle
-- **Renderer Process** (`renderer.js`) - Manages the user interface and orchestrates services
-- **SVG2Icon** (`icon-generator.ts`) - Core conversion and sizing logic
-- **Services** - Modular components for telemetry, settings, files, and UI
-
-## 🎨 Customization
-
-### Adding New Icon Sizes
-
-Edit the size arrays in `src/icon-generator.ts`:
-
-```typescript
-const customIconSizes: IconSize[] = [
-  { name: 'custom-size', size: 150 },
-  // Add your custom sizes here
-];
+Web
+```tree
+<project> - Web - svg2icon.zip/
+└─ web/
+   ├─ apple-touch-icon-57.png
+   ├─ apple-touch-icon-60.png
+   ├─ apple-touch-icon-72.png
+   ├─ apple-touch-icon-76.png
+   ├─ apple-touch-icon-114.png
+   ├─ apple-touch-icon-120.png
+   ├─ apple-touch-icon-144.png
+   ├─ apple-touch-icon-152.png
+   ├─ apple-touch-icon-180.png
+   ├─ favicon-16.png
+   ├─ favicon-32.png
+   ├─ favicon.ico
+   ├─ manifest-192.png
+   ├─ manifest-512.png
+   ├─ manifest.json
+   └─ icons-head.html
 ```
 
-### Modifying the UI
+Mobile
+```tree
+<project> - Mobile - svg2icon.zip/
+└─ mobile/
+   ├─ ios-icons/
+   │  ├─ icon-20@1x.png
+   │  ├─ icon-20@2x.png
+   │  ├─ icon-20@3x.png
+   │  ├─ icon-29@1x.png
+   │  ├─ icon-29@2x.png
+   │  ├─ icon-29@3x.png
+   │  ├─ icon-40@1x.png
+   │  ├─ icon-40@2x.png
+   │  ├─ icon-40@3x.png
+   │  ├─ icon-60@2x.png
+   │  ├─ icon-60@3x.png
+   │  ├─ icon-76@1x.png
+   │  ├─ icon-76@2x.png
+   │  ├─ icon-83.5@2x.png
+   │  └─ icon-1024@1x.png
+   └─ android-icons/
+      ├─ mipmap-ldpi/
+      │  └─ ic_launcher.png
+      ├─ mipmap-mdpi/
+      │  └─ ic_launcher.png
+      ├─ mipmap-hdpi/
+      │  └─ ic_launcher.png
+      ├─ mipmap-xhdpi/
+      │  └─ ic_launcher.png
+      ├─ mipmap-xxhdpi/
+      │  └─ ic_launcher.png
+      ├─ mipmap-xxxhdpi/
+      │  └─ ic_launcher.png
+      └─ playstore-icon.png
+```
 
-The interface is built with vanilla HTML/CSS/JS. Customize styling in `src/renderer/styles.css`.
+Desktop
+```tree
+<project> - Desktop - svg2icon.zip/
+└─ desktop/
+   ├─ icon-16.png
+   ├─ icon-24.png
+   ├─ icon-32.png
+   ├─ icon-48.png
+   ├─ icon-64.png
+   ├─ icon-96.png
+   ├─ icon-128.png
+   ├─ icon-256.png
+   ├─ icon-512.png
+   ├─ icon-1024.png
+   ├─ icon.ico
+   └─ icon.icns
+```
 
-### Telemetry Configuration (opt-out)
+All‑In‑One
+```tree
+<project> - All - svg2icon.zip/
+├─ web/
+│  └─ (same as Web above)
+├─ mobile/
+│  └─ (same as Mobile above)
+├─ desktop/
+│  └─ (same as Desktop above)
+└─ svg/
+   └─ <project>_original.svg
+```
 
-SVG2Icon includes optional anonymous usage analytics (PostHog) to guide development.
+## Notes
+- favicon.ico is created when possible; if tools are unavailable, a 32px fallback is provided.
+- The Original SVG is not included in Web/Mobile/Desktop packages; use the “SVG” download or the All‑In‑One bundle.
+- Themes: Light / System / Dark, configurable in Settings.
 
-- Default: telemetry is enabled (opt-out) and can be turned off in Settings at any time.
-- First-run default via environment variables:
-  - Disable by default: set `DISABLE_TELEMETRY=1` or `SVG2ICON_TELEMETRY_DEFAULT=off`
-  - Enable by default: set `SVG2ICON_TELEMETRY_DEFAULT=on`
+## License
 
-Examples:
-
-- Linux/macOS (bash): `DISABLE_TELEMETRY=1 npm run start`
-- Windows (PowerShell): `$env:DISABLE_TELEMETRY='1'; npm run start`
-
-If you fork this project and want to use your own PostHog project, replace the API key in `src/renderer/services/TelemetryService.js`.
-
-## 🐛 Troubleshooting
-
-### Common Issues
-
-**SVG not displaying in preview:**
-- Ensure your SVG file is valid and not corrupted
-- Try opening the SVG in a web browser first
-
-**ICO/ICNS generation failed:**
-- Install ImageMagick: `sudo apt install imagemagick` (Linux)
-- Install png2icons: `npm install png2icons`
-- Manual conversion instructions provided in generated README
-
-
-
-**Installation fails:**
-- Make sure you have Node.js v16 or higher
-- Try clearing npm cache: `npm cache clean --force`
-
-**Linux-specific issues:**
-- Install ImageMagick with full format support
-- GLib/GTK warnings are normal and can be ignored
-
-**App won't start:**
-- Run `npm run build` before `npm start`
-- Check the console for TypeScript compilation errors
-
-## 📄 License
-
-MIT License
-
-Copyright (c) 2024 StarUnderscore.com (Michael Hunt)
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-### Development Setup
-
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature-name`
-3. Make your changes and test them
-4. Commit your changes: `git commit -am 'Add feature'`
-5. Push to the branch: `git push origin feature-name`
-6. Submit a pull request
-
-## 🙏 Acknowledgments
-
-- Built with [Electron](https://electronjs.org/)
-- Image processing by [Sharp](https://sharp.pixelplumbing.com/)
-- SVG rendering by [resvg](https://github.com/RazrFalcon/resvg)
-- Analytics by [PostHog](https://posthog.com)
-
----
-
-**Made with ❤️ by StarUnderscore.com**  
-**✨ A cozy, simple MIT licensed app for the developer community**
+MIT — see `LICENSE`.
