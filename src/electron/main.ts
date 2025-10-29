@@ -158,17 +158,22 @@ export class ElectronMain {
           } as any);
         };
 
-        const copyRecursive = (src: string, dest: string) => {
+        const copyRecursive = (src: string, dest: string, skip?: (srcPath: string, destPath: string) => boolean) => {
           if (!fs.existsSync(src)) return;
           const stat = fs.statSync(src);
           if (stat.isDirectory()) {
             fs.mkdirSync(dest, { recursive: true });
             for (const entry of fs.readdirSync(src)) {
-              copyRecursive(path.join(src, entry), path.join(dest, entry));
+              const childSrc = path.join(src, entry);
+              const childDest = path.join(dest, entry);
+              if (skip && skip(childSrc, childDest)) continue;
+              copyRecursive(childSrc, childDest, skip);
             }
           } else {
             fs.mkdirSync(path.dirname(dest), { recursive: true });
-            fs.copyFileSync(src, dest);
+            if (!(skip && skip(src, dest))) {
+              fs.copyFileSync(src, dest);
+            }
           }
         };
 
@@ -221,7 +226,12 @@ export class ElectronMain {
         switch (packageType) {
           case 'web': {
             await ensureGenerated(['web']);
-            copyRecursive(path.join(baseDir, 'web-icons'), path.join(finalDest, 'web'));
+            // Exclude any legacy original.svg from web package
+            copyRecursive(
+              path.join(baseDir, 'web-icons'),
+              path.join(finalDest, 'web'),
+              (s) => path.basename(s).toLowerCase() === 'original.svg'
+            );
             break;
           }
           case 'desktop': {
@@ -243,7 +253,12 @@ export class ElectronMain {
           case 'all':
           default: {
             await ensureGenerated(['web', 'desktop', 'ios', 'android']);
-            copyRecursive(path.join(baseDir, 'web-icons'), path.join(finalDest, 'web'));
+            // Exclude any legacy original.svg from web package
+            copyRecursive(
+              path.join(baseDir, 'web-icons'),
+              path.join(finalDest, 'web'),
+              (s) => path.basename(s).toLowerCase() === 'original.svg'
+            );
             copyRecursive(path.join(baseDir, 'desktop-icons'), path.join(finalDest, 'desktop'));
             const mobileDest = path.join(finalDest, 'mobile');
             copyRecursive(path.join(baseDir, 'ios-icons'), path.join(mobileDest, 'ios-icons'));

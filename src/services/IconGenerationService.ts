@@ -385,12 +385,8 @@ export class IconGenerationService {
       path.join(outputPath, 'manifest.json'),
       JSON.stringify(manifest, null, 2)
     );
-    // Also save the original SVG
-    const svgContent = Buffer.from(svgData, 'base64').toString('utf-8');
-    fs.writeFileSync(
-      path.join(outputPath, 'original.svg'),
-      svgContent
-    );
+    // Note: Do not write the original SVG into any icon package folders.
+    // The "Original" download remains available via the dedicated package type.
   }
 
   getIconTypeInfo(iconType: IconType): { name: string; description: string; badge: string } {
@@ -443,6 +439,17 @@ export class IconGenerationService {
       }
     } catch {
       // ignore errors producing favicon.ico
+    }
+
+    // Final fallback: if favicon.ico still missing, copy 32px PNG to .ico name
+    try {
+      const out = path.join(outputPath, 'favicon.ico');
+      const f32 = path.join(outputPath, 'favicon-32.png');
+      if (!fs.existsSync(out) && fs.existsSync(f32)) {
+        fs.copyFileSync(f32, out);
+      }
+    } catch {
+      // ignore
     }
 
     // icons-head.html template

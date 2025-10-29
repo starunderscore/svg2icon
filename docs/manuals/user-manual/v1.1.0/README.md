@@ -61,12 +61,18 @@ Use the sidebar to explore topics. This page gives you a friendly high‑level t
 │  │  ├─ icon-83.5@2x.png
 │  │  └─ icon-1024@1x.png
 │  └─ android-icons/
-│     ├─ mipmap-ldpi/ic_launcher.png
-│     ├─ mipmap-mdpi/ic_launcher.png
-│     ├─ mipmap-hdpi/ic_launcher.png
-│     ├─ mipmap-xhdpi/ic_launcher.png
-│     ├─ mipmap-xxhdpi/ic_launcher.png
-│     ├─ mipmap-xxxhdpi/ic_launcher.png
+│     ├─ mipmap-ldpi/
+│     │  └─ ic_launcher.png
+│     ├─ mipmap-mdpi/
+│     │  └─ ic_launcher.png
+│     ├─ mipmap-hdpi/
+│     │  └─ ic_launcher.png
+│     ├─ mipmap-xhdpi/
+│     │  └─ ic_launcher.png
+│     ├─ mipmap-xxhdpi/
+│     │  └─ ic_launcher.png
+│     ├─ mipmap-xxxhdpi/
+│     │  └─ ic_launcher.png
 │     └─ playstore-icon.png
 ├─ desktop/
 │  ├─ icon-16.png
@@ -155,7 +161,7 @@ Reference in HTML:
 | --- | --- |
 | mipmap-ldpi/ic_launcher.png | Launcher (ldpi) |
 | mipmap-mdpi/ic_launcher.png | Launcher (mdpi) |
-| mipmap-hdpi/ic_launcher.png | Launcher (hdpi) |
+| mipmap-hdpi/ic_launcher.png | Launcher (hdpi, ~1.5×) |
 | mipmap-xhdpi/ic_launcher.png | Launcher (xhdpi) |
 | mipmap-xxhdpi/ic_launcher.png | Launcher (xxhdpi) |
 | mipmap-xxxhdpi/ic_launcher.png | Launcher (xxxhdpi) |
@@ -165,7 +171,16 @@ Reference in HTML:
 ### Desktop
 | Filename | Purpose |
 | --- | --- |
-| icon-16..1024.png | App icons at common desktop sizes |
+| icon-16.png | App icon (16×16) |
+| icon-24.png | App icon (24×24) |
+| icon-32.png | App icon (32×32) |
+| icon-48.png | App icon (48×48) |
+| icon-64.png | App icon (64×64) |
+| icon-96.png | App icon (96×96) |
+| icon-128.png | App icon (128×128) |
+| icon-256.png | App icon (256×256) |
+| icon-512.png | App icon (512×512) |
+| icon-1024.png | App icon (1024×1024) |
 | icon.ico | Windows icon bundle |
 | icon.icns | macOS icon bundle |
 | manifest.json | Generated metadata for the set |
