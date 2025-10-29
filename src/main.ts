@@ -11,8 +11,20 @@ let mainWindow: BrowserWindow | null = null;
 let core: ElectronMain | null = null;
 
 function createWindow() {
-  // Enforce dark theme background to avoid flash
-  const bgColor = '#0b0f0e';
+  // Read persisted theme synchronously to pick correct background and avoid flash
+  let bgColor = '#0b0f0e'; // dark fallback
+  try {
+    // Manually read settings from storage file
+    const fs = require('fs');
+    const p = require('path');
+    const userDataPath = app.getPath('userData');
+    const jsonPath = p.join(userDataPath, 'svg2icon.json');
+    if (fs.existsSync(jsonPath)) {
+      const raw = JSON.parse(fs.readFileSync(jsonPath, 'utf-8')) || {};
+      const theme = (raw.settings && raw.settings.theme) || 'dark';
+      bgColor = theme === 'light' ? '#faf9f7' : '#0b0f0e';
+    }
+  } catch {}
 
   mainWindow = new BrowserWindow({
     width: 1000,
@@ -35,8 +47,9 @@ function createWindow() {
   core = new ElectronMain(mainWindow);
 
   const indexPath = path.join(__dirname, '../src/renderer/index.html');
-  // Pass enforced dark theme as a query param
-  mainWindow.loadFile(indexPath, { search: `?theme=dark` });
+  // Pass initial theme as a query param so the page can apply it pre-CSS
+  const initialTheme = bgColor === '#faf9f7' ? 'light' : 'dark';
+  mainWindow.loadFile(indexPath, { search: `?theme=${initialTheme}` });
 
   // Show only when ready to minimize theme flash
   mainWindow.once('ready-to-show', () => {

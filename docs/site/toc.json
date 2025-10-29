@@ -62,26 +62,11 @@
         {
           "title": "Generating Icons",
           "pages": [
-            {
-              "title": "Overview",
-              "path": "generating-icons/index.md"
-            },
-            {
-              "title": "Web",
-              "path": "generating-icons/web.md"
-            },
-            {
-              "title": "Mobile",
-              "path": "generating-icons/mobile.md"
-            },
-            {
-              "title": "Desktop",
-              "path": "generating-icons/desktop.md"
-            },
-            {
-              "title": "All-In-One",
-              "path": "generating-icons/all-in-one.md"
-            }
+            { "title": "Overview",     "path": "generating-icons/index.md" },
+            { "title": "All-In-One",   "path": "generating-icons/all-in-one.md" },
+            { "title": "Mobile",       "path": "generating-icons/mobile.md" },
+            { "title": "Desktop",      "path": "generating-icons/desktop.md" },
+            { "title": "Web",          "path": "generating-icons/web.md" }
           ]
         },
         {

@@ -330,10 +330,9 @@ export class ElectronMain {
       }
     });
 
-    ipcMain.handle('settings:setTheme', async (_event, _theme: string) => {
+    ipcMain.handle('settings:setTheme', async (_event, theme: string) => {
       try {
-        // Enforce dark theme only
-        await this.storageService.setSetting('theme', 'dark');
+        await this.storageService.setSetting('theme', theme);
       } catch (error) {
         console.error('Failed to set theme:', error);
         throw error;
