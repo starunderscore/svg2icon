@@ -4,6 +4,18 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { ElectronMain } from './electron/main.js';
 
+// Use a separate userData folder for dev runs so test data
+// never mixes with production data.
+const isDev = process.argv.includes('--dev');
+if (isDev) {
+  try {
+    const defaultUserData = app.getPath('userData');
+    const devUserData = `${defaultUserData}-dev`;
+    app.setPath('userData', devUserData);
+    try { app.setName(`${app.name} Dev`); } catch {}
+  } catch {}
+}
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
