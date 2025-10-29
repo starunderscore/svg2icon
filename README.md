@@ -1,5 +1,14 @@
 # SVG2Icon — Icon Generator (v1.1.0)
 
+[![Maverick Spirit Product](https://img.shields.io/badge/Maverick%20Spirit-Product-ff69b4.svg)](#)
+[![Version](https://img.shields.io/badge/version-1.1.0-blue.svg)](#)
+[![Electron](https://img.shields.io/badge/electron-28%2B-9cf.svg)](#)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178c6.svg)](#)
+[![Platforms](https://img.shields.io/badge/platforms-Windows%20%7C%20Linux-informational.svg)](#)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Docs: User Manual](https://img.shields.io/badge/docs-User%20Manual-8A2BE2.svg)](https://example.com/docs/svg2icon/user-manual/v1.1.0)
+[![Docs: Tech Guide](https://img.shields.io/badge/docs-Tech%20Guide-8A2BE2.svg)](https://example.com/docs/tech-guide/v1.1.0)
+
 Convert a single SVG into complete, production‑ready icon sets for Web, Mobile, and Desktop. SVG2Icon is a desktop app built with Electron + TypeScript.
 
 ## Install & Run
