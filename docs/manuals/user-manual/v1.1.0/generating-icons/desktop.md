@@ -13,7 +13,8 @@ From the project row, click the Desktop download to create the desktop package Z
 ![Click Desktop download](images/generating-icons/desktop/view_desktop_download_view1.png)
 
 ## Save the ZIP
-Choose where to save. Inside the ZIP you’ll find `{project}_desktop/` (a ` (n)` suffix is added when a folder already exists).
+Choose where to save. The ZIP is named:
+`<project name> - Desktop - svg2icon.zip` (a ` (n)` suffix is added if a file with the same name already exists).
  
 
 ## Extract and use

@@ -12,8 +12,8 @@ From the project row, click the Mobile download to create the mobile package ZIP
 ![Click Mobile download](images/generating-icons/mobile/view-mobile-download-button-view1.png)
 
 ## Save the ZIP
-Choose where to save. The file name follows your selection:
-- Folder name inside the ZIP: `{project}_mobile` (a ` (n)` suffix is added if a folder already exists)
+Choose where to save. The ZIP is named:
+`<project name> - Mobile - svg2icon.zip` (a ` (n)` suffix is added if a file with the same name already exists).
 
  
 

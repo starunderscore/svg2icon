@@ -84,6 +84,15 @@
           ]
         },
         {
+          "title": "Toolbar & Help",
+          "pages": [
+            { "title": "Check for Updates", "path": "toolbar/updates.md" },
+            { "title": "About",              "path": "toolbar/about.md" },
+            { "title": "User Manuals",       "path": "toolbar/manuals.md" },
+            { "title": "Report an Issue",    "path": "toolbar/report-issue.md" }
+          ]
+        },
+        {
           "title": "Reference",
           "pages": [
             {

@@ -14,7 +14,8 @@ From the project row, click the All download to create the all‑in‑one packag
 ![Click All download](images/generating-icons/all-in-one/view_all_download_view1.png)
 
 ## Save the ZIP
-Choose where to save. Inside the ZIP you’ll find `{project}_all/` (a ` (n)` suffix is added if a folder already exists).
+Choose where to save. The ZIP is named:
+`<project name> - All - svg2icon.zip` (a ` (n)` suffix is added if a file with the same name already exists).
 
 ## Extract and use
 Open the ZIP and review `web/`, `desktop/`, `mobile/`, and `svg/` in one place.

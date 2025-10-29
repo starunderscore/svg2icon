@@ -14,7 +14,8 @@ From the project row, click the Web download to create the web package ZIP.
 ![Click Web download](images/generating-icons/web/view-web-button-download-view1.png)
 
 ## Save the ZIP
-Choose where to save. Inside the ZIP you’ll find `{project}_web/` (a ` (n)` suffix is added when a folder already exists).
+Choose where to save. The ZIP is named:
+`<project name> - Web - svg2icon.zip` (a ` (n)` suffix is added if a file with the same name already exists).
 
 ## Web folder (inside ZIP)
 After you extract the ZIP, open the `web/` folder to see all files.
