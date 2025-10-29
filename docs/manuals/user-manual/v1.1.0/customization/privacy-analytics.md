@@ -7,7 +7,7 @@ Control anonymous usage analytics to help improve SVG2Icon.
 ## Toggle Analytics
 In the Privacy & Analytics card, use the toggle to enable or disable anonymous usage analytics.
 
-[Image: view: Settings modal; arrow: Analytics toggle; squares: Privacy & Analytics card]
+![Privacy & Analytics — toggle](images/settings/privacy_&_analytics/modal_analytics_view1.png)
 
 The status pill updates to show Enabled or Disabled.
 

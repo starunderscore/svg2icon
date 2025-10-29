@@ -7,14 +7,19 @@ Find Settings quickly, whichever way you work.
 ## From the toolbar
 Click the Settings gear in the app header.
 
-[Image: view: app (header); arrow: Click “Settings”; squares: Settings button]
+![Click Settings button](images/settings/opening-settings/view_settings_button_view1.png)
 
 ## From the menu
 Use the native menu: File → Settings.
 
-[Image: view: app menu; arrow: File → Settings; squares: Settings menu item]
+![Toolbar Settings](images/settings/opening-settings/toolbar_settings_view2.png)
 
 ## With a shortcut
-Press Ctrl+, (Windows/Linux) or Command+, (macOS).
+Use the keyboard shortcut that matches your OS:
+
+| OS | Hotkey |
+| --- | --- |
+| Windows / Linux | "Ctrl + ," |
+| macOS | "Command + ," |
 
 [Image: view: keyboard; arrow: Ctrl/Command + comma; squares: Shortcut]

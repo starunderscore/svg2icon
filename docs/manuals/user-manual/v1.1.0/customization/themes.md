@@ -10,7 +10,7 @@ In the Appearance section, click a theme:
 - System — Follows your OS preference (auto‑switches)
 - Dark — Dim for low‑light environments
 
-[Image: view: Settings modal; arrow: Theme options (Light/System/Dark); squares: selected theme]
+![Appearance — theme options](images/settings/themes/modal_appearance_view1.png)
 
 > Tip: System follows your operating system and updates automatically when your OS switches between light/dark.
 

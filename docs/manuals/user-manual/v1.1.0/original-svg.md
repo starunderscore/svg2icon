@@ -5,7 +5,7 @@ Retrieve the exact SVG you imported into your project — unchanged.
 ## Where to find it
 On the project row, click the “SVG” download. This creates a small ZIP that only contains your original SVG.
 
-[Image: view: app (table); arrow: Click “SVG”; squares: SVG button]
+![Click SVG download](images/original-svg/view_svg_download_view1.png)
 
 ## What’s inside
 ```tree
@@ -14,7 +14,7 @@ On the project row, click the “SVG” download. This creates a small ZIP that 
    └─ <project>_original.svg
 ```
 
-[Image: view: file manager (svg/); arrow: <project>_original.svg; squares: svg/ contents]
+![ZIP file dialog](images/original-svg/zipfile_view2.png)
 
 ## Notes
 - The original SVG is not included in Web/Mobile/Desktop packages to keep those bundles lean and focused.
