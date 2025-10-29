@@ -70,16 +70,17 @@
           ]
         },
         {
+          "title": "Original SVG",
+          "pages": [
+            { "title": "Download Original", "path": "original-svg.md" }
+          ]
+        },
+        {
           "title": "Settings",
           "pages": [
-            {
-              "title": "Themes",
-              "path": "customization/themes.md"
-            },
-            {
-              "title": "Privacy & Analytics",
-              "path": "customization/privacy-analytics.md"
-            }
+            { "title": "Opening Settings",    "path": "customization/opening-settings.md" },
+            { "title": "Themes",               "path": "customization/themes.md" },
+            { "title": "Privacy & Analytics",  "path": "customization/privacy-analytics.md" }
           ]
         },
         {

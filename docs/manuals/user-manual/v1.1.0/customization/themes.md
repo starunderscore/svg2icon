@@ -2,10 +2,7 @@
 
 Choose the appearance that works best for you. Theme changes apply instantly and persist between sessions.
 
-## Open Settings
-Click the Settings button in the app header.
-
-[Image: view: app (header); arrow: Click “Settings”; squares: Settings button]
+> Tip: New to Settings? See [Opening Settings](opening-settings.md) for the toolbar button, menu path, and keyboard shortcut.
 
 ## Pick a Theme
 In the Appearance section, click a theme:

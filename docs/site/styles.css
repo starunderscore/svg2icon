@@ -57,3 +57,10 @@ blockquote { border-left: 3px solid var(--accent); padding: 0.5rem 0.75rem; back
 .doc-image { margin: 0.75rem 0; }
 .doc-image img { width: 100%; max-width: 980px; height: auto; display: block; margin-left: auto; margin-right: auto; border: 1px solid var(--border); border-radius: 6px; }
 .doc-image figcaption { color: var(--muted); font-size: 0.85rem; margin-top: 0.35rem; }
+
+/* Inline links inside content should not use sidebar block styles */
+.site-content a.nav-link {
+  display: inline;
+  padding: 0;
+  border-radius: 0;
+}

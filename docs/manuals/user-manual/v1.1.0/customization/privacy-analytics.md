@@ -2,10 +2,7 @@
 
 Control anonymous usage analytics to help improve SVG2Icon.
 
-## Open Settings
-Click the Settings button in the app header.
-
-[Image: view: app (header); arrow: Click “Settings”; squares: Settings button]
+> Tip: Need the ways to open Settings? See [Opening Settings](opening-settings.md) for the toolbar, menu, and shortcut options.
 
 ## Toggle Analytics
 In the Privacy & Analytics card, use the toggle to enable or disable anonymous usage analytics.
@@ -27,4 +24,3 @@ The status pill updates to show Enabled or Disabled.
 - Personal data
 
 > Tip: You can change this setting anytime from Settings → Privacy & Analytics.
-
