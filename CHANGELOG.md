@@ -2,49 +2,34 @@
 
 All notable changes to this project are documented here.
 
-Format: Based on Keep a Changelog. Versions follow Semantic Versioning.
-
-## [Unreleased]
-
-Nothing yet — tracking begins after 1.2.0.
-
 ## [1.1.0] - 2025-10-23
 
-UI overhaul and workflow refinements. This release focuses on a coherent end‑to‑end experience in the app; documentation updates are tracked separately.
+A complete UX pass with projects, settings, manuals, and support tools — ready for testing.
 
-### Added
-- Unified SVG form modal (Create + Edit) with a fixed‑height SVG area (dropzone ↔ preview) and Replace/Cancel flow
-- Download flow prompts for a destination and generates on demand per selection:
-  - Web → `web/`
-  - Mobile → `mobile/ios-icons/`, `mobile/android-icons/`
-  - Desktop → `desktop/`
-  - SVG (original) → `svg/`
-  - All → `web/`, `mobile/`, `desktop/`, `svg/`
-- Bottom‑right toast notifications for success/failure of downloads and key actions
+### Highlights
+- Projects UX
+  - SVG is stored with each project; rows show preview, name, date, and download buttons
+  - Full CRUD: create, edit (replace SVG/rename), delete (exact‑name confirmation)
+  - Per‑selection downloads generate ZIPs with platform folders: Web, Mobile (iOS/Android), Desktop, All, and Original (SVG)
+- Updates & About
+  - “Check for Updates” (Tools menu) shows available version or current version
+  - “About” (Help menu) displays app name/version and quick links (website, changelog, licenses)
+- Settings
+  - Themes: Light / System / Dark (applied early, with system follow)
+  - Privacy & Analytics: opt‑out anonymous telemetry (PostHog)
+- Documentation
+  - User Manual v1.1.0
+  - Tech Guide v1.1.0
 
-### Changed
-- Rebuilt project list and forms for steady visuals:
-  - Single table with static header; body‑only scroll
-  - SVG area is fixed‑height to prevent layout shifts
-- Right‑aligned theme selector pills (Light / System / Dark) with responsive wrap on small screens
-- Privacy & Analytics content consolidated into a single card with the toggle on the right
-- Folder naming on download: `{project}_{selection}` with automatic uniqueness suffix ` (n)`
-- Help button removed from the visible UI (kept in code for a future release); Settings remains a separate, clear action
+### Notable improvements
+- Consistent ZIP naming: `<project name> - <Selection> - svg2icon.zip`
+- Web: always provide `favicon.ico` (with a 32px fallback if tooling is unavailable)
+- Web/Mobile/Desktop packages do not include the original SVG (use the dedicated “SVG” or the All‑In‑One bundle)
+- Dev runs use a separate userData folder (`-dev` suffix) to keep test data isolated
 
-### Fixed
-- Modal header close “line” now closes consistently across modals (no double‑outline/ghost behavior)
-- Download actions report clear success/failure; notifications moved to bottom‑right to avoid covering controls
-
-### Performance / Build
-- ESM‑safe imports throughout Electron main and services (removed remaining `require` usages in these paths)
-- Desktop icon generation:
-  - Uses `png2icons` when available for `.ico` / `.icns`
-  - Falls back to CLI tools when present (ImageMagick `magick`/`convert` for `.ico`, `png2icns` for `.icns`)
-  - Skips quietly if prerequisites are missing, while PNG sets always generate
-
-### Removed
-- “Icon Types” UI and default icon type setting
-- Download subsection from the row actions menu (download buttons remain in the row)
+### UI polish
+- Toasts (notifications) appear bottom‑right for success/error
+- Stable sidebar/docs viewer with improved code/tree rendering
 
 ## [1.0.0] - 2025-10-19
 
