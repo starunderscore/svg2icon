@@ -265,13 +265,11 @@ function renderCallout(kind, content){
   function displayLabel(v){
     try {
       if (/^\d+\.\d+\.\d+$/.test(v)) {
-        const parts = v.split('.');
-        return `user-v${parts[0]}.${parts[1]}.*`;
+        return `svg2icon-user-${v}`;
       }
       if (/^tech-\d+\.\d+\.\d+$/.test(v)) {
         const ver = v.replace(/^tech-/, '');
-        const parts = ver.split('.');
-        return `tech-v${parts[0]}.${parts[1]}.*`;
+        return `svg2icon-tech-${ver}`;
       }
     } catch {}
     return v;

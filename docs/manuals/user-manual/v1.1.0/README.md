@@ -1,6 +1,6 @@
 # SVG2Icon User Manual
 
-Manual: user-v1.1.*
+Manual: svg2icon-user-1.1.0
 
 Welcome! SVG2Icon turns a single SVG into production‑ready icon sets for web, mobile, and desktop — fast, predictable, and with a clean workflow.
 
