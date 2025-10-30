@@ -415,8 +415,8 @@ export class ElectronMain {
     template.push({
       label: 'Help',
       submenu: [
-        { label: 'User Manual', accelerator: 'F1', click: () => { try { this.window.webContents.send('menu:user-manual'); } catch {} } },
-        { label: 'Tech Guide', accelerator: 'Shift+F1', click: () => { try { this.window.webContents.send('menu:tech-guide'); } catch {} } },
+        { label: 'User Manual', accelerator: 'F1', click: async () => { try { await shell.openExternal('https://starunderscore.com/docs/svg2icon/user-v1.1.0'); } catch {} } },
+        { label: 'Tech Guide', accelerator: 'Shift+F1', click: async () => { try { await shell.openExternal('https://starunderscore.com/docs/svg2icon/tech-v1.1.0'); } catch {} } },
         { type: 'separator' },
         { label: 'Report Issue', accelerator: 'CmdOrCtrl+Alt+R', click: async () => { try { await shell.openExternal('https://github.com/starunderscore/svg2icon/issues'); } catch {} } },
         { type: 'separator' },

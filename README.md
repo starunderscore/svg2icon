@@ -6,8 +6,8 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178c6.svg)](#)
 [![Platforms](https://img.shields.io/badge/platforms-Windows%20%7C%20Linux-informational.svg)](#)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Docs: User Manual](https://img.shields.io/badge/docs-User%20Manual-8A2BE2.svg)](https://example.com/docs/svg2icon/user-manual/v1.1.0)
-[![Docs: Tech Guide](https://img.shields.io/badge/docs-Tech%20Guide-8A2BE2.svg)](https://example.com/docs/tech-guide/v1.1.0)
+[![Docs: User Manual](https://img.shields.io/badge/docs-User%20Manual-8A2BE2.svg)](https://starunderscore.com/docs/svg2icon/user-v1.1.0)
+[![Docs: Tech Guide](https://img.shields.io/badge/docs-Tech%20Guide-8A2BE2.svg)](https://starunderscore.com/docs/svg2icon/tech-v1.1.0)
 
 Convert a single SVG into complete, production‑ready icon sets for Web, Mobile, and Desktop. SVG2Icon is a desktop app built with Electron + TypeScript.
 
@@ -29,13 +29,12 @@ npm run dist
 ```
 Artifacts are written under `release/` (platform‑specific subfolders).
 
-## Documentation (placeholders)
-Replace these with your published docs URLs when ready.
+## Documentation
 
 | Manual | Version | Link |
 | --- | --- | --- |
-| User Manual | v1.1.0 | https://example.com/docs/svg2icon/user-manual/v1.1.0 |
-| Tech Guide | v1.1.0 | https://example.com/docs/tech-guide/v1.1.0 |
+| User Manual | v1.1.0 | https://starunderscore.com/docs/svg2icon/user-v1.1.0 |
+| Tech Guide | v1.1.0 | https://starunderscore.com/docs/svg2icon/tech-v1.1.0 |
 
 ## Quick usage
 1) Click “New SVG”, drop your SVG, confirm the name

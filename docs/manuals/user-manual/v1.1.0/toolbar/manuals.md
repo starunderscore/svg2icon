@@ -8,9 +8,9 @@ Use Help → User Manual (this guide) or Help → Tech Guide.
 ![Help → User Manual](images/toolbar/manuals/toolbar_manuals_view1.png)
 
 ## Available manuals
-Use these online manuals when you publish your docs. Replace the links below with your website URLs.
+Use these online manuals for the latest published docs.
 
 | Manual | Version | Link |
 | --- | --- | --- |
-| User Manual | v1.1.0 | https://example.com/docs/svg2icon/user-manual/v1.1.0 |
-| Tech Guide | v1.1.0 | https://example.com/docs/tech-guide/v1.1.0 |
+| User Manual | v1.1.0 | [https://starunderscore.com/docs/svg2icon/user-v1.1.0](https://starunderscore.com/docs/svg2icon/user-v1.1.0) |
+| Tech Guide | v1.1.0 | [https://starunderscore.com/docs/svg2icon/tech-v1.1.0](https://starunderscore.com/docs/svg2icon/tech-v1.1.0) |

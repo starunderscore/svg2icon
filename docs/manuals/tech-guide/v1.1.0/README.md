@@ -1,6 +1,6 @@
 # Tech Overview
 
-Manual: svg2icon-tech-1.1.0
+Manual: svg2icon-tech-v1.1.0
 
 This overview reflects the completed v1.1.0 app and the current directory layout. It covers the process model, IPC, storage, icon generation, packaging, theming, and build/distribution.
 
