@@ -135,6 +135,20 @@
             { "title": "Dist",               "path": "packaging.md" },
             { "title": "Troubleshooting",    "path": "troubleshooting.md" }
           ]
+        },
+        {
+          "title": "Manual Testing",
+          "pages": [
+            { "title": "Electron Area", "path": "testing.md" }
+          ]
+        },
+        {
+          "title": "Testing Roadmap",
+          "pages": [
+            { "title": "Electron Area Testing", "path": "testing-roadmap.md" },
+            { "title": "End-to-End (E2E) UI Testing", "path": "testing-roadmap-e2e.md" },
+            { "title": "CI Gates (GitHub Actions)", "path": "testing-roadmap-ci.md" }
+          ]
         }
       ]
     },
