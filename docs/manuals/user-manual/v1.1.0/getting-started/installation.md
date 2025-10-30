@@ -1,6 +1,8 @@
 # Installation
 
-Get SVG2Icon running in a couple of minutes.
+Links
+- Releases (installers): https://github.com/starunderscore/svg2icon/releases
+- Source code: https://github.com/starunderscore/svg2icon/tree/main
 
 ## Requirements
 - Windows or Linux
@@ -8,22 +10,34 @@ Get SVG2Icon running in a couple of minutes.
 - Developer build (optional): Node.js and npm
 
 ## Packaged app (recommended)
-1. Download the installer for your OS (Windows installer or Linux .deb/.rpm).
-2. Run the installer and open SVG2Icon from your apps menu.
-
-[Image: view: desktop; arrow: App launcher entry; squares: app icon]
+1. Download from Releases: https://github.com/starunderscore/svg2icon/releases
+   - Windows: NSIS installer (`.exe`)
+   - Linux: Debian (`.deb`) or RPM (`.rpm`)
+2. Install, then open SVG2Icon from your applications menu.
 
 You’re ready to create your first project.
 
 ## Developer build (optional)
-Run from source if you prefer:
-1. Clone the repository
-2. Run `npm install`
-3. Start the app with `npm run dev`
+ Run from source if you prefer:
+ 1. Clone the repository
+    ```bash
+    git clone https://github.com/starunderscore/svg2icon.git
+    cd svg2icon
+    ```
+ 2. Install dependencies
+    ```bash
+    npm install
+    ```
+ 3. Start the app in dev mode
+    ```bash
+    npm run dev
+    ```
 
-[Image: view: terminal; arrow: npm install / npm run dev; squares: successful start]
+## Build your own release (optional)
+You can create installers locally if you prefer to package the app yourself:
 
-## Verify
-Open the app — you should see an empty project table and the New SVG button.
+```bash
+npm run dist
+```
 
-[Image: view: app (empty state); arrow: New SVG; squares: header]
+Artifacts are written to the `release/` folder (with platform‑specific subfolders). For detailed packaging steps and prerequisites, open Help → Tech Guide in the app.

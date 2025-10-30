@@ -107,13 +107,14 @@ function markdownToHtml(md){
   let inCode = false; let codeLang = ''; let codeLines = [];
   for (let i = 0; i < lines.length; i++) {
     let line = lines[i];
-    if (!inCode && /^```\s*tree\s*$/.test(line)) { inTree = true; treeLines = []; continue; }
-    if (inTree) { if (/^```\s*$/.test(line)) { html += renderTree(treeLines.join('\n')); inTree = false; } else { treeLines.push(line); } continue; }
-    const start = line.match(/^```\s*([a-z0-9+_-]*)\s*$/i);
+    const ltrim = line.replace(/^\s+/, '');
+    if (!inCode && /^```\s*tree\s*$/.test(ltrim)) { inTree = true; treeLines = []; continue; }
+    if (inTree) { if (/^```\s*$/.test(ltrim)) { html += renderTree(treeLines.join('\n')); inTree = false; } else { treeLines.push(line); } continue; }
+    const start = ltrim.match(/^```\s*([a-z0-9+_-]*)\s*$/i);
     if (start && !inCode) { inCode = true; codeLang = start[1] || ''; codeLines = []; continue; }
-    if (inCode) { if (/^```\s*$/.test(line)) { html += renderCode(codeLines.join('\n'), codeLang); inCode = false; codeLang=''; codeLines=[]; } else { codeLines.push(line); } continue; }
+    if (inCode) { if (/^```\s*$/.test(ltrim)) { html += renderCode(codeLines.join('\n'), codeLang); inCode = false; codeLang=''; codeLines=[]; } else { codeLines.push(line); } continue; }
     // Markdown image: ![alt](src)
-    const mImgMd = line.match(/^\s*!\[(.*?)\]\((.*?)\)\s*$/);
+    const mImgMd = ltrim.match(/^!\[(.*?)\]\((.*?)\)\s*$/);
     if (mImgMd) {
       if (inList) { html += '</ul>'; inList = false; }
       const alt = mImgMd[1] || '';
@@ -129,9 +130,9 @@ function markdownToHtml(md){
       html += renderTable(header, rows);
       continue;
     }
-    if (/^\s*>\s?/.test(line)) {
+    if (/^\s*>\s?/.test(ltrim)) {
       if (inList) { html += '</ul>'; inList = false; }
-      const raw = line.replace(/^\s*>\s?/, '');
+      const raw = ltrim.replace(/^\s*>\s?/, '');
       const m = raw.match(/^(Tip|Remember|Warning|Technical Stuff):\s*(.*)$/i);
       if (m) {
         const kind = m[1].toLowerCase();
@@ -142,21 +143,21 @@ function markdownToHtml(md){
       }
       continue;
     }
-    const mImg = line.match(/^\s*\[Image:\s*(.*?)\]\s*$/i);
+    const mImg = ltrim.match(/^\[Image:\s*(.*?)\]\s*$/i);
     if (mImg) {
       if (inList) { html += '</ul>'; inList = false; }
       const desc = mImg[1] || '';
       html += renderImageCard(desc);
       continue;
     }
-    if (/^###\s+/.test(line)) { html += `<h3>${linkify(esc(line.replace(/^###\s+/,'')))}</h3>`; continue; }
-    if (/^##\s+/.test(line)) { html += `<h2>${linkify(esc(line.replace(/^##\s+/,'')))}</h2>`; continue; }
-    if (/^#\s+/.test(line)) { html += `<h1>${linkify(esc(line.replace(/^#\s+/,'')))}</h1>`; continue; }
+    if (/^###\s+/.test(ltrim)) { html += `<h3>${linkify(esc(ltrim.replace(/^###\s+/,'')))}</h3>`; continue; }
+    if (/^##\s+/.test(ltrim)) { html += `<h2>${linkify(esc(ltrim.replace(/^##\s+/,'')))}</h2>`; continue; }
+    if (/^#\s+/.test(ltrim)) { html += `<h1>${linkify(esc(ltrim.replace(/^#\s+/,'')))}</h1>`; continue; }
     if (/^\s*[-*]\s+/.test(line)) {
       if (!inList) { html += '<ul>'; inList = true; }
       html += `<li>${linkify(esc(line.replace(/^\s*[-*]\s+/,'')))}</li>`; continue;
     } else if (inList) { html += '</ul>'; inList = false; }
-    if (line.trim() === '') { html += '<p></p>'; continue; }
+    if (ltrim.trim() === '') { html += '<p></p>'; continue; }
     html += `<p>${linkify(esc(line))}</p>`;
   }
   if (inList) html += '</ul>';
@@ -261,9 +262,24 @@ function renderCallout(kind, content){
   const filter = (window).VERSIONS_FILTER || null;
   const versions = filter ? all.filter(v => filter.includes(v)) : all;
   const defaultVersion = versions.includes(toc.default) ? toc.default : versions[0];
+  function displayLabel(v){
+    try {
+      if (/^\d+\.\d+\.\d+$/.test(v)) {
+        const parts = v.split('.');
+        return `user-v${parts[0]}.${parts[1]}.*`;
+      }
+      if (/^tech-\d+\.\d+\.\d+$/.test(v)) {
+        const ver = v.replace(/^tech-/, '');
+        const parts = ver.split('.');
+        return `tech-v${parts[0]}.${parts[1]}.*`;
+      }
+    } catch {}
+    return v;
+  }
+
   versions.forEach(v => {
     const opt = document.createElement('option');
-    opt.value = v; opt.textContent = v;
+    opt.value = v; opt.textContent = displayLabel(v);
     if (v === defaultVersion) opt.selected = true;
     select.appendChild(opt);
   });

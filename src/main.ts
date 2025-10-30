@@ -38,6 +38,10 @@ function createWindow() {
     }
   } catch {}
 
+  const iconPath = process.platform === 'win32'
+    ? path.join(__dirname, '../src/assets/this-app/icon.ico')
+    : path.join(__dirname, '../src/assets/this-app/icon-64.png');
+
   mainWindow = new BrowserWindow({
     width: 1000,
     height: 700,
@@ -47,6 +51,7 @@ function createWindow() {
     autoHideMenuBar: false,
     show: false, // prevent flash; show when ready
     backgroundColor: bgColor,
+    icon: iconPath,
     webPreferences: {
       contextIsolation: true,
       preload: path.join(__dirname, 'electron', 'preload.js'),

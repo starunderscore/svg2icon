@@ -17,7 +17,7 @@ Prebuilt releases: GitHub Releases (TBA). On Linux, install `.deb` or `.rpm`. On
 
 Dev (contributors):
 ```bash
-git clone https://github.com/starunderscore/svg2icon
+git clone https://github.com/starunderscore/svg2icon.git
 cd svg2icon
 npm install
 npm run dev

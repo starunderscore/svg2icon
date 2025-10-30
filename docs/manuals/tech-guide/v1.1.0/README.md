@@ -1,5 +1,7 @@
 # Tech Overview
 
+Manual: tech-v1.1.*
+
 This page orients you to SVG2Icon’s architecture, layout, and build pipeline. Use the left navigation to jump into setup, running, and packaging.
 
 ## Architecture
