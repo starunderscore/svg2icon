@@ -13,7 +13,7 @@ export class StorageService {
     fs.mkdirSync(path.dirname(this.jsonPath), { recursive: true });
     if (!fs.existsSync(this.jsonPath)) {
       fs.writeFileSync(this.jsonPath, JSON.stringify({ projects: [], settings: {
-        theme: 'dark', telemetry: true, autoUpdate: false, defaultIconType: 'universal'
+        theme: 'dark', telemetry: true, defaultIconType: 'universal'
       } }, null, 2));
     }
   }

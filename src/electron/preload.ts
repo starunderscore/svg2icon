@@ -1,4 +1,4 @@
-// Preload: expose a safe electronAPI for renderer (CommonJS for Electron preload)
+// Preload: expose a safe electronAPI for renderer (CommonJS preload)
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { contextBridge, ipcRenderer } = require('electron');
 

@@ -3,7 +3,6 @@
 export interface AppSettings {
   theme: 'light' | 'dark' | 'system';
   telemetry: boolean;
-  autoUpdate: boolean;
   defaultIconType: 'universal' | 'ios' | 'android' | 'desktop' | 'electron' | 'web';
   lastUsedOutputPath?: string;
   windowBounds?: WindowBounds;
@@ -62,7 +61,6 @@ export interface PrivacySettings {
 export interface SettingsValidation {
   theme: (value: any) => value is AppSettings['theme'];
   telemetry: (value: any) => value is boolean;
-  autoUpdate: (value: any) => value is boolean;
   defaultIconType: (value: any) => value is AppSettings['defaultIconType'];
 }
 

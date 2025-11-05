@@ -3,7 +3,6 @@
 interface AppSettings {
   theme: 'light' | 'dark' | 'system';
   telemetry: boolean;
-  autoUpdate: boolean;
   defaultIconType: string;
   lastUsedOutputPath?: string;
 }
@@ -80,7 +79,6 @@ export class SettingsService {
     return {
       theme: 'dark',
       telemetry: true,
-      autoUpdate: false,
       defaultIconType: 'universal'
     };
   }

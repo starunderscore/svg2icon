@@ -1,6 +1,7 @@
 // App entry (Electron) for v1.1.0
 import { app, BrowserWindow, Menu } from 'electron';
 import path from 'path';
+import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { ElectronMain } from './electron/main.js';
 
@@ -27,10 +28,8 @@ function createWindow() {
   let bgColor = '#0b0f0e'; // dark fallback
   try {
     // Manually read settings from storage file
-    const fs = require('fs');
-    const p = require('path');
     const userDataPath = app.getPath('userData');
-    const jsonPath = p.join(userDataPath, 'svg2icon.json');
+    const jsonPath = path.join(userDataPath, 'svg2icon.json');
     if (fs.existsSync(jsonPath)) {
       const raw = JSON.parse(fs.readFileSync(jsonPath, 'utf-8')) || {};
       const theme = (raw.settings && raw.settings.theme) || 'dark';

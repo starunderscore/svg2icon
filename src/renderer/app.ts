@@ -101,6 +101,9 @@ class SVG2IconApp {
       // Render components
       this.render();
 
+      // Check for updates and show toast on startup
+      this.checkForUpdatesOnStartup();
+
       // Track app startup
       this.telemetryService.track('app_initialized', {
         projectCount: this.projects.length,
@@ -377,6 +380,18 @@ class SVG2IconApp {
         toast.parentNode.removeChild(toast);
       }
     }, 300);
+  }
+
+  private async checkForUpdatesOnStartup(): Promise<void> {
+    try {
+      const result = await window.electronAPI.app.checkForUpdates();
+      if (result?.hasUpdate) {
+        const ver = result.version || 'a new version';
+        this.showToast('warning', 'Update available', `New update available: ${ver}. Open Tools → Check for Updates.`);
+      }
+    } catch {
+      // Silent on failure
+    }
   }
 }
 
