@@ -57,6 +57,7 @@
     "files": [
       "dist/**/*",
       "src/renderer/**/*",
+      "src/styles/**/*",
       "!src/renderer/vendor/**",
       "src/assets/star-underscore/**/*",
       "node_modules/**/*",
